@@ -37,6 +37,6 @@ ul {
 }
 
 a {
-  color: #42b983;
+  color: #42b9  83;
 }
 </style>

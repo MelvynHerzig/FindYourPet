@@ -1,10 +1,12 @@
 <template>
-  <div class="animalAdsList">
+  <div class="animalsList">
+    <div class="filters">
+      C'est ici que les filtres irons
+    </div>
     <div class="inner">
-      <h1>Annonces récentes :</h1>
       <div class="list">
         <ul>
-          <li v-for="animal in this.animals.slice(0,3)" :key="animal.id" style="list-style-type:none">
+          <li v-for="animal in this.animals" :key="animal.id" style="list-style-type:none">
             <AnimalAd :animal="animal"/>
           </li>
         </ul>
@@ -16,13 +18,13 @@
 <script>
 const axios = require('axios');
 
-import AnimalAd from "./AnimalAd";
+import AnimalAd from "../components/AnimalAd";
 
 export default {
   name: "AnimalAdsList",
   components: {AnimalAd},
   beforeMount() {
-    axios.get('http://api.findyourpet.ch/animals').then(result => {
+    axios.get(process.env.VUE_APP_ROOT_API + '/animals').then(result => {
       this.animals = result.data;
       console.log(result.data);
     });
@@ -54,31 +56,23 @@ h1{
   text-align: center;
 }
 
-.animalAdsList {
-  
-  background: url("../assets/images/pets.jpg");
-  background-attachment:fixed;
-  background-repeat: no-repeat;
-  background-size: cover;
-  margin:auto;
-  width: 100%;
-  height: 1000px;
-  display: flex;
-  
+.filter {
+  background-color: var(--footer-color);
+  position: fixed;
+  height: 70%;
+  align-self: center;
 }
 
-.list {
-  height: 85%;
-  overflow: auto;
+.animalsList {
+  background-color: var(--header-selection-color);
+  width: 100%;  
+  display: flex;
+  justify-content: right;
 }
 
 .inner {
   background: var(--transparent-background-color);
-  padding: 20px;
-  margin: auto;
   width: 80%;
-  height: 80%;
-  border-radius: 10px;
   border: solid;
   border-color: var(--transparent-border-color);
   }

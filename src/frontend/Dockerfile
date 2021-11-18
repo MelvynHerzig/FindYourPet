@@ -1,7 +1,4 @@
-FROM node:14-alpine
-
-# install simple http server for serving static content
-RUN npm install -g http-server
+FROM node:14-alpine as builder
 
 # make the 'app' folder the current working directory
 WORKDIR /app
@@ -18,5 +15,17 @@ COPY . .
 # build app for production with minification
 RUN npm run build
 
-EXPOSE 8080
-CMD [ "http-server", "dist" ]
+# nginx state for serving content
+FROM nginx:alpine
+
+# Set working directory to nginx asset directory
+WORKDIR /usr/share/nginx/html
+
+## Remove default nginx index page
+RUN rm -rf ./*
+
+# Copy from the stahg 1
+COPY --from=builder /app/dist .
+
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

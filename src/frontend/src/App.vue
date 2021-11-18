@@ -1,53 +1,93 @@
-<template>
-  <Header title="find your pet"/>
-  <Landing-1/>
-  <AnimalAdsList />
-  <HelloWorld url="images/background_kitten.jpg" alt="image"/>
-  <HelloWorld url="images/kitty.jpg" alt="image"/>
-  <HelloWorld url="images/doggo.jpg" alt="image"/>
-  <HelloWorld url="images/pets.jpg" alt="image"/>
-  <Footer/>
-
+<template> 
+  <div classe = "main-div">
+    <Header/>  
+    <router-view/>
+    <Footer/>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
-import Landing1 from './components/Landing_1.vue'
-import AnimalAdsList from "./components/AnimalAdsList";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
     Header,
     Footer,
-    Landing1,
-    AnimalAdsList
+   // HelloWorld,
+   // LandingPage
   }
 }
 </script>
 
 <style>
+
+* {box-shadow: border-box;}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+button {
+  font-family:Georgia, 'Times New Roman', Times, serif;
+  color: white;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button{
+  letter-spacing: .15rem;
+}
+
+:root{
+  --header-color: #4e598c;
+  --header-selection-color: #5a648f;  
+  --footer-color: #373d5e;
+  --bg-color: #ffffff;
+  --select-color: #4e598c25;
+  --transparent-background-color: rgba(255, 255, 255, 0.85);
+  --transparent-border-color: #5a648f25
+
+}
+
+
+/*hide scrollbar*/
+body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+body::-webkit-scrollbar {/*Chrome*/
+  display: none;
+}
+
+html {
+  height: 100%;
+}
+.main-div {
+  height: parent;
+}
+body {
+  min-height: 100%;
+}
+
 body {
   width: 100%;
   margin: 0;
-  background-image: url("./assets/images/pets.jpg") ;
+  margin-top: 80px;
+  background-color: var(--bg-color);
   background-size: 100%;
   background-repeat:repeat-x;
   background-attachment:fixed;
   background-position: left top;
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  padding-top: 80px;
-  width: 100%;
-  height: 100%;
 }
 </style>

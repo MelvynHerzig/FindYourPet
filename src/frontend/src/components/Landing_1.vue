@@ -1,17 +1,11 @@
 <template>
   <div class="landing1">
-    <div class = title>
-    <h1>Adoptez un animal de compagnie proche de chez vous maintenant !</h1>
-    </div>
-    <div class="bottom">
-      <h2>
-        <p>- Trouvez des animeaux proches de chez vous !</p>
-        <p>- Créez des annonces pour vos animeaux !</p>
-      </h2>
-      <div class="buttons">
-        <button> Voir des annonces </button>
-        <button> Créer des annonces </button>
-      </div>
+    <div class="inner">
+      <img src="../assets/images/findyourpet_logo.png"/>
+      <h1>Adoptez un animal de compagnie proche de chez vous maintenant !</h1>
+      <p>Trouvez des animaux proches de chez vous et créez des annonces pour vos animaux !</p>
+      <button> Voir des annonces </button>
+      <button> Créer des annonces </button>
     </div>
   </div>
 </template>
@@ -19,44 +13,57 @@
 <script>
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped>  
 
-div{
-  background-color: #FAE5DC;
-  width: 80%;
-  margin: auto;
-  margin-top: 80px;
-  padding: 30px;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+button{
+  color: black;
 }
 
-.landing1{
-  display: flex;
-  flex-direction: column;
-}
-
-.bottom {
-  background-color: #F7C9D1;
-}
-
-.buttons {
-  display: flex;
-  justify-content: space-around;
-  background-color: #F7C9D1;
-}
-
-.buttons button {
-   display: inline-block;
-  padding: .75rem 1.25rem;
-  border-radius: 10rem;
-  text-transform: uppercase;
-  font-size: 1rem;
+button {
+  display: inline-block;
+  padding: 20px;
+  margin: 30px;
   letter-spacing: .15rem;
   transition: all .3s;
   position: relative;
   overflow: hidden;
-  z-index: 1;
-  background-color: #F29188;
-  border-color:#F29166
-  
+  background-color: transparent;
+  border-color:var(--header-color);
+}
+
+button:hover{
+  background-color: var(--select-color);
+}
+
+.landing1{
+  background: url("../assets/images/test.jpg");
+  background-attachment:fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 100%;
+  height: 600px;
+  margin: auto;
+  display: flex;
+}
+
+.inner {
+  background: var(--transparent-background-color);
+  padding: 20px;
+  margin: auto;
+  width: 80%;
+  height: 80%;
+  border-radius: 10px;
+  text-align: center;
+  border: solid;
+  border-color: var(--transparent-border-color);
 }
 </style>
