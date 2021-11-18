@@ -1,12 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { AnimalsService } from './animals.service';
 import { AnimalsInterface } from './models/animals.interface';
 import { Observable } from 'rxjs';
 
 @Controller('animals')
 export class AnimalsController {
-  constructor(private animalService: AnimalsService) {
-  }
+  constructor(private animalService: AnimalsService) {}
 
   @Post()
   create(@Body() animal: AnimalsInterface): Observable<AnimalsInterface> {
