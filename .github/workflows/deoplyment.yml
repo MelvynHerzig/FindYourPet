@@ -3,11 +3,15 @@
 name: Findyourpet deployment
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI Backend"]
     branches: [ main ]
+    types:
+      - completed
     
 jobs:
   push_to_registry:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Push Docker and pull on remote
     runs-on: ubuntu-latest
     steps:
