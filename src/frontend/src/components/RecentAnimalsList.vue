@@ -1,7 +1,7 @@
 <template>
   <div class="animalAdsList">
     <div class="inner">
-      <h1>Annonces récentes :</h1>
+      <h1>{{$t("recent.title")}}</h1>
       <div class="list">
         <ul>
           <li v-for="animal in this.animals.slice(0,3)" :key="animal.id" style="list-style-type:none">

@@ -2,10 +2,10 @@
   <div class="landing1">
     <div class="inner">
       <img src="../assets/images/findyourpet_logo.png"/>
-      <h1>Adoptez un animal de compagnie proche de chez vous maintenant !</h1>
-      <p>Trouvez des animaux proches de chez vous et créez des annonces pour vos animaux !</p>
-      <button> Voir des annonces </button>
-      <button> Créer des annonces </button>
+      <h1>{{$t("landing.welcome")}}</h1>
+      <p>{{$t("landing.description")}}</p>
+      <button>{{$t("landing.see")}}</button>
+      <button> {{$t("landing.create")}} </button>
     </div>
   </div>
 </template>
@@ -40,6 +40,7 @@ button {
 }
 
 button:hover{
+  cursor:pointer;
   background-color: var(--select-color);
 }
 

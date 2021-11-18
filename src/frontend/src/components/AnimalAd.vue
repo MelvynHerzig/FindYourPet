@@ -46,7 +46,8 @@ h3  ,p {
 }
 
 .ad:hover {
- background-color: var(--footer-color);
+  cursor:pointer;
+  background-color: var(--footer-color);
  }
 
 
