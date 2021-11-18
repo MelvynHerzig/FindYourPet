@@ -6,13 +6,13 @@
         </a>
       </div>
       <div class="nav">
-       <button @click="$router.push('/')"> Home </button>
-       <button @click="$router.push('/annonces')"> Annonces </button>
+       <button @click="$router.push('/')"> {{$t("header.home")}}  </button>
+       <button @click="$router.push('/annonces')">  {{$t("header.advert")}} </button>
       </div>
       <div class="account">
           
-       <button @click="$router.push('/login  ')"> Login </button>
-       <button @click="$router.push('/register  ')"> Register </button>
+       <button @click="$router.push('/login  ')">  {{$t("header.login")}} </button>
+       <button @click="$router.push('/register  ')">  {{$t("header.register")}} </button>
       </div>
   </div>
 </template>
@@ -39,6 +39,7 @@ button{
 }
 
 button:hover {
+  cursor:pointer;
   background-color: var(--header-selection-color);
 }
 

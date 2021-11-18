@@ -1,7 +1,7 @@
 <template>
   <div class="footer">
     <div class="left">
-      <p>Contact : contact@findyourpet.ch</p>
+      <p>{{$t("footer.contact")}}  contact@findyourpet.ch</p>
     </div>
     <div class="middle">
       <h2>@COPYRIGHT</h2>
