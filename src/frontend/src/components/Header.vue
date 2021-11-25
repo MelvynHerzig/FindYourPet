@@ -2,7 +2,7 @@
   <div class="header">
       <div class="logo">
         <a @click="$router.push('/')">
-            <img src="@/assets/images/findyourpet_logo.png" alt="logo" >
+            <img src="@/assets/images/WIDE_logo.png" alt="logo" >
         </a>
       </div>
       <div class="nav">
@@ -58,6 +58,10 @@ button:hover {
     border-right:solid;
     border-right-color: var(--header-selection-color);
     align-content: flex-start;
+}
+
+.logo:hover{
+  cursor:pointer;
 }
 
 .logo img {
