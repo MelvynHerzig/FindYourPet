@@ -1,11 +1,11 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Advert } from './advert.entity';
+import { AdvertEntity } from './advert.entity';
 
 /**
  * Entity to represents a user of FindYourPet
  */
-@Entity()
-export class Member {
+@Entity('member')
+export class MemberEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -30,12 +30,6 @@ export class Member {
   @Column()
   city: string;
 
-  @Column({ type: 'date' })
-  lastModified: Date;
-
-  @Column()
-  petAge: number;
-
-  @OneToMany(() => Advert, (advert) => advert.member)
-  adverts: Advert[];
+  @OneToMany(() => AdvertEntity, (advert) => advert.member)
+  adverts: AdvertEntity[];
 }
