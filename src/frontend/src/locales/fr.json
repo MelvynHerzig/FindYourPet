@@ -33,5 +33,11 @@
     "advert": "Annonces",
     "login": "Se connecter",
     "register": "S'inscrire"
+  },
+  "login":{
+    "title": "Connexion",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "button": "Se Connecter"
   }
 }

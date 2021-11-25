@@ -11,8 +11,8 @@
       </div>
       <div class="account">
           
-       <button @click="$router.push('/login  ')">  {{$t("header.login")}} </button>
-       <button @click="$router.push('/register  ')">  {{$t("header.register")}} </button>
+       <button @click="$router.push('/login')">  {{$t("header.login")}} </button>
+       <button @click="$router.push('/register')">  {{$t("header.register")}} </button>
       </div>
   </div>
 </template>
@@ -78,7 +78,7 @@ button:hover {
 }
 
 .account img {
-    width: 40x;
+    width: 40px;
     height: 40px;
     margin-right: 40px;
     align-self: center;
