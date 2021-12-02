@@ -7,34 +7,34 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { AdvertService } from '../service/advert.service';
-import { AdvertInterface } from '../entity/advert.interface';
+import { AdvertsService } from './adverts.service';
+import { AdvertsInterface } from './adverts.interface';
 import { Observable } from 'rxjs';
 
 /**
  * Advert controller
  */
-@Controller('advert')
-export class AdvertController {
-  constructor(private advertService: AdvertService) {}
+@Controller('adverts')
+export class AdvertsController {
+  constructor(private advertService: AdvertsService) {}
 
   @Post()
-  create(@Body() advert: AdvertInterface): Observable<AdvertInterface> {
+  create(@Body() advert: AdvertsInterface): Observable<AdvertsInterface> {
     return this.advertService.createAdvert(advert);
   }
 
   @Get()
-  findAll(): Observable<AdvertInterface[]> {
+  findAll(): Observable<AdvertsInterface[]> {
     return this.advertService.findAllAdvert();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Observable<AdvertInterface> {
+  findOne(@Param('id') id: string): Observable<AdvertsInterface> {
     return this.advertService.findOneAdvertById(parseInt(id));
   }
 
   @Put()
-  update(@Body() advert: AdvertInterface) {
+  update(@Body() advert: AdvertsInterface) {
     return this.advertService.updateAdvert(advert);
   }
 

@@ -1,33 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { MemberEntity } from '../entity/member.entity';
-import { MemberInterface } from '../entity/member.interface';
+import { MembersEntity } from './members.entity';
+import { MembersInterface } from './members.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
 
 /**
- * Service to query member
+ * Service to query members
  */
 @Injectable()
-export class MemberService {
+export class MembersService {
   constructor(
-    @InjectRepository(MemberEntity)
-    private readonly memberRepository: Repository<MemberEntity>,
+    @InjectRepository(MembersEntity)
+    private readonly memberRepository: Repository<MembersEntity>,
   ) {}
 
-  createMember(member: MemberInterface): Observable<MemberInterface> {
+  createMember(member: MembersInterface): Observable<MembersInterface> {
     return from(this.memberRepository.save(member));
   }
 
-  findAllMember(): Observable<MemberInterface[]> {
+  findAllMember(): Observable<MembersInterface[]> {
     return from(this.memberRepository.find());
   }
 
-  findOneMemberById(id: number): Observable<MemberInterface> {
+  findOneMemberById(id: number): Observable<MembersInterface> {
     return from(this.memberRepository.findOne(id));
   }
 
-  updateMember(member: MemberInterface) {
+  updateMember(member: MembersInterface) {
     return from(this.memberRepository.update(member.id, member));
   }
 

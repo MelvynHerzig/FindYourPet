@@ -7,10 +7,10 @@
       </div>
       <div class="nav">
        <button @click="$router.push('/')"> {{$t("header.home")}}  </button>
-       <button @click="$router.push('/annonces')">  {{$t("header.advert")}} </button>
+       <button @click="$router.push('/annonces')">  {{$t("header.adverts")}} </button>
       </div>
       <div class="account">
-          
+
        <button @click="$router.push('/login  ')">  {{$t("header.login")}} </button>
        <button @click="$router.push('/register  ')">  {{$t("header.register")}} </button>
       </div>

@@ -7,34 +7,35 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { MemberService } from '../service/member.service';
-import { MemberInterface } from '../entity/member.interface';
+import { MembersService } from './members.service';
+import { MembersInterface } from './members.interface';
 import { Observable } from 'rxjs';
 
 /**
  * Member controller
  */
-@Controller('member')
-export class MemberController {
-  constructor(private memberService: MemberService) {}
+@Controller('members')
+export class MembersController {
+  constructor(private memberService: MembersService) {
+  }
 
   @Post()
-  create(@Body() member: MemberInterface): Observable<MemberInterface> {
+  create(@Body() member: MembersInterface): Observable<MembersInterface> {
     return this.memberService.createMember(member);
   }
 
   @Get()
-  findAll(): Observable<MemberInterface[]> {
+  findAll(): Observable<MembersInterface[]> {
     return this.memberService.findAllMember();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Observable<MemberInterface> {
+  findOne(@Param('id') id: string): Observable<MembersInterface> {
     return this.memberService.findOneMemberById(parseInt(id));
   }
 
   @Put()
-  update(@Body() member: MemberInterface) {
+  update(@Body() member: MembersInterface) {
     return this.memberService.updateMember(member);
   }
 

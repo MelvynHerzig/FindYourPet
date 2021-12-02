@@ -7,34 +7,34 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { RaceService } from '../service/race.service';
-import { RaceInterface } from '../entity/race.interface';
+import { SpeciesService } from './species.service';
+import { SpeciesInterface } from './species.interface';
 import { Observable } from 'rxjs';
 
 /**
  * Race controller
  */
-@Controller('race')
-export class RaceController {
-  constructor(private raceService: RaceService) {}
+@Controller('species')
+export class SpeciesController {
+  constructor(private raceService: SpeciesService) {}
 
   @Post()
-  create(@Body() race: RaceInterface): Observable<RaceInterface> {
+  create(@Body() race: SpeciesInterface): Observable<SpeciesInterface> {
     return this.raceService.createRace(race);
   }
 
   @Get()
-  findAll(): Observable<RaceInterface[]> {
+  findAll(): Observable<SpeciesInterface[]> {
     return this.raceService.findAllRace();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Observable<RaceInterface> {
+  findOne(@Param('id') id: string): Observable<SpeciesInterface> {
     return this.raceService.findOneRaceById(parseInt(id));
   }
 
   @Put()
-  update(@Body() race: RaceInterface) {
+  update(@Body() race: SpeciesInterface) {
     return this.raceService.updateRace(race);
   }
 
