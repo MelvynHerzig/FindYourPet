@@ -1,18 +1,16 @@
 <template>
-  <div class="ad" @click="$router.push('/animals/' + animal.id)" >
+  <div class="ad" @click="$router.push('/adverts/' + advert.id)" >
     <div class="image">
       <img src="images/kitty.jpg" alt="image">
     </div>
     <div class="name">
-      <h1>{{animal.name}}</h1>
-      <h3>{{animal.type}}</h3>
+      <h1>{{advert.title}}</h1>
+      <h3>Chat</h3>
+      <h3>age: {{advert.petAge}}</h3>
     </div>
     <div class = "description">
-      <h2>
-        Petit chat cherche maison
-      </h2>
       <p>
-        Mon petit chat cherche une nouvelle maison car je n'ai plus les moyens de m'en occuper. 
+        {{advert.description}}
       </p>
     </div>
   </div>
@@ -22,7 +20,7 @@
 export default {
   name: "AnimalAd",
   props: {
-    animal: {}
+    advert: {}
   }
 }
 </script>
