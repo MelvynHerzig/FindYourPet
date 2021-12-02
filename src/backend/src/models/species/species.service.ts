@@ -12,74 +12,74 @@ import { from, Observable } from 'rxjs';
 export class SpeciesService {
   constructor(
     @InjectRepository(SpeciesEntity)
-    private readonly raceRepository: Repository<SpeciesEntity>,
+    private readonly speciesRepository: Repository<SpeciesEntity>,
   ) {
     const dogR = new SpeciesEntity();
     dogR.name = 'dog';
-    raceRepository.save(dogR).catch((err) => console.log(err));
+    speciesRepository.save(dogR).catch((err) => console.log(err));
 
     const catR = new SpeciesEntity();
     catR.name = 'cat';
-    raceRepository.save(catR).catch((err) => console.log(err));
+    speciesRepository.save(catR).catch((err) => console.log(err));
 
     const birdR = new SpeciesEntity();
     birdR.name = 'bird';
-    raceRepository.save(birdR).catch((err) => console.log(err));
+    speciesRepository.save(birdR).catch((err) => console.log(err));
 
     const reptileR = new SpeciesEntity();
     reptileR.name = 'reptile';
-    raceRepository.save(reptileR).catch((err) => console.log(err));
+    speciesRepository.save(reptileR).catch((err) => console.log(err));
 
     const horseR = new SpeciesEntity();
     horseR.name = 'horse';
-    raceRepository.save(horseR).catch((err) => console.log(err));
+    speciesRepository.save(horseR).catch((err) => console.log(err));
 
     const fishR = new SpeciesEntity();
     fishR.name = 'fish';
-    raceRepository.save(fishR).catch((err) => console.log(err));
+    speciesRepository.save(fishR).catch((err) => console.log(err));
 
     const rabbitR = new SpeciesEntity();
     rabbitR.name = 'rabbit';
-    raceRepository.save(rabbitR).catch((err) => console.log(err));
+    speciesRepository.save(rabbitR).catch((err) => console.log(err));
 
     const poultryR = new SpeciesEntity();
     poultryR.name = 'poultry';
-    raceRepository.save(poultryR).catch((err) => console.log(err));
+    speciesRepository.save(poultryR).catch((err) => console.log(err));
 
     const hamsterR = new SpeciesEntity();
     hamsterR.name = 'hamster';
-    raceRepository.save(hamsterR).catch((err) => console.log(err));
+    speciesRepository.save(hamsterR).catch((err) => console.log(err));
 
     const guineaPigR = new SpeciesEntity();
     guineaPigR.name = 'guinea pig';
-    raceRepository.save(guineaPigR).catch((err) => console.log(err));
+    speciesRepository.save(guineaPigR).catch((err) => console.log(err));
 
     const ferretR = new SpeciesEntity();
     ferretR.name = 'ferret';
-    raceRepository.save(ferretR).catch((err) => console.log(err));
+    speciesRepository.save(ferretR).catch((err) => console.log(err));
 
     const otherR = new SpeciesEntity();
     otherR.name = 'other';
-    raceRepository.save(otherR).catch((err) => console.log(err));
+    speciesRepository.save(otherR).catch((err) => console.log(err));
   }
 
-  createRace(race: SpeciesInterface): Observable<SpeciesInterface> {
-    return from(this.raceRepository.save(race));
+  createSpecies(species: SpeciesInterface): Observable<SpeciesInterface> {
+    return from(this.speciesRepository.save(species));
   }
 
-  findAllRace(): Observable<SpeciesInterface[]> {
-    return from(this.raceRepository.find());
+  findAllSpecies(): Observable<SpeciesInterface[]> {
+    return from(this.speciesRepository.find());
   }
 
-  findOneRaceById(id: number): Observable<SpeciesInterface> {
-    return from(this.raceRepository.findOne(id));
+  findOneSpeciesById(id: number): Observable<SpeciesInterface> {
+    return from(this.speciesRepository.findOne(id));
   }
 
-  updateRace(race: SpeciesInterface) {
-    return from(this.raceRepository.update(race.id, race));
+  updateSpecies(species: SpeciesInterface) {
+    return from(this.speciesRepository.update(species.id, species));
   }
 
-  deleteRace(id: number) {
-    return from(this.raceRepository.delete(id));
+  deleteSpecies(id: number) {
+    return from(this.speciesRepository.delete(id));
   }
 }

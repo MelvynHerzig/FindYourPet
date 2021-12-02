@@ -16,30 +16,30 @@ import { Observable } from 'rxjs';
  */
 @Controller('species')
 export class SpeciesController {
-  constructor(private raceService: SpeciesService) {}
+  constructor(private speciesService: SpeciesService) {}
 
   @Post()
-  create(@Body() race: SpeciesInterface): Observable<SpeciesInterface> {
-    return this.raceService.createRace(race);
+  create(@Body() species: SpeciesInterface): Observable<SpeciesInterface> {
+    return this.speciesService.createSpecies(species);
   }
 
   @Get()
   findAll(): Observable<SpeciesInterface[]> {
-    return this.raceService.findAllRace();
+    return this.speciesService.findAllSpecies();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string): Observable<SpeciesInterface> {
-    return this.raceService.findOneRaceById(parseInt(id));
+    return this.speciesService.findOneSpeciesById(parseInt(id));
   }
 
   @Put()
-  update(@Body() race: SpeciesInterface) {
-    return this.raceService.updateRace(race);
+  update(@Body() species: SpeciesInterface) {
+    return this.speciesService.updateSpecies(species);
   }
 
   @Delete(':id')
   deleteOne(@Param('id') id: string) {
-    return this.raceService.deleteRace(parseInt(id));
+    return this.speciesService.deleteSpecies(parseInt(id));
   }
 }

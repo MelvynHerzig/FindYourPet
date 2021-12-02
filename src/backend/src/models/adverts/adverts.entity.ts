@@ -43,6 +43,6 @@ export class AdvertsEntity {
   @ManyToOne(() => MembersEntity, (member) => member.adverts)
   member: MembersEntity;
 
-  @ManyToOne(() => SpeciesEntity, (race) => race.adverts)
-  race: SpeciesEntity;
+  @ManyToOne(() => SpeciesEntity, (species) => species.adverts)
+  species: SpeciesEntity;
 }

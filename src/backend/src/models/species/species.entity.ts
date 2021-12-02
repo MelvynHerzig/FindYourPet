@@ -4,7 +4,7 @@ import { AdvertsEntity } from '../adverts/adverts.entity';
 /**
  * Entity to represents a pet species of FindYourPet
  */
-@Entity('race')
+@Entity('species')
 export class SpeciesEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -12,6 +12,6 @@ export class SpeciesEntity {
   @Column({ unique: true })
   name: string;
 
-  @OneToMany(() => AdvertsEntity, (advert) => advert.race)
+  @OneToMany(() => AdvertsEntity, (advert) => advert.species)
   adverts: AdvertsEntity[];
 }

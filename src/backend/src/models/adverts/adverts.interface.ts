@@ -14,5 +14,5 @@ export interface AdvertsInterface {
   petAge: number;
   petGender: PetGender;
   member: MembersEntity;
-  race: SpeciesEntity;
+  species: SpeciesEntity;
 }
