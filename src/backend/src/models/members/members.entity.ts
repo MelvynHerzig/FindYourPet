@@ -1,11 +1,11 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { AdvertEntity } from './advert.entity';
+import { AdvertsEntity } from '../adverts/adverts.entity';
 
 /**
  * Entity to represents a user of FindYourPet
  */
 @Entity('member')
-export class MemberEntity {
+export class MembersEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -30,6 +30,6 @@ export class MemberEntity {
   @Column()
   city: string;
 
-  @OneToMany(() => AdvertEntity, (advert) => advert.member)
-  adverts: AdvertEntity[];
+  @OneToMany(() => AdvertsEntity, (advert) => advert.member)
+  adverts: AdvertsEntity[];
 }

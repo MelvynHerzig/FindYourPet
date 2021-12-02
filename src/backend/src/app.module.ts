@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MemberModule } from './models/module/member.module';
-import { AdvertModule } from './models/module/advert.module';
-import { RaceModule } from './models/module/race.module';
+import { MembersModule } from './models/members/members.module';
+import { AdvertsModule } from './models/adverts/adverts.module';
+import { SpeciesModule } from './models/species/species.module';
 
 @Module({
   imports: [
-    MemberModule,
-    AdvertModule,
-    RaceModule,
+    MembersModule,
+    AdvertsModule,
+    SpeciesModule,
     ConfigModule.forRoot({ isGlobal: true, envFilePath: 'database/.env' }),
     TypeOrmModule.forRoot({
       type: 'postgres',
