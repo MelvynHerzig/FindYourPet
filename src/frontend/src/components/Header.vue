@@ -7,7 +7,7 @@
       </div>
       <div class="nav">
        <button @click="$router.push('/')"> {{$t("header.home")}}  </button>
-       <button @click="$router.push('/annonces')">  {{$t("header.adverts")}} </button>
+       <button @click="$router.push('/annonces')">  {{$t("header.advert")}} </button>
       </div>
       <div class="account">      
        <button @click="$router.push('/login  ')">  {{$t("header.login")}} </button>
