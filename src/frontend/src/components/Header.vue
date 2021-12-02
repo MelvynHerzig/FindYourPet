@@ -70,7 +70,6 @@ button:hover {
     border-right:solid;
     border-right-color: var(--header-selection-color);
     align-content: flex-start;
-    flex: 1;
 }
 
 .logo:hover{
@@ -78,22 +77,23 @@ button:hover {
 }
 
 .logo img {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
+    margin: 5px;
 }
 
 .nav {
   display:flex;
   justify-content: right;
   width: 100%;
-  flex: 3;
+  flex: 2;
 }
 
 .account {
     width: 20%;
     display: flex;
     justify-content: right;
-    flex: 2;
+    flex: 1;
 }
 
 .account img {
