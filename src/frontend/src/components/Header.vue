@@ -7,17 +7,29 @@
       </div>
       <div class="nav">
        <button @click="$router.push('/')"> {{$t("header.home")}}  </button>
-       <button @click="$router.push('/annonces')">  {{$t("header.advert")}} </button>
+       <button @click="$router.push('/annonces')">  {{$t("header.adverts")}} </button>
       </div>
-      <div class="account">
-          
+      <div class="account">      
        <button @click="$router.push('/login  ')">  {{$t("header.login")}} </button>
        <button @click="$router.push('/register  ')">  {{$t("header.register")}} </button>
+       <div class="locale">
+          <select v-model="$i18n.locale" value = "$i18n.locale">
+      <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
+        {{ lang }}
+      </option>
+    </select>
+        </div>
       </div>
   </div>
 </template>
 
 <script>
+export default {
+  name: 'locale-changer',
+  data () {
+    return { langs: ['fr', 'en', 'it', 'de'] }
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -65,20 +77,23 @@ button:hover {
 }
 
 .logo img {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
+    margin: 5px;
 }
 
 .nav {
   display:flex;
   justify-content: right;
   width: 100%;
+  flex: 2;
 }
 
 .account {
     width: 20%;
     display: flex;
     justify-content: right;
+    flex: 1;
 }
 
 .account img {
@@ -86,6 +101,22 @@ button:hover {
     height: 40px;
     margin-right: 40px;
     align-self: center;
+}
+
+.locale {
+  justify-content: center;
+  background-color: var(--header-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.locale select {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: var(--footer-color);
+  padding: 10px;
+  margin: 10px;
+  background-color: var(--header-color);
 }
 
 </style>
