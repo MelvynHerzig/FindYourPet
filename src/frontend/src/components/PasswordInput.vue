@@ -1,30 +1,40 @@
 <template>
   <div class="wrapper">
-    <input v-bind:value="value" v-on:input="$emit('input', $event.target.value)" v-bind:type="type"
-           class="password" name="password" v-bind:placeholder="$t('login.password')" required/>
-    <span class="show-btn" v-on:click="showPassword"><i class="fas fa-eye"></i></span><br/>
+    <FormInput
+        @valueInput="sendEvent"
+        :defaultValue="''"
+        :type="password"
+        :name="password"
+        :placeholder="$t('login.password')"
+        :required="true"
+        class="password"
+    />
+    <!-- <span class="show-btn" v-show="false" v-on:click="showPassword"><i class="fas fa-eye"></i></span><br/>-->
   </div>
 </template>
 
 <script>
+import FormInput from "./FormInput";
+
 export default {
   name: "PasswordInput",
+  components: {FormInput},
   props: {
-    value: String,
-    type: String
+    defaultValue: String,
   },
-  methods: function () {
-    return {
-      showPassword: function (event) {
-        console.log(event);
-        /*if(event.type === "password"){
-          event.currentTarget = "text";
-          showBtn.classList.add("hide-btn");
-        }else{
-          passField.type = "password";
-          showBtn.classList.remove("hide-btn");
-        }*/
-      }
+  methods: {
+    sendEvent(value) {
+      this.$emit('valueInput', value);
+    },
+    showPassword: function (event) {
+      console.log(event);
+      /*if(event.type === "password"){
+        event.currentTarget = "text";
+        showBtn.classList.add("hide-btn");
+      }else{
+        passField.type = "password";
+        showBtn.classList.remove("hide-btn");
+      }*/
     }
   },
 }
@@ -44,23 +54,7 @@ export default {
   background-size: 16px 80px;
 }
 
-input {
-  width: 100%;
-  height: 42px;
-  box-sizing: border-box;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  margin-bottom: 20px;
-  font-size: 14px;
-  padding: 0 20px 0 50px;
-  outline: none;
-}
-
-input:active, input:focus {
-  border: 1px solid var(--footer-color);
-}
-
-.wrapper span{
+.wrapper span {
   position: absolute;
   right: 15px;
   top: 50%;
@@ -69,10 +63,12 @@ input:active, input:focus {
   color: var(--footer-color);
   cursor: pointer;
 }
-.wrapper input:valid ~ span{
+
+.wrapper input:valid ~ span {
   display: block;
 }
-.wrapper span i.hide-btn::before{
+
+.wrapper span i.hide-btn::before {
   content: "\f070";
 }
 

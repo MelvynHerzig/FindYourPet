@@ -2,10 +2,10 @@
   <div class="bg">
     <div class="login">
       <h1>{{ $t("login.title") }}</h1>
-      <form>
-        <UsernameInput v-model="username" :type="username"/>
-        <PasswordInput v-model="password" :type="password"/>
-        <button type="button" v-on:click="login">{{ $t("login.button") }}</button>
+      <form v-on:submit.prevent="login">
+        <UsernameInput @valueInput="setUsername" />
+        <PasswordInput @valueInput="setPassowrd" />
+        <button type="submit">{{ $t("login.button") }}</button>
       </form>
       <div v-if="error">{{ error }}</div>
     </div>
@@ -14,10 +14,9 @@
 
 <script>
 import UsernameInput from "../components/UsernameInput";
+import PasswordInput from "../components/PasswordInput";
 
 const axios = require('axios');
-
-import PasswordInput from "../components/PasswordInput";
 
 export default {
   name: "Login",
@@ -31,17 +30,23 @@ export default {
   },
   methods: {
     login() {
-      console.log(this.username)
-      console.log(this.password)
+      console.log("username sent: " + this.username);
+      console.log("password sent: " + this.password);
       axios.post(process.env.VUE_APP_ROOT_API + '/login', {
         username: this.username,
         password: this.password
       })
       .then(result => {
-        this.animals = result.data;
+        this.error = result.data;
         console.log(result.data);
       })
-    }
+    },
+    setUsername(value) {
+      this.username = value;
+    },
+    setPassowrd(value) {
+      this.password = value;
+    },
   },
 }
 </script>
