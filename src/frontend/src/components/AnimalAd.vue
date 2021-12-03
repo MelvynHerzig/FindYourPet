@@ -1,5 +1,5 @@
 <template>
-  <div class="ad">
+  <div class="ad" @click="$router.push('/animals/' + animal.id)" >
     <div class="image">
       <img src="images/kitty.jpg" alt="image">
     </div>

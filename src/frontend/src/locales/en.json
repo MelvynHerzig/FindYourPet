@@ -1,0 +1,37 @@
+{
+  "landing": {
+    "welcome": "Adopt a pet near you now!",
+    "description": "Find pets near you and create ads for your pets!",
+    "see": "See announcements",
+    "create": "Create announcements"
+  },
+  "howto": {
+    "title": "How to use our site",
+    "step1": "Step 1",
+    "step2": "Step 2",
+    "step3": "Step 3",
+    "subtitle_announce": "To announce an animal",
+    "1_announce": "Create an account",
+    "2_announce": "Create an announcement",
+    "3_announce": "Wait for another user to contact you",
+    "subtitle_adopt": "To adopt an animal",
+    "1_adopt": "Consult the announcements",
+    "2_adopt": "Select an ad you like",
+    "3_adopt": "Contact the current owner"
+  },
+  "recent": {
+    "title": "Recent announcements:"
+  },
+  "dev_team": {
+    "title": "The FindYourPet team"
+  },
+  "footer": {
+    "contact": "Contact:"
+  },
+  "header": {
+    "home": "Home",
+    "advert": "Advertisements",
+    "login": "Login",
+    "register": "Register"
+  }
+}
