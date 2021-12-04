@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MembersModule } from './models/members/members.module';
 import { AdvertsModule } from './models/adverts/adverts.module';
 import { SpeciesModule } from './models/species/species.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { SpeciesModule } from './models/species/species.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    AuthModule,
   ],
   controllers: [],
   providers: [],
