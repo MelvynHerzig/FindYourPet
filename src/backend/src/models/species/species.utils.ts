@@ -1,5 +1,3 @@
-import { Observable } from 'rxjs';
-import { SpeciesInterface } from './species.interface';
 
 /**
  * Make a json string containing different languages
