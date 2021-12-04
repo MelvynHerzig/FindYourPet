@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { SpeciesService } from './species.service';
 import { SpeciesInterface } from './species.interface';
-import { Observable, switchAll } from 'rxjs';
+import { Observable } from 'rxjs';
 import { isSupportedLangAbr } from './species.utils';
 
 /**
