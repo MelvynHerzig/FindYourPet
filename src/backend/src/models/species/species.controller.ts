@@ -3,13 +3,16 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
 } from '@nestjs/common';
 import { SpeciesService } from './species.service';
 import { SpeciesInterface } from './species.interface';
-import { Observable } from 'rxjs';
+import { Observable, switchAll } from 'rxjs';
+import { isSupportedLangAbr } from './species.utils';
 
 /**
  * Race controller
@@ -23,14 +26,56 @@ export class SpeciesController {
     return this.speciesService.createSpecies(species);
   }
 
-  @Get()
-  findAll(): Observable<SpeciesInterface[]> {
-    return this.speciesService.findAllSpecies();
+  // For example http://localhost:3000/species/fr
+  // Answer [{ "id": 25, "name": "chien" }, { "id": 25, "name": "chat" }, ... ]
+  @Get('/:lang')
+  findAll(@Param('lang') lang: string): Observable<SpeciesInterface[]> {
+    if (!isSupportedLangAbr(lang)) {
+      throw new HttpException(
+        { status: HttpStatus.NOT_FOUND, error: 'Bad language' },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    // Getting species and keeping only desired language
+    const species = this.speciesService.findAllSpecies();
+    species.subscribe({
+      next(sp) {
+        sp.map((sp) => (sp.name = JSON.parse(sp.name)[lang]));
+      },
+      error(err) {
+        console.error('something wrong occurred: ' + err);
+      },
+    });
+
+    return species;
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Observable<SpeciesInterface> {
-    return this.speciesService.findOneSpeciesById(parseInt(id));
+  // For example http://localhost:3000/species/fr/1
+  // Answer { "id": 25, "name": "chien" }
+  @Get('/:lang/:id')
+  findOne(
+    @Param('lang') lang: string,
+    @Param('id') id: string,
+  ): Observable<SpeciesInterface> {
+    if (!isSupportedLangAbr(lang)) {
+      throw new HttpException(
+        { status: HttpStatus.NOT_FOUND, error: 'Bad language' },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const species = this.speciesService.findOneSpeciesById(parseInt(id));
+    species.subscribe({
+      next(sp) {
+        sp.name = JSON.parse(sp.name)[lang];
+      },
+      error(err) {
+        console.error('something wrong occurred: ' + err);
+      },
+    });
+
+    return species;
   }
 
   @Put()
