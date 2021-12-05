@@ -5,8 +5,8 @@
     </div>
     <div class="name">
       <h1>{{advert.title}}</h1>
-      <h3>Chat {{advert.species}}</h3>
-      <h3>age: {{advert.petAge}}</h3>
+      <h3>{{specie.name}}</h3>
+      <h3>{{$t("animal_ad.age")}}: {{advert.petAge}}</h3>
     </div>
     <div class = "description">
       <p>
@@ -17,11 +17,24 @@
 </template>
 
 <script>
+const axios = require('axios');
 export default {
   name: "AnimalAd",
   props: {
     advert: {}
-  }
+  },
+  beforeMount() {
+    axios.get(process.env.VUE_APP_ROOT_API + '/species/' + this.$root.$i18n.locale + "/" + this.advert.speciesId).then(result => {
+      this.specie = result.data;
+      console.log(result.data);
+    });
+
+  },
+  data: function () {
+    return {
+      specie: {}
+    }
+  },
 }
 </script>
 

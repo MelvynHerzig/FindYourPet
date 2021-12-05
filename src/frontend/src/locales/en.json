@@ -33,5 +33,12 @@
     "advert": "Advertisements",
     "login": "Login",
     "register": "Register"
+  },
+  "animal_ad" : {
+    "age": "age"
+  },
+  "ad":{
+    "contact": "Contact",
+    "years": "years"
   }
 }

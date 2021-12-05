@@ -1,12 +1,12 @@
 <template>
   <div class="ad">
     <div class="inner">
-      <h1>{{advert.name}}</h1>
+      <h1>{{advert.title}}</h1>
       <div class="info">
         <div class="short">
           <img src="..\..\public\images\kitty.jpg" alt="image">
-          <h2>Chat</h2>
-          <h3>{{advert.petGender}}, {{advert.petAge}} ans</h3>
+          <h2>{{specie.name}}</h2>
+          <h3>{{advert.petGender}}, {{advert.petAge}} {{$t("ad.years")}}</h3>
         </div>
         <div class="description">
           <p>
@@ -14,8 +14,8 @@
           </p>
         </div>
       </div>
-      <div>
-      <h1> CONTACT </h1>
+      <div class="contact">
+      <h2> {{$t("ad.contact")}} </h2>
       </div>
     </div>
   </div>
@@ -30,12 +30,17 @@ export default {
     axios.get(process.env.VUE_APP_ROOT_API + '/adverts/' + this.$route.params.id).then(result => {
       this.advert = result.data;
       console.log(result.data);
+      axios.get(process.env.VUE_APP_ROOT_API + '/species/' + this.$root.$i18n.locale + "/" + this.advert.speciesId).then(result => {
+        this.specie = result.data;
+        console.log(result.data);
+      });
     });
-
+    
   },
   data: function () {
     return {
-      advert: {}
+      advert: {},
+      specie: {}
     } 
   },
 }
