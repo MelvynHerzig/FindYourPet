@@ -5,7 +5,7 @@
     </div>
     <div class="name">
       <h1>{{advert.title}}</h1>
-      <h3>Chat</h3>
+      <h3>Chat {{advert.species}}</h3>
       <h3>age: {{advert.petAge}}</h3>
     </div>
     <div class = "description">
