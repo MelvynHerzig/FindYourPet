@@ -7,13 +7,13 @@
       </div>
       <div class="nav">
        <button @click="$router.push('/')"> {{$t("header.home")}}  </button>
-       <button @click="$router.push('/annonces')">  {{$t("header.advert")}} </button>
+       <button @click="$router.push('/adverts')">  {{$t("header.advert")}} </button>
       </div>
       <div class="account">      
-       <button @click="$router.push('/login  ')">  {{$t("header.login")}} </button>
-       <button @click="$router.push('/register  ')">  {{$t("header.register")}} </button>
+       <button @click="$router.push('/login')">  {{$t("header.login")}} </button>
+       <button @click="$router.push('/register')">  {{$t("header.register")}} </button>
        <div class="locale">
-          <select v-model="$i18n.locale" value = "$i18n.locale">
+          <select v-model="$i18n.locale" value = "$i18n.locale" >
             <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
               {{ lang }}
             </option>
@@ -24,11 +24,13 @@
 </template>
 
 <script>
+
 export default {
   name: 'locale-changer',
   data () {
     return { langs: ['fr', 'en', 'it', 'de'] }
   }
+  
 }
 </script>
 

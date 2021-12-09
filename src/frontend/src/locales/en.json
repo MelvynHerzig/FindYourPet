@@ -40,5 +40,8 @@
   "ad":{
     "contact": "Contact",
     "years": "years"
+  },
+  "ad_create":{
+    "title": "Title"
   }
 }

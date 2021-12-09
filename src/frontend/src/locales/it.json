@@ -40,5 +40,8 @@
   "ad":{
     "contact": "Contatto",
     "years": "anni"
+  },
+  "ad_create":{
+    "title": "Titolo"
   }
 }
