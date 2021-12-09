@@ -1,21 +1,21 @@
 <template>
   <div class="ad">
     <div class="inner">
-      <h1>{{animal.name}}</h1>
+      <h1>{{advert.title}}</h1>
       <div class="info">
         <div class="short">
           <img src="..\..\public\images\kitty.jpg" alt="image">
-          <h2>{{animal.type}}</h2>
-          <h3>Male, 19 ans</h3>
+          <h2>{{specie.name}}</h2>
+          <h3>{{advert.petGender}}, {{advert.petAge}} {{$t("ad.years")}}</h3>
         </div>
         <div class="description">
           <p>
-            Mon petit chat cherche une nouvelle maison car je n'ai plus les moyens de m'en occuper. bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla 
+           {{advert.description}}
           </p>
         </div>
       </div>
-      <div>
-      <h1> CONTACT </h1>
+      <div class="contact">
+      <h2> {{$t("ad.contact")}} </h2>
       </div>
     </div>
   </div>
@@ -27,15 +27,20 @@ const axios = require('axios');
 export default {
   name: "Ad",
   beforeMount() {
-    axios.get(process.env.VUE_APP_ROOT_API + '/animals/' + this.$route.params.id).then(result => {
-      this.animal = result.data;
+    axios.get(process.env.VUE_APP_ROOT_API + '/adverts/' + this.$route.params.id).then(result => {
+      this.advert = result.data;
       console.log(result.data);
+      axios.get(process.env.VUE_APP_ROOT_API + '/species/' + this.$root.$i18n.locale + "/" + this.advert.speciesId).then(result => {
+        this.specie = result.data;
+        console.log(result.data);
+      });
     });
-
+    
   },
   data: function () {
     return {
-      animal: {}
+      advert: {},
+      specie: {}
     } 
   },
 }

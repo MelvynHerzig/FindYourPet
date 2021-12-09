@@ -29,7 +29,7 @@ const routes = [
     component: Login
   },
   {
-    path: '/animals/:id',
+    path: '/adverts/:id',
     name: 'Ad',
     component: Ad
   }

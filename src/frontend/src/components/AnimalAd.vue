@@ -1,29 +1,40 @@
 <template>
-  <div class="ad" @click="$router.push('/animals/' + animal.id)" >
+  <div class="ad" @click="$router.push('/adverts/' + advert.id)" >
     <div class="image">
       <img src="images/kitty.jpg" alt="image">
     </div>
     <div class="name">
-      <h1>{{animal.name}}</h1>
-      <h3>{{animal.type}}</h3>
+      <h1>{{advert.title}}</h1>
+      <h3>{{specie.name}}</h3>
+      <h3>{{$t("animal_ad.age")}}: {{advert.petAge}}</h3>
     </div>
     <div class = "description">
-      <h2>
-        Petit chat cherche maison
-      </h2>
       <p>
-        Mon petit chat cherche une nouvelle maison car je n'ai plus les moyens de m'en occuper. 
+        {{advert.description}}
       </p>
     </div>
   </div>
 </template>
 
 <script>
+const axios = require('axios');
 export default {
   name: "AnimalAd",
   props: {
-    animal: {}
-  }
+    advert: {}
+  },
+  beforeMount() {
+    axios.get(process.env.VUE_APP_ROOT_API + '/species/' + this.$root.$i18n.locale + "/" + this.advert.speciesId).then(result => {
+      this.specie = result.data;
+      console.log(result.data);
+    });
+
+  },
+  data: function () {
+    return {
+      specie: {}
+    }
+  },
 }
 </script>
 
