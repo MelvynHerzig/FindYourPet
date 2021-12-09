@@ -6,8 +6,8 @@
     <div class="inner">
       <div class="list">
         <ul>
-          <li v-for="animal in this.animals" :key="animal.id" style="list-style-type:none">
-            <AnimalAd :animal="animal"/>
+          <li v-for="advert in this.adverts" :key="advert.id" style="list-style-type:none">
+            <AnimalAd :advert="advert"/>
           </li>
         </ul>
       </div>
@@ -24,15 +24,15 @@ export default {
   name: "AnimalAdsList",
   components: {AnimalAd},
   beforeMount() {
-    axios.get(process.env.VUE_APP_ROOT_API + '/animals').then(result => {
-      this.animals = result.data;
+    axios.get(process.env.VUE_APP_ROOT_API + '/adverts').then(result => {
+      this.adverts = result.data;
       console.log(result.data);
     });
 
   },
   data: function () {
     return {
-      animals: []
+      adverts: []
     }
   },
 }

@@ -1,0 +1,44 @@
+{
+  "landing": {
+    "welcome": "Adotta subito un animale domestico vicino a te!",
+    "description": "Trova animali vicino a te e crea annunci per i tuoi animali!",
+    "see":"Vedi annunci",
+    "create" : "Crea annunci"
+  },
+  "howto": {
+    "title": "Come utilizzare il nostro sito",
+    "step1": "Fase 1",
+    "step2": "Fase 2",
+    "step3": "Fase 3",
+    "subtitle_announce":"Per annunciare un animale",
+    "1_announce":"Crea un account",
+    "2_announce":"Crea un annuncio",
+    "3_announce": "Attendi che un altro utente ti contatti",
+    "subtitle_adopt":"Per adottare un animale",
+    "1_adopt":"Consulta gli annunci",
+    "2_adopt":"Seleziona un annuncio che ti piace",
+    "3_adopt":"Contatta il proprietario"
+  },
+  "recent": {
+    "title": "Annunci recenti:"
+  },
+  "dev_team": {
+    "title": "Il team di FindYourPet"
+  },
+  "footer":{
+    "contact":"Contatto:"
+  },
+  "header":{
+    "home": "Home",
+    "advert": "Annunci",
+    "login": "Connetti",
+    "register": "Registrati"
+  },
+  "animal_ad" : {
+    "age": "età"
+  },
+  "ad":{
+    "contact": "Contatto",
+    "years": "anni"
+  }
+}

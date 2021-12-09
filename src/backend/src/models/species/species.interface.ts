@@ -6,5 +6,4 @@ import { AdvertsEntity } from '../adverts/adverts.entity';
 export interface SpeciesInterface {
   id: number;
   name: string;
-  adverts: AdvertsEntity[];
 }

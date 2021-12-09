@@ -1,0 +1,44 @@
+{
+  "landing": {
+    "welcome": "Adoptiere jetzt ein Haustier in deiner Nähe!",
+    "description": "Finde Haustiere in deiner Nähe und erstelle Anzeigen für deine Haustiere!",
+    "see": "Ansagen anzeigen",
+    "create": "Ankündigungen erstellen"
+  },
+  "howto": {
+    "title": "So nutzen Sie unsere Website",
+    "step1": "Schritt 1",
+    "step2": "Schritt 2",
+    "step3": "Schritt 3",
+    "subtitle_announce":"Ein Tier ankündigen",
+    "1_announce":"Konto erstellen",
+    "2_announce":"Erstelle eine Ansage",
+    "3_announce":"Warten Sie, bis ein anderer Benutzer Sie kontaktiert",
+    "subtitle_adopt":"Ein Tier adoptieren",
+    "1_adopt":"Konsultieren Sie die Ankündigungen",
+    "2_adopt":"Wählen Sie eine Anzeige aus, die Ihnen gefällt",
+    "3_adopt":"Kontaktieren Sie den aktuellen Besitzer"
+  },
+  "recent": {
+    "title": "Letzte Ankündigungen:"
+  },
+  "dev_team": {
+    "title": "Das FindYourPet Team"
+  },
+  "footer":{
+    "contact":"Kontakt:"
+  },
+  "header":{
+    "home": "Zu Hause",
+    "advert": "Werbung",
+    "login": "Verbinden",
+    "register": "Registrieren"
+  },
+  "animal_ad" : {
+    "age": "Alter"
+  },
+  "ad":{
+    "contact": "Kontact",
+    "years": "Jahre"
+  }
+}
