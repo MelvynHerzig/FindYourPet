@@ -38,7 +38,7 @@ jobs:
       - name: Change permission
         run: chmod 400 SSH.pem  
       - name: connect to SSH
-        run: sudo ssh -o StrictHostKeyChecking=no ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} -i "SSH.pem" "./deploy.sh" 
+        run: sudo ssh -o StrictHostKeyChecking=no ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}}
    
     
       
