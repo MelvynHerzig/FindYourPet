@@ -4,7 +4,7 @@
       <img src="../assets/images/findyourpet_logo.png"/>
       <h1>{{$t("landing.welcome")}}</h1>
       <p>{{$t("landing.description")}}</p>
-      <button>{{$t("landing.see")}}</button>
+      <button @click="$router.push('/annonces')">{{$t("landing.see")}}</button>
       <button> {{$t("landing.create")}} </button>
     </div>
   </div>

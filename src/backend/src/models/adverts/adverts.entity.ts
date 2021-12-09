@@ -43,6 +43,9 @@ export class AdvertsEntity {
   @ManyToOne(() => MembersEntity, (member) => member.adverts)
   member: MembersEntity;
 
+  @Column({ nullable: true })
+  speciesId: number;
+
   @ManyToOne(() => SpeciesEntity, (species) => species.adverts)
   species: SpeciesEntity;
 }
