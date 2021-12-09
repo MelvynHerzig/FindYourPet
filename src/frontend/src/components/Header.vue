@@ -10,8 +10,8 @@
        <button @click="$router.push('/annonces')">  {{$t("header.advert")}} </button>
       </div>
       <div class="account">      
-       <button @click="$router.push('/login  ')">  {{$t("header.login")}} </button>
-       <button @click="$router.push('/register  ')">  {{$t("header.register")}} </button>
+       <button @click="$router.push('/login')">  {{$t("header.login")}} </button>
+       <button @click="$router.push('/register')">  {{$t("header.register")}} </button>
        <div class="locale">
           <select v-model="$i18n.locale" value = "$i18n.locale">
             <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">

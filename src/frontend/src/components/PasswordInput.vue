@@ -5,7 +5,7 @@
         :defaultValue="''"
         :type="password"
         :name="password"
-        :placeholder="$t('login.password')"
+        :placeholder="placeholder"
         :required="true"
         class="password"
     />
@@ -20,6 +20,7 @@ export default {
   components: {FormInput},
   props: {
     defaultValue: String,
+    placeholder: String,
   },
   methods: {
     sendEvent(value) {

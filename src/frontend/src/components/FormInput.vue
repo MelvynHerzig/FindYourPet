@@ -47,7 +47,9 @@ input {
   outline: none;
 }
 
-input:active, input:focus {
+input:active,
+input:focus,
+input:hover {
   border: 1px solid var(--footer-color);
 }
 

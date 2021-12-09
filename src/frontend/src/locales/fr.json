@@ -34,11 +34,24 @@
     "login": "Se connecter",
     "register": "S'inscrire"
   },
-  "login":{
-    "title": "Connexion",
+  "account": {
     "email": "Adresse email",
     "password": "Mot de passe",
+    "confirmPassword": "Confirmation de mot de passe",
+    "firstName": "Prénom",
+    "name": "Nom",
+    "street": "Rue",
+    "city": "Ville / Village",
+    "npa": "NPA",
+    "phone": "Téléphone"
+  },
+  "login":{
+    "title": "Connexion",
     "button": "Se Connecter"
+  },
+  "register": {
+    "title": "Inscription",
+    "button": "S'inscrire"
   },
   "animal_ad" : {
     "age": "age"

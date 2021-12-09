@@ -4,7 +4,10 @@
       <h1>{{ $t("login.title") }}</h1>
       <form v-on:submit.prevent="login">
         <EmailInput @valueInput="setEmail" />
-        <PasswordInput @valueInput="setPassowrd" />
+        <PasswordInput
+            @valueInput="setPassowrd"
+            :placeholder="$t('account.password')"
+        />
         <button type="submit">{{ $t("login.button") }}</button>
       </form>
       <div v-if="error">{{ error }}</div>
@@ -56,13 +59,6 @@ export default {
 <style scoped>
 
 h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-li,
 button {
   color: black;
 }

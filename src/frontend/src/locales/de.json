@@ -29,10 +29,29 @@
     "contact":"Kontakt:"
   },
   "header":{
-    "home": "Zu Hause",
+    "home": "Home",
     "advert": "Werbung",
     "login": "Verbinden",
-    "register": "Registrieren"
+    "register": "Anmeldung"
+  },
+  "account": {
+    "email": "E-Mail-Addresse",
+    "password": "Passwort",
+    "confirmPassword": "Passwort Bestätigung",
+    "firstName": "Vorname",
+    "name": "Name",
+    "street": "Strasse",
+    "city": "Stadt / Dorf",
+    "npa": "NPA",
+    "phone": "Telefon"
+  },
+  "login":{
+    "title": "Verbindung",
+    "button": "Einloggen"
+  },
+  "register": {
+    "title": "Anmeldung",
+    "button": "Jetzt Anmelden"
   },
   "animal_ad" : {
     "age": "Alter"

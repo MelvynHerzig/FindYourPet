@@ -15,8 +15,6 @@ export default {
   components: {
     Header,
     Footer,
-   // HelloWorld,
-   // LandingPage
   }
 }
 </script>

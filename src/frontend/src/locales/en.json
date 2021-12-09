@@ -34,6 +34,25 @@
     "login": "Login",
     "register": "Register"
   },
+  "account": {
+    "email": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Password Confirmation",
+    "firstName": "First Name",
+    "name": "Name",
+    "street": "Street",
+    "city": "City / Town",
+    "npa": "NPA",
+    "phone": "Phone Number"
+  },
+  "login":{
+    "title": "Login",
+    "button": "Login"
+  },
+  "register": {
+    "title": "Register",
+    "button": "Register"
+  },
   "animal_ad" : {
     "age": "age"
   },

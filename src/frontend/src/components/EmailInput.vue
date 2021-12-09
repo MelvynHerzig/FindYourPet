@@ -4,7 +4,7 @@
       :defaultValue="''"
       :type="email"
       :name="email"
-      :placeholder="$t('login.email')"
+      :placeholder="$t('account.email')"
       :required="true"
       class="email"
   />
