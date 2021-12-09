@@ -2,11 +2,11 @@
   <FormInput
       @valueInput="sendEvent"
       :defaultValue="''"
-      :type="text"
-      :name="username"
-      :placeholder="$t('login.username')"
+      :type="email"
+      :name="email"
+      :placeholder="$t('login.email')"
       :required="true"
-      class="username"
+      class="email"
   />
 </template>
 
@@ -14,7 +14,7 @@
 import FormInput from "./FormInput";
 
 export default {
-  name: "UsernameInput",
+  name: "EmailInput",
   components: {FormInput},
   props: {
     defaultValue: String,
@@ -29,12 +29,12 @@ export default {
 
 <style scoped>
 
-.username {
+.email {
   background: #fff url('../assets/images/user.png') 20px top no-repeat;
   background-size: 16px 80px;
 }
 
-.username:focus {
+.email:focus {
   background: #fff url('../assets/images/user.png') 20px bottom no-repeat;
   background-size: 16px 80px;
 }

@@ -36,7 +36,7 @@
   },
   "login":{
     "title": "Connexion",
-    "username": "Nom d'utilisateur",
+    "email": "Adresse email",
     "password": "Mot de passe",
     "button": "Se Connecter"
   }

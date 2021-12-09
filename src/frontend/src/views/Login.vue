@@ -3,7 +3,7 @@
     <div class="login">
       <h1>{{ $t("login.title") }}</h1>
       <form v-on:submit.prevent="login">
-        <UsernameInput @valueInput="setUsername" />
+        <EmailInput @valueInput="setEmail" />
         <PasswordInput @valueInput="setPassowrd" />
         <button type="submit">{{ $t("login.button") }}</button>
       </form>
@@ -13,27 +13,27 @@
 </template>
 
 <script>
-import UsernameInput from "../components/UsernameInput";
+import EmailInput from "../components/EmailInput";
 import PasswordInput from "../components/PasswordInput";
 
 const axios = require('axios');
 
 export default {
   name: "Login",
-  components: {UsernameInput, PasswordInput},
+  components: {EmailInput, PasswordInput},
   data() {
     return {
       error: null,
-      username: "",
+      email: "",
       password: "",
     }
   },
   methods: {
     login() {
-      console.log("username sent: " + this.username);
+      console.log("username sent: " + this.email);
       console.log("password sent: " + this.password);
-      axios.post(process.env.VUE_APP_ROOT_API + '/login', {
-        username: this.username,
+      axios.post(process.env.VUE_APP_ROOT_API + '/auth/login', {
+        email: this.email,
         password: this.password
       })
       .then(result => {
@@ -41,8 +41,8 @@ export default {
         console.log(result.data);
       })
     },
-    setUsername(value) {
-      this.username = value;
+    setEmail(value) {
+      this.email = value;
     },
     setPassowrd(value) {
       this.password = value;

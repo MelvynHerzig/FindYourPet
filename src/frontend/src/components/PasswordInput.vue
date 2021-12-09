@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="globalInput">
     <FormInput
         @valueInput="sendEvent"
         :defaultValue="''"
@@ -9,7 +9,7 @@
         :required="true"
         class="password"
     />
-    <!-- <span class="show-btn" v-show="false" v-on:click="showPassword"><i class="fas fa-eye"></i></span><br/>-->
+    <i @click="showPassword" class="fas fa-eye">test</i>
   </div>
 </template>
 
@@ -54,22 +54,15 @@ export default {
   background-size: 16px 80px;
 }
 
-.wrapper span {
+.globalInput {
+  position: relative;
+}
+
+.globalInput i{
   position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 20px;
-  color: var(--footer-color);
-  cursor: pointer;
-}
-
-.wrapper input:valid ~ span {
-  display: block;
-}
-
-.wrapper span i.hide-btn::before {
-  content: "\f070";
+  left: 600px;
+  top: 40px;
+  color: black;
 }
 
 </style>
