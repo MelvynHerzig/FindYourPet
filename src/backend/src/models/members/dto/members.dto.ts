@@ -9,6 +9,7 @@ export class MemberDto {
   street: string;
   NPA: number;
   city: string;
+  phone: string;
   adverts: AdvertsEntity[];
 }
 
@@ -17,9 +18,11 @@ export class CreateMemberDto {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
   street: string;
   NPA: number;
   city: string;
+  phone: string;
 }
 
 export class LoginMemberDto {
@@ -28,7 +31,7 @@ export class LoginMemberDto {
 }
 
 export const toMemberDto = (data: MembersEntity): MemberDto => {
-  const { id, firstname, name, email, street, NPA, city, adverts } = data;
+  const { id, firstname, name, email, street, NPA, city, phone, adverts } = data;
   return {
     id,
     firstname,
@@ -37,6 +40,7 @@ export const toMemberDto = (data: MembersEntity): MemberDto => {
     street,
     NPA,
     city,
+    phone,
     adverts,
   };
 };

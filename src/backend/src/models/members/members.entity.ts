@@ -42,6 +42,9 @@ export class MembersEntity {
   @Column()
   city: string;
 
+  @Column()
+  phone: string;
+
   @OneToMany(() => AdvertsEntity, (advert) => advert.member)
   adverts: AdvertsEntity[];
 }
