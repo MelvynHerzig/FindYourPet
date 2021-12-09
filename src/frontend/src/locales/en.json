@@ -47,7 +47,8 @@
   },
   "login":{
     "title": "Login",
-    "button": "Login"
+    "button": "Login",
+    "fail": "Your email or password is incorrect"
   },
   "register": {
     "title": "Register",

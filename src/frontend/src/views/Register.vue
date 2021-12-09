@@ -3,62 +3,51 @@
     <div class="register">
       <h1>{{ $t("register.title") }}</h1>
       <form v-on:submit.prevent="register">
-        <FormInput
+        <NameInput
             @valueInput="setFirstName"
-            :defaultValue="''"
-            :type="text"
-            :name="firstName"
+            :name="'firstName'"
             :placeholder="$t('account.firstName')"
-            :required="true"
         />
-        <FormInput
+        <NameInput
             @valueInput="setName"
-            :defaultValue="''"
-            :type="text"
-            :name="name"
+            :name="'name'"
             :placeholder="$t('account.name')"
-            :required="true"
         />
-        <EmailInput @valueInput="setEmail" />
+        <EmailInput
+            @valueInput="setEmail"
+        />
         <PasswordInput
             @valueInput="setPassowrd"
+            :name="'password'"
             :placeholder="$t('account.password')"
         />
         <PasswordInput
             @valueInput="setConfirmPassword"
+            :name="'confirmPassword'"
             :placeholder="$t('account.confirmPassword')"
         />
-        <FormInput
+        <LocationInput
             @valueInput="setStreet"
-            :defaultValue="''"
-            :type="text"
-            :name="street"
+            :name="'street'"
+            :type="'text'"
             :placeholder="$t('account.street')"
-            :required="true"
         />
-        <FormInput
+        <LocationInput
             @valueInput="setNPA"
-            :defaultValue="''"
-            :type="number"
-            :name="npa"
+            :name="'npa'"
+            :type="'number'"
             :placeholder="$t('account.npa')"
-            :required="true"
         />
-        <FormInput
+        <LocationInput
             @valueInput="setCity"
-            :defaultValue="''"
-            :type="text"
-            :name="city"
+            :name="'city'"
+            :type="'text'"
             :placeholder="$t('account.city')"
-            :required="true"
         />
-        <FormInput
+        <PhoneInput
             @valueInput="setPhone"
-            :defaultValue="''"
-            :type="number"
-            :name="phone"
+            :name="'phone'"
             :placeholder="$t('account.phone')"
-            :required="true"
         />
         <button type="submit">{{ $t("register.button") }}</button>
       </form>
@@ -68,15 +57,17 @@
 </template>
 
 <script>
-import EmailInput from "../components/EmailInput";
-import PasswordInput from "../components/PasswordInput";
-import FormInput from "../components/FormInput";
+import EmailInput from "../components/inputs/EmailInput";
+import PasswordInput from "../components/inputs/PasswordInput";
+import NameInput from "../components/inputs/NameInput";
+import LocationInput from "../components/inputs/LocationInput";
+import PhoneInput from "../components/inputs/PhoneInput";
 
 const axios = require('axios');
 
 export default {
   name: "Register",
-  components: {FormInput, EmailInput, PasswordInput},
+  components: {NameInput, EmailInput, PasswordInput, LocationInput, PhoneInput},
   data() {
     return {
       error: null,
@@ -93,6 +84,15 @@ export default {
   },
   methods: {
     register() {
+      console.log(this.firstName);
+      console.log(this.name);
+      console.log(this.email);
+      console.log(this.password);
+      console.log(this.confirmPassword);
+      console.log(this.street);
+      console.log(this.npa);
+      console.log(this.city);
+      console.log(this.phone);
       axios.post(process.env.VUE_APP_ROOT_API + '/auth/register', {
         firstname: this.firstname,
         name: this.name,

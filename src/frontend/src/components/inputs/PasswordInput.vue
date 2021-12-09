@@ -1,13 +1,14 @@
 <template>
-  <div class="globalInput">
+  <div class="field">
+    <i class="icon fas fa-key"></i>
     <FormInput
         @valueInput="sendEvent"
         :defaultValue="''"
-        :type="password"
-        :name="password"
+        :type="'password'"
+        :name="name"
         :placeholder="placeholder"
         :required="true"
-        class="password"
+        class="input"
     />
   </div>
 </template>
@@ -19,6 +20,7 @@ export default {
   name: "PasswordInput",
   components: {FormInput},
   props: {
+    name: String,
     defaultValue: String,
     placeholder: String,
   },
@@ -32,25 +34,15 @@ export default {
 
 <style scoped>
 
-.password {
-  background: #fff url('../assets/images/password.png') 20px top no-repeat;
-  background-size: 16px 80px;
-}
-
-.password:focus {
-  background: #fff url('../assets/images/password.png') 20px bottom no-repeat;
-  background-size: 16px 80px;
-}
-
-.globalInput {
+.field {
   position: relative;
 }
 
-.globalInput i{
+.icon {
   position: absolute;
-  left: 600px;
-  top: 40px;
-  color: black;
+  top: 13px;
+  left: 20px;
+  color: grey;
 }
 
 </style>

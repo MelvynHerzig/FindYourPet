@@ -47,7 +47,8 @@
   },
   "login":{
     "title": "Connexion",
-    "button": "Se Connecter"
+    "button": "Se Connecter",
+    "fail": "Votre email ou mot de passe est incorrect"
   },
   "register": {
     "title": "Inscription",

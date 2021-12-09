@@ -47,7 +47,8 @@
   },
   "login":{
     "title": "Connetti",
-    "button": "Per Accedere"
+    "button": "Per Accedere",
+    "fail": "Email o password incorretto"
   },
   "register": {
     "title": "Registrati",

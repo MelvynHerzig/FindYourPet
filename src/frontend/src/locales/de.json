@@ -47,7 +47,8 @@
   },
   "login":{
     "title": "Verbindung",
-    "button": "Einloggen"
+    "button": "Einloggen",
+    "fail": "E-Mail oder Passwort ist falsch"
   },
   "register": {
     "title": "Anmeldung",
