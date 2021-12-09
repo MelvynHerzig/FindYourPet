@@ -1,40 +1,40 @@
 <template>
   <div class="landing2">
     <div class="title">
-      <h1> Comment utiliser notre site</h1>
+      <h1> {{$t("howto.title")}} </h1>
     </div>
     <div class="texts">
       <div>
-        <h2>Pour annoncer un animal</h2>
+        <h2>{{$t("howto.subtitle_announce")}} </h2>
         <div>
           <div>
-            <h3>Etape 1</h3>
-            <p>Crée un compte</p>
+            <h3>{{$t("howto.step1")}} </h3>
+            <p>{{$t("howto.1_announce")}} </p>
           </div>
           <div>
-            <h3>Etape 2</h3>
-            <p>Crée une annonce</p>
+            <h3>{{$t("howto.step2")}} </h3>
+            <p>{{$t("howto.2_announce")}} </p>
           </div>
           <div>
-            <h3>Étape 3</h3>
-            <p>Attends qu'un autre utilisateur te contacte</p>
+            <h3>{{$t("howto.step3")}} </h3>
+            <p>{{$t("howto.3_announce")}} </p>
           </div>
         </div>
       </div>
       <div>
-        <h2>Pour adopter un animal</h2>
+        <h2>{{$t("howto.subtitle_adopt")}} </h2>
         <div>
           <div>
-            <h3>Etape 1</h3>
-            <p>Consulte les annonces</p>
+            <h3>{{$t("howto.step1")}} </h3>
+            <p>{{$t("howto.1_adopt")}} </p>
           </div>
           <div>
-            <h3>Etape 2</h3>
-            <p>Selectionne une annonce qui te plaît</p>
+            <h3>{{$t("howto.step2")}} </h3>
+            <p>{{$t("howto.2_adopt")}} </p>
           </div>
           <div>
-            <h3>Étape 3</h3>
-            <p>Contacte le propriétaire actuel</p>
+            <h3>{{$t("howto.step3")}} </h3>
+            <p>{{$t("howto.3_adopt")}} </p>
           </div>
         </div>
       </div>

@@ -1,0 +1,44 @@
+{
+  "landing": {
+    "welcome": "Adoptez un animal de compagnie proche de chez vous maintenant !",
+    "description": "Trouvez des animaux proches de chez vous et créez des annonces pour vos animaux !",
+    "see": "Voir des annonces",
+    "create": "Créer des annonces"
+  },
+  "howto": {
+    "title": "Comment utiliser notre site",
+    "step1": "Etape 1",
+    "step2": "Etape 2",
+    "step3": "Etape 3",
+    "subtitle_announce":"Pour annoncer un animal",
+    "1_announce":"Crée un compte",
+    "2_announce":"Crée une annonce",
+    "3_announce":"Attends qu'un autre utilisateur te contacte",
+    "subtitle_adopt":"Pour adopter un animal",
+    "1_adopt":"Consulte les annonces",
+    "2_adopt":"Selectionne une annonce qui te plaît",
+    "3_adopt":"Contacte le propriétaire actuel"
+  },
+  "recent": {
+    "title": "Annonces récentes :"
+  },
+  "dev_team": {
+    "title": "L'équipe FindYourPet"
+  },
+  "footer":{
+    "contact":"Contact :"
+  },
+  "header":{
+    "home": "Accueil",
+    "advert": "Annonces",
+    "login": "Se connecter",
+    "register": "S'inscrire"
+  },
+  "animal_ad" : {
+    "age": "age"
+  },
+  "ad":{
+    "contact": "Contact",
+    "years": "ans"
+  }
+}

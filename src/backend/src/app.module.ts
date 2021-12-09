@@ -1,13 +1,16 @@
 import { Module } from '@nestjs/common';
-import { CatsModule } from './cats/cats.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AnimalsModule } from './animals/animals.module';
+import { MembersModule } from './models/members/members.module';
+import { AdvertsModule } from './models/adverts/adverts.module';
+import { SpeciesModule } from './models/species/species.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    CatsModule,
-    AnimalsModule,
+    MembersModule,
+    AdvertsModule,
+    SpeciesModule,
     ConfigModule.forRoot({ isGlobal: true, envFilePath: 'database/.env' }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -19,9 +22,9 @@ import { AnimalsModule } from './animals/animals.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    AuthModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {
-}
+export class AppModule {}

@@ -1,7 +1,7 @@
 <template>
   <div class="devteam">
     <div class = "title">
-    <h1>L'équipe Find Your Pet</h1>
+    <h1>{{$t("dev_team.title")}}</h1>
     </div>
     <div class="team">
       <Dev url = "images/Berney.png" name= "Alec Berney" />
