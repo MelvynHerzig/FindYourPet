@@ -27,6 +27,10 @@ export class AdvertsService {
     return from(this.advertRepository.findOne(id));
   }
 
+  findAllAdvertByUuid(uuid: string): Observable<AdvertsInterface[]> {
+    return from(this.advertRepository.find({ memberId: uuid }));
+  }
+
   updateAdvert(advert: AdvertsInterface) {
     return from(this.advertRepository.update(advert.id, advert));
   }

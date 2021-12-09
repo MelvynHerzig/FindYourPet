@@ -4,7 +4,12 @@ import { MembersEntity } from './members.entity';
 import { MembersInterface } from './members.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
-import { CreateMemberDto, LoginMemberDto, MemberDto, toMemberDto } from "./dto/members.dto";
+import {
+  CreateMemberDto,
+  LoginMemberDto,
+  MemberDto,
+  toMemberDto,
+} from './dto/members.dto';
 import bcrypt from 'bcrypt';
 
 /**
@@ -22,12 +27,12 @@ export class MembersService {
     return toMemberDto(member);
   }
 
-  async findByPayload({ email}: any): Promise<MemberDto> {
-    return await this.findOne({ where: {email}});
+  async findByPayload({ email }: any): Promise<MemberDto> {
+    return await this.findOne({ where: { email } });
   }
 
-  async findByLogin({ email, password}: LoginMemberDto): Promise<MemberDto> {
-    const member = await this.memberRepository.findOne({ where: {email}});
+  async findByLogin({ email, password }: LoginMemberDto): Promise<MemberDto> {
+    const member = await this.memberRepository.findOne({ where: { email } });
 
     if (!member) {
       throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
@@ -63,5 +68,9 @@ export class MembersService {
     });
     await this.memberRepository.save(member);
     return toMemberDto(member);
+  }
+
+  updateMember(member: MembersInterface) {
+    return from(this.memberRepository.update(member.id, member));
   }
 }
