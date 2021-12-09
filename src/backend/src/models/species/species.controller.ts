@@ -7,12 +7,14 @@ import {
   HttpStatus,
   Param,
   Post,
-  Put,
+  Put, UseGuards,
 } from '@nestjs/common';
 import { SpeciesService } from './species.service';
 import { SpeciesInterface } from './species.interface';
 import { Observable } from 'rxjs';
+import { AuthGuard } from '@nestjs/passport';
 import { isSupportedLangAbr } from './species.utils';
+
 
 /**
  * Race controller
@@ -84,6 +86,7 @@ export class SpeciesController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   deleteOne(@Param('id') id: string) {
     return this.speciesService.deleteSpecies(parseInt(id));
   }
