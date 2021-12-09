@@ -39,5 +39,12 @@
     "email": "Adresse email",
     "password": "Mot de passe",
     "button": "Se Connecter"
+  },
+  "animal_ad" : {
+    "age": "age"
+  },
+  "ad":{
+    "contact": "Contact",
+    "years": "ans"
   }
 }
