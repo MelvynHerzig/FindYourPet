@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { MembersEntity } from './members.entity';
 import { MembersInterface } from './members.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
+import { CreateMemberDto, LoginMemberDto, MemberDto, toMemberDto } from "./dto/members.dto";
+import bcrypt from 'bcrypt';
 
 /**
  * Service to query members
@@ -15,23 +17,51 @@ export class MembersService {
     private readonly memberRepository: Repository<MembersEntity>,
   ) {}
 
-  createMember(member: MembersInterface): Observable<MembersInterface> {
-    return from(this.memberRepository.save(member));
+  async findOne(options?: object): Promise<MemberDto> {
+    const member = await this.memberRepository.findOne(options);
+    return toMemberDto(member);
   }
 
-  findAllMember(): Observable<MembersInterface[]> {
-    return from(this.memberRepository.find());
+  async findByPayload({ email}: any): Promise<MemberDto> {
+    return await this.findOne({ where: {email}});
   }
 
-  findOneMemberById(id: number): Observable<MembersInterface> {
-    return from(this.memberRepository.findOne(id));
+  async findByLogin({ email, password}: LoginMemberDto): Promise<MemberDto> {
+    const member = await this.memberRepository.findOne({ where: {email}});
+
+    if (!member) {
+      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+    }
+
+    // We should crypt here
+    if (member.password !== password) {
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+    }
+
+    return toMemberDto(member);
   }
 
-  updateMember(member: MembersInterface) {
-    return from(this.memberRepository.update(member.id, member));
-  }
+  async create(memberDto: CreateMemberDto): Promise<MemberDto> {
+    const { firstname, name, email, password, street, NPA, city } = memberDto;
 
-  deleteMember(id: number) {
-    return from(this.memberRepository.delete(id));
+    const memberInDb = await this.memberRepository.findOne({
+      where: { email },
+    });
+
+    if (memberInDb) {
+      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+    }
+
+    const member: MembersEntity = await this.memberRepository.create({
+      firstname,
+      name,
+      email,
+      password,
+      street,
+      NPA,
+      city,
+    });
+    await this.memberRepository.save(member);
+    return toMemberDto(member);
   }
 }

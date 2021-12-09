@@ -8,5 +8,6 @@ import { MembersEntity } from './members.entity';
   imports: [TypeOrmModule.forFeature([MembersEntity])],
   providers: [MembersService],
   controllers: [MembersController],
+  exports: [MembersService],
 })
 export class MembersModule {}

@@ -16,9 +16,8 @@ import { Observable } from 'rxjs';
  */
 @Controller('members')
 export class MembersController {
-  constructor(private memberService: MembersService) {
-  }
-
+  constructor(private memberService: MembersService) {}
+/*
   @Post()
   create(@Body() member: MembersInterface): Observable<MembersInterface> {
     return this.memberService.createMember(member);
@@ -43,4 +42,6 @@ export class MembersController {
   deleteOne(@Param('id') id: string) {
     return this.memberService.deleteMember(parseInt(id));
   }
+
+ */
 }
