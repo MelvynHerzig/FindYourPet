@@ -26,20 +26,22 @@ export default {
       error: null,
       email: "",
       password: "",
+      token: null,
     }
   },
   methods: {
     login() {
-      console.log("username sent: " + this.email);
-      console.log("password sent: " + this.password);
       axios.post(process.env.VUE_APP_ROOT_API + '/auth/login', {
         email: this.email,
-        password: this.password
+        password: this.password,
       })
       .then(result => {
-        this.error = result.data;
+        this.token = result.data;
         console.log(result.data);
       })
+      .catch(error => {
+        this.error = error;
+      });
     },
     setEmail(value) {
       this.email = value;
