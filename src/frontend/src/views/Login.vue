@@ -3,18 +3,30 @@
     <div class="login">
       <h1>{{ $t("login.title") }}</h1>
       <form v-on:submit.prevent="login">
-        <EmailInput @valueInput="setEmail" />
-        <PasswordInput @valueInput="setPassowrd" />
+        <EmailInput
+            @valueInput="setEmail"
+            :name="'email'"
+        />
+        <PasswordInput
+            @valueInput="setPassowrd"
+            :name="'password'"
+            :placeholder="$t('account.password')"
+        />
         <button type="submit">{{ $t("login.button") }}</button>
       </form>
-      <div v-if="error">{{ error }}</div>
+      <div v-if="error">
+          {{ error }}
+      </div>
+      <div v-if="invalid">
+          {{ $t('login.fail') }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import EmailInput from "../components/EmailInput";
-import PasswordInput from "../components/PasswordInput";
+import EmailInput from "../components/inputs/EmailInput";
+import PasswordInput from "../components/inputs/PasswordInput";
 
 const axios = require('axios');
 
@@ -24,6 +36,7 @@ export default {
   data() {
     return {
       error: null,
+      invalid: null,
       email: "",
       password: "",
       token: null,
@@ -31,6 +44,8 @@ export default {
   },
   methods: {
     login() {
+      console.log(this.email);
+      console.log(this.password);
       axios.post(process.env.VUE_APP_ROOT_API + '/auth/login', {
         email: this.email,
         password: this.password,
@@ -56,13 +71,6 @@ export default {
 <style scoped>
 
 h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-li,
 button {
   color: black;
 }
