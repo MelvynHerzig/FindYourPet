@@ -1,6 +1,7 @@
 import { Controller, Request, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
 import { AuthService, LoginStatus, RegistrationsStatus } from './auth.service';
 import { CreateMemberDto, LoginMemberDto } from '../models/members/dto/members.dto';
+import { ERROR_PASSWORD_CONFIRMATION } from '../error/error-message';
 
 @Controller('auth')
 export class AuthController {

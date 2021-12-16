@@ -14,6 +14,7 @@ import { SpeciesInterface } from './species.interface';
 import { Observable } from 'rxjs';
 import { AuthGuard } from '@nestjs/passport';
 import { isSupportedLangAbr } from './species.utils';
+import { ERROR_LANGUAGE } from "../../error/error-message";
 
 
 /**

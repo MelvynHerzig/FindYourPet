@@ -10,6 +10,11 @@ import {
   toMemberDto,
 } from './dto/members.dto';
 import { MembersInterface } from './members.interface';
+import {
+  ERROR_USER_NOT_FOUND,
+  ERROR_INVALID_CREDENTIALS,
+  ERROR_USER_ALREADY_EXIST,
+} from '../../error/error-message';
 
 const bcrypt = require('bcryptjs');
 
