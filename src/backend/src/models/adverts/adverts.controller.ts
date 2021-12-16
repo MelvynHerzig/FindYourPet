@@ -5,11 +5,12 @@ import {
   Get,
   Param,
   Post,
-  Put,
+  Put, UseGuards,
 } from '@nestjs/common';
 import { AdvertsService } from './adverts.service';
 import { AdvertsInterface } from './adverts.interface';
 import { Observable } from 'rxjs';
+import { AuthGuard } from '@nestjs/passport';
 
 /**
  * Advert controller

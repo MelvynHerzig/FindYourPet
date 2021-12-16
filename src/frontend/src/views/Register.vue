@@ -84,15 +84,6 @@ export default {
   },
   methods: {
     register() {
-      console.log(this.firstName);
-      console.log(this.name);
-      console.log(this.email);
-      console.log(this.password);
-      console.log(this.confirmPassword);
-      console.log(this.street);
-      console.log(this.npa);
-      console.log(this.city);
-      console.log(this.phone);
       axios.post(process.env.VUE_APP_ROOT_API + '/auth/register', {
         firstname: this.firstname,
         name: this.name,

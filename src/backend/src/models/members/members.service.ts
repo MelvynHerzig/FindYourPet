@@ -9,8 +9,9 @@ import {
   MemberDto,
   toMemberDto,
 } from './dto/members.dto';
-import bcrypt from 'bcryptjs';
 import { MembersInterface } from './members.interface';
+
+const bcrypt = require('bcryptjs');
 
 /**
  * Service to query members
