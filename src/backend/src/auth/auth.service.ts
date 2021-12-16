@@ -22,7 +22,7 @@ export class AuthService {
   constructor(
     private readonly membersService: MembersService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async register(memberDto: CreateMemberDto): Promise<RegistrationsStatus> {
     let status: RegistrationsStatus = {
@@ -55,7 +55,7 @@ export class AuthService {
     const member = await this.membersService.findByPayload(payload);
 
     if (!member) {
-      throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(ERROR_INVALID_TOKEN, HttpStatus.UNAUTHORIZED);
     }
 
     return member;
