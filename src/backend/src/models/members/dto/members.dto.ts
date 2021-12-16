@@ -31,7 +31,8 @@ export class LoginMemberDto {
 }
 
 export const toMemberDto = (data: MembersEntity): MemberDto => {
-  const { id, firstname, name, email, street, NPA, city, phone, adverts } = data;
+  const { id, firstname, name, email, street, NPA, city, phone, adverts } =
+    data;
   return {
     id,
     firstname,
