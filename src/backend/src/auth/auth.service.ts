@@ -7,6 +7,7 @@ import {
   MemberDto,
 } from '../models/members/dto/members.dto';
 import { JwtPayload } from './jwt.strategy';
+import { Point } from 'geojson';
 
 export interface RegistrationsStatus {
   success: boolean;
@@ -22,15 +23,18 @@ export class AuthService {
   constructor(
     private readonly membersService: MembersService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
-  async register(memberDto: CreateMemberDto): Promise<RegistrationsStatus> {
+  async register(
+    memberDto: CreateMemberDto,
+    location: Point,
+  ): Promise<RegistrationsStatus> {
     let status: RegistrationsStatus = {
       success: true,
       message: 'member registered',
     };
     try {
-      await this.membersService.create(memberDto);
+      await this.membersService.create(memberDto, location);
     } catch (err) {
       status = {
         success: false,

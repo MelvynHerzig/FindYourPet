@@ -1,11 +1,12 @@
 import {
   BeforeInsert,
   Column,
-  Entity,
+  Entity, Index,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AdvertsEntity } from '../adverts/adverts.entity';
+import { Point } from 'geojson';
 
 const bcrypt = require('bcryptjs');
 
@@ -46,6 +47,15 @@ export class MembersEntity {
 
   @Column()
   phone: string;
+
+  @Index({ spatial: true })
+  @Column({
+    type: 'geography',
+    spatialFeatureType: 'Point',
+    srid: 4326,
+    nullable: true,
+  })
+  location: Point;
 
   @OneToMany(() => AdvertsEntity, (advert) => advert.member)
   adverts: AdvertsEntity[];

@@ -11,6 +11,7 @@ import {
 } from './dto/members.dto';
 import bcrypt from 'bcryptjs';
 import { MembersInterface } from './members.interface';
+import { Point } from 'geojson';
 
 /**
  * Service to query members
@@ -47,7 +48,10 @@ export class MembersService {
     throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
   }
 
-  async create(memberDto: CreateMemberDto): Promise<MemberDto> {
+  async create(
+    memberDto: CreateMemberDto,
+    location: Point,
+  ): Promise<MemberDto> {
     const { firstname, name, email, password, street, NPA, city, phone } =
       memberDto;
 
@@ -58,6 +62,7 @@ export class MembersService {
     if (memberInDb) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
+
     const member: MembersEntity = await this.memberRepository.create({
       firstname,
       name,
@@ -67,6 +72,7 @@ export class MembersService {
       NPA,
       city,
       phone,
+      location,
     });
 
     await this.memberRepository.save(member);
