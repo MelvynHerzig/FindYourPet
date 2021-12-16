@@ -9,7 +9,8 @@ import {
   MemberDto,
   toMemberDto,
 } from './dto/members.dto';
-
+import bcrypt from 'bcryptjs';
+import { MembersInterface } from './members.interface';
 
 /**
  * Service to query members
@@ -19,43 +20,39 @@ export class MembersService {
   constructor(
     @InjectRepository(MembersEntity)
     private readonly memberRepository: Repository<MembersEntity>,
-  ) {
-  }
+  ) {}
 
   async findOne(options?: object): Promise<MemberDto> {
     const member = await this.memberRepository.findOne(options);
     return toMemberDto(member);
   }
 
-  async findByPayload({email}: any): Promise<MemberDto> {
-    return await this.findOne({where: {email}});
+  async findByPayload({ email }: any): Promise<MemberDto> {
+    return await this.findOne({ where: { email } });
   }
 
-  async findByLogin({email, password}: LoginMemberDto): Promise<MemberDto> {
-    const member = await this.memberRepository.findOne({where: {email}});
+  async findByLogin({ email, password }: LoginMemberDto): Promise<MemberDto> {
+    const member = await this.memberRepository.findOne({ where: { email } });
 
     if (!member) {
       throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
     }
 
-
     const doesPasswordMatch = bcrypt.compareSync(password, member.password);
-
-
 
     if (doesPasswordMatch) {
       return toMemberDto(member);
     }
 
     throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
-
   }
 
   async create(memberDto: CreateMemberDto): Promise<MemberDto> {
-    let {firstname, name, email, password, street, NPA, city, phone} = memberDto;
+    const { firstname, name, email, password, street, NPA, city, phone } =
+      memberDto;
 
     const memberInDb = await this.memberRepository.findOne({
-      where: {email},
+      where: { email },
     });
 
     if (memberInDb) {
