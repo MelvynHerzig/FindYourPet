@@ -14,12 +14,11 @@
         />
         <button type="submit">{{ $t("login.button") }}</button>
       </form>
-      <div v-if="error">
-          {{ error }}
-      </div>
-      <div v-if="invalid">
-          {{ $t('login.fail') }}
-      </div>
+      <ToastError
+          v-if="error"
+          :text="error"
+          class="toast"
+      />
     </div>
   </div>
 </template>
@@ -27,12 +26,13 @@
 <script>
 import EmailInput from "../components/inputs/EmailInput";
 import PasswordInput from "../components/inputs/PasswordInput";
+import ToastError from "../components/toasts/ToastError";
 
 const axios = require('axios');
 
 export default {
   name: "Login",
-  components: {EmailInput, PasswordInput},
+  components: {ToastError, EmailInput, PasswordInput},
   data() {
     return {
       error: null,
@@ -44,8 +44,6 @@ export default {
   },
   methods: {
     login() {
-      console.log(this.email);
-      console.log(this.password);
       axios.post(process.env.VUE_APP_ROOT_API + '/auth/login', {
         email: this.email,
         password: this.password,
@@ -115,6 +113,10 @@ button:hover {
   height: 600px;
   margin: auto;
   display: flex;
+}
+
+.toast {
+  text-align: center;
 }
 
 </style>

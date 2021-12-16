@@ -46,10 +46,4 @@ export default {
   color: grey;
 }
 
-.icon:active,
-.icon:focus,
-.icon:hover {
-  color: var(--footer-color);
-}
-
 </style>

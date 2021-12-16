@@ -51,7 +51,11 @@
         />
         <button type="submit">{{ $t("register.button") }}</button>
       </form>
-      <div v-if="error">{{ error }}</div>
+      <ToastError
+          v-if="error"
+          :text="error"
+          class="toast"
+      />
     </div>
   </div>
 </template>
@@ -71,6 +75,7 @@ export default {
   data() {
     return {
       error: null,
+      invalidMessage: null,
       firstName: "",
       name: "",
       email: "",
@@ -84,15 +89,6 @@ export default {
   },
   methods: {
     register() {
-      console.log(this.firstName);
-      console.log(this.name);
-      console.log(this.email);
-      console.log(this.password);
-      console.log(this.confirmPassword);
-      console.log(this.street);
-      console.log(this.npa);
-      console.log(this.city);
-      console.log(this.phone);
       axios.post(process.env.VUE_APP_ROOT_API + '/auth/register', {
         firstname: this.firstname,
         name: this.name,
@@ -106,6 +102,11 @@ export default {
       })
       .then(result => {
         console.log(result.data);
+        if (result.success) {
+          this.$router.push('/login');
+        } else {
+          this.invalidMessage = result.message;
+        }
       })
       .catch(error => {
         this.error = error;
