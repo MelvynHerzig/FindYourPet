@@ -1,30 +1,31 @@
 <template>
-  <div class="ad" @click="$router.push('/adverts/' + advert.id)" >
+  <div class="ad" @click="$router.push('/adverts/' + advert.id)">
     <div class="image">
       <img src="images/kitty.jpg" alt="image">
     </div>
     <div class="name">
-      <h1>{{advert.title}}</h1>
-      <h3>{{specie.name}}</h3>
-      <h3>{{$t("animal_ad.age")}}: {{advert.petAge}}</h3>
+      <h1>{{ advert.title }}</h1>
+      <h3>{{ specie.name }}</h3>
+      <h3>{{ $t("animal_ad.age") }}: {{ advert.petAge }}</h3>
     </div>
-    <div class = "description">
+    <div class="description">
       <p>
-        {{advert.description}}
+        {{ advert.description }}
       </p>
     </div>
   </div>
 </template>
 
 <script>
-const axios = require('axios');
+import { getSpeciesById } from '../apicalls'
+
 export default {
   name: "AnimalAd",
   props: {
     advert: {}
   },
   beforeMount() {
-    axios.get(process.env.VUE_APP_ROOT_API + '/species/' + this.$root.$i18n.locale + "/" + this.advert.speciesId).then(result => {
+    getSpeciesById(this.advert.speciesId).then(result => {
       this.specie = result.data;
       console.log(result.data);
     });
@@ -40,11 +41,11 @@ export default {
 
 <style scoped>
 
-h3  ,p {
+h3, p {
   color: darkgrey;
 }
 
-.ad{
+.ad {
   width: 90%;
   height: 160px;
   background-color: var(--header-color);
@@ -57,9 +58,9 @@ h3  ,p {
 }
 
 .ad:hover {
-  cursor:pointer;
+  cursor: pointer;
   background-color: var(--footer-color);
- }
+}
 
 
 .ad div {
@@ -67,15 +68,15 @@ h3  ,p {
   margin-left: 20px;
 }
 
-img{
+img {
   width: 160px;
   height: 160px;
   align-self: center;
   border-radius: 50px;
 }
 
-.name{
-  
+.name {
+
   border-radius: 10px;
   flex: 1;
   width: 100px;
@@ -83,18 +84,18 @@ img{
   padding-left: 20px;
   border: solid;
   border-color: var(--header-selection-color);
-  
+
 }
 
-.description{
-  
+.description {
+
   border-radius: 10px;
   padding-left: 20px;
   padding-bottom: 10px;
   border: solid;
   border-color: var(--header-selection-color);
   flex: 2;
-  overflow:hidden;
+  overflow: hidden;
 }
 
 </style>
