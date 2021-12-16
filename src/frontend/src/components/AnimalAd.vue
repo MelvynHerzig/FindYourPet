@@ -27,7 +27,6 @@ export default {
   beforeMount() {
     getSpeciesById(this.advert.speciesId).then(result => {
       this.specie = result.data;
-      console.log(result.data);
     });
 
   },

@@ -5,11 +5,12 @@ import {
   Get,
   Param,
   Post,
-  Put,
+  Put, UseGuards,
 } from '@nestjs/common';
 import { AdvertsService } from './adverts.service';
 import { AdvertsInterface } from './adverts.interface';
 import { Observable } from 'rxjs';
+import { AuthGuard } from '@nestjs/passport';
 
 /**
  * Advert controller
@@ -29,8 +30,13 @@ export class AdvertsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Observable<AdvertsInterface> {
+  findOneById(@Param('id') id: string): Observable<AdvertsInterface> {
     return this.advertService.findOneAdvertById(parseInt(id));
+  }
+
+  @Get('members/:uuid')
+  findAllByUuid(@Param('uuid') uuid: string): Observable<AdvertsInterface[]> {
+    return this.advertService.findAllAdvertByUuid(uuid);
   }
 
   @Put()

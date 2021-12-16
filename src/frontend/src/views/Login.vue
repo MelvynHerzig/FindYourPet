@@ -3,19 +3,33 @@
     <div class="login">
       <h1>{{ $t("login.title") }}</h1>
       <form v-on:submit.prevent="login">
-        <EmailInput @valueInput="setEmail"/>
-        <PasswordInput @valueInput="setPassowrd"/>
+
+        <EmailInput
+            @valueInput="setEmail"
+            :name="'email'"
+        />
+        <PasswordInput
+            @valueInput="setPassowrd"
+            :name="'password'"
+            :placeholder="$t('account.password')"
+        />
         <button type="submit">{{ $t("login.button") }}</button>
       </form>
-      <div v-if="error">{{ error }}</div>
+      <div v-if="error">
+        {{ error }}
+      </div>
+      <div v-if="invalid">
+        {{ $t('login.fail') }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import EmailInput from "../components/EmailInput";
-import PasswordInput from "../components/PasswordInput";
 import { login } from "../apicalls";
+import EmailInput from "../components/inputs/EmailInput";
+import PasswordInput from "../components/inputs/PasswordInput";
+
 
 export default {
   name: "Login",
@@ -23,9 +37,9 @@ export default {
   data() {
     return {
       error: null,
+      invalid: null,
       email: "",
       password: "",
-      token: null,
     }
   },
   methods: {
@@ -35,9 +49,8 @@ export default {
         email: this.email,
         password: this.password,
       })
-          .then(result => {
-            this.token = result.data;
-            console.log(result.data);
+          .then(() => {
+            this.$router.push('/')
           })
           .catch(error => {
             this.error = error;
@@ -56,13 +69,6 @@ export default {
 <style scoped>
 
 h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-li,
 button {
   color: black;
 }
