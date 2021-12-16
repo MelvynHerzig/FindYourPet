@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { MembersService } from './members.service';
 import { MembersInterface } from './members.interface';
-import { Observable } from 'rxjs';
 import { MemberDto } from './dto/members.dto';
 
 /**
