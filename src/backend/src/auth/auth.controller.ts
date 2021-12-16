@@ -11,6 +11,15 @@ export class AuthController {
   public async register(
     @Body() createMemberDto: CreateMemberDto,
   ): Promise<RegistrationsStatus> {
+
+
+    if (createMemberDto.password !== createMemberDto.confirmPassword) {
+      throw new HttpException(
+        'Password and confirmation are not the same',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const result: RegistrationsStatus = await this.authService.register(
       createMemberDto,
     );

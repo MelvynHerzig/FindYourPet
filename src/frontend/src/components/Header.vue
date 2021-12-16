@@ -14,10 +14,10 @@
        <button @click="$router.push('/register  ')">  {{$t("header.register")}} </button>
        <div class="locale">
           <select v-model="$i18n.locale" value = "$i18n.locale">
-      <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
-        {{ lang }}
-      </option>
-    </select>
+            <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
+              {{ lang }}
+            </option>
+          </select>
         </div>
       </div>
   </div>
@@ -97,7 +97,7 @@ button:hover {
 }
 
 .account img {
-    width: 40x;
+    width: 40px;
     height: 40px;
     margin-right: 40px;
     align-self: center;
