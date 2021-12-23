@@ -10,12 +10,12 @@ import {
   toMemberDto,
 } from './dto/members.dto';
 import { MembersInterface } from './members.interface';
+import { Point } from 'geojson';
 import {
   ERROR_USER_NOT_FOUND,
   ERROR_INVALID_CREDENTIALS,
   ERROR_USER_ALREADY_EXIST,
 } from '../../error/error-message';
-
 const bcrypt = require('bcryptjs');
 
 /**
@@ -54,8 +54,17 @@ export class MembersService {
   }
 
   async create(memberDto: CreateMemberDto): Promise<MemberDto> {
-    const { firstname, name, email, password, street, NPA, city, phone } =
-      memberDto;
+    const {
+      firstname,
+      name,
+      email,
+      password,
+      street,
+      NPA,
+      city,
+      phone,
+      location,
+    } = memberDto;
 
     const memberInDb = await this.memberRepository.findOne({
       where: { email },
@@ -64,6 +73,7 @@ export class MembersService {
     if (memberInDb) {
       throw new HttpException(ERROR_USER_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
     }
+
     const member: MembersEntity = await this.memberRepository.create({
       firstname,
       name,
@@ -73,6 +83,7 @@ export class MembersService {
       NPA,
       city,
       phone,
+      location,
     });
 
     await this.memberRepository.save(member);

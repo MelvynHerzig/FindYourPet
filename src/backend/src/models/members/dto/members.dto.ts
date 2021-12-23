@@ -1,5 +1,6 @@
 import { AdvertsEntity } from '../../adverts/adverts.entity';
 import { MembersEntity } from '../members.entity';
+import { Point } from 'geojson';
 
 export class MemberDto {
   id: string;
@@ -23,6 +24,7 @@ export class CreateMemberDto {
   NPA: number;
   city: string;
   phone: string;
+  location: Point;
 }
 
 export class LoginMemberDto {
