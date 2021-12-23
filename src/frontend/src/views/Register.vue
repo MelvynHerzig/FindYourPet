@@ -7,52 +7,44 @@
             @valueInput="setFirstName"
             :name="'firstName'"
             :placeholder="$t('account.firstName')"
-            :default-value="'Alec'"
         />
         <NameInput
             @valueInput="setName"
             :name="'name'"
             :placeholder="$t('account.name')"
-            :default-value="'Berney'"
         />
         <EmailInput
             @valueInput="setEmail"
-            :default-value="'beral@sevjnet.ch'"
         />
         <PasswordInput
             @valueInput="setPassword"
             :name="'password'"
             :placeholder="$t('account.password')"
-            :default-value="'1234'"
         />
         <PasswordInput
             @valueInput="setConfirmPassword"
             :name="'confirmPassword'"
             :placeholder="$t('account.confirmPassword')"
-            :default-value="'1234'"
         />
         <LocationInput
             @valueInput="setStreet"
             :name="'street'"
             :type="'text'"
             :placeholder="$t('account.street')"
-            :default-value="'Rue du Village 28'"
         />
         <LocationInput
             @valueInput="setNPA"
             :name="'npa'"
             :type="'number'"
             :placeholder="$t('account.npa')"
-            :default-value="'1347'"
         />
         <LocationInput
             @valueInput="setCity"
             :name="'city'"
             :type="'text'"
             :placeholder="$t('account.city')"
-            :default-value="'Le Solliat'"
         />
-        <select v-if="addressToSelect != null" v-model="address">
+        <select v-if="addressToSelect != null" v-model="address" class="addressSelection">
           <option v-for="addr in this.addressToSelect"
                   :key="addr.address"
                   :value="addr.address"
@@ -64,7 +56,6 @@
             @valueInput="setPhone"
             :name="'phone'"
             :placeholder="$t('account.phone')"
-            :default-value="'0788377718'"
         />
         <button type="submit">{{ $t("register.button") }}</button>
       </form>
@@ -111,14 +102,14 @@ export default {
   methods: {
     async register() {
       this.invalidMessage = await register({
-        firstname: this.firstname,
+        firstname: this.firstName,
         name: this.name,
         email: this.email,
         password: this.password,
         confirmPassword: this.confirmPassword,
-        street: this.street,
-        NPA: this.npa,
-        city: this.city,
+        street: this.address.street,
+        NPA: this.address.npa,
+        city: this.address.city,
         phone: this.phone,
       });
     },
@@ -178,9 +169,9 @@ export default {
       let tokens = addressInString.split('<b>');
       let tokensbis = tokens[1].split(' ');
       let npa = tokensbis[0];
-      let city = tokensbis.slice(1).toString().replace(',', ' ').replace('</b>', '');
+      let city = tokensbis.slice(1).toString().replace(',', ' ').replace('</b>', '').trim();
       return {
-        street: tokens[0],
+        street: tokens[0].trim(),
         npa: npa,
         city: city,
       }
@@ -239,6 +230,11 @@ button:hover {
   height: 1100px;
   margin: auto;
   display: flex;
+}
+
+.addressSelection {
+  justify-content: center;
+  margin: 10px;
 }
 
 </style>
