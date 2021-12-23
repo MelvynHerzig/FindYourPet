@@ -10,6 +10,7 @@ import {
   toMemberDto,
 } from './dto/members.dto';
 import { MembersInterface } from './members.interface';
+import { ERROR_INVALID_CREDENTIALS, ERROR_USER_ALREADY_EXIST, ERROR_USER_NOT_FOUND } from "../../error/error-message";
 
 const bcrypt = require('bcryptjs');
 
@@ -21,19 +22,20 @@ export class MembersService {
   constructor(
     @InjectRepository(MembersEntity)
     private readonly memberRepository: Repository<MembersEntity>,
-  ) {}
+  ) {
+  }
 
   async findOne(options?: object): Promise<MemberDto> {
     const member = await this.memberRepository.findOne(options);
     return toMemberDto(member);
   }
 
-  async findByPayload({ email }: any): Promise<MemberDto> {
-    return await this.findOne({ where: { email } });
+  async findByPayload({email}: any): Promise<MemberDto> {
+    return await this.findOne({where: {email}});
   }
 
-  async findByLogin({ email, password }: LoginMemberDto): Promise<MemberDto> {
-    const member = await this.memberRepository.findOne({ where: { email } });
+  async findByLogin({email, password}: LoginMemberDto): Promise<MemberDto> {
+    const member = await this.memberRepository.findOne({where: {email}});
 
     if (!member) {
       throw new HttpException(ERROR_USER_NOT_FOUND, HttpStatus.NOT_FOUND);
@@ -49,11 +51,11 @@ export class MembersService {
   }
 
   async create(memberDto: CreateMemberDto): Promise<MemberDto> {
-    const { firstname, name, email, password, street, NPA, city, phone } =
+    const {firstname, name, email, password, street, NPA, city, phone} =
       memberDto;
 
     const memberInDb = await this.memberRepository.findOne({
-      where: { email },
+      where: {email},
     });
 
     if (memberInDb) {
@@ -68,8 +70,10 @@ export class MembersService {
       NPA,
       city,
       phone,
+
     });
 
+    member.isAdmin = false;
     await this.memberRepository.save(member);
     return toMemberDto(member);
   }

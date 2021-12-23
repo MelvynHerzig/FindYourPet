@@ -4,6 +4,7 @@ import { AdvertsEntity } from './adverts.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AdvertsInterface } from './adverts.interface';
 import { from, Observable } from 'rxjs';
+import { CreateAdvertsDto } from "./dto/adverts.dto";
 
 /**
  * Service to query adverts

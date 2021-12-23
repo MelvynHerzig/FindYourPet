@@ -30,6 +30,13 @@ export class LoginMemberDto {
   readonly password: string;
 }
 
+export class AdvertsMemberDto {
+  firstname: string;
+  name: string;
+  email: string;
+  phone: string;
+}
+
 export const toMemberDto = (data: MembersEntity): MemberDto => {
   const { id, firstname, name, email, street, NPA, city, phone, adverts } =
     data;

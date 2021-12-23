@@ -47,6 +47,9 @@ export class MembersEntity {
   @Column()
   phone: string;
 
+  @Column()
+  isAdmin: boolean;
+
   @OneToMany(() => AdvertsEntity, (advert) => advert.member)
   adverts: AdvertsEntity[];
 }

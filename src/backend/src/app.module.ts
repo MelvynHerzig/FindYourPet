@@ -5,6 +5,7 @@ import { MembersModule } from './models/members/members.module';
 import { AdvertsModule } from './models/adverts/adverts.module';
 import { SpeciesModule } from './models/species/species.module';
 import { AuthModule } from './auth/auth.module';
+import { CaslModule } from './security/casl/casl.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AuthModule } from './auth/auth.module';
       synchronize: true,
     }),
     AuthModule,
+    CaslModule,
   ],
   controllers: [],
   providers: [],

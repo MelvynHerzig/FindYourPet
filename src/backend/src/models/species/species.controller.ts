@@ -14,6 +14,8 @@ import { SpeciesInterface } from './species.interface';
 import { Observable } from 'rxjs';
 import { AuthGuard } from '@nestjs/passport';
 import { isSupportedLangAbr } from './species.utils';
+import { CheckPolicies, PoliciesGuard } from "../../security/policy/policy.guard";
+import { ERROR_LANGUAGE } from "../../error/error-message";
 
 
 /**
@@ -21,10 +23,11 @@ import { isSupportedLangAbr } from './species.utils';
  */
 @Controller('species')
 export class SpeciesController {
-  constructor(private speciesService: SpeciesService) {
-  }
+  constructor(private speciesService: SpeciesService) {}
 
   @Post()
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies()
   create(@Body() species: SpeciesInterface): Observable<SpeciesInterface> {
     return this.speciesService.createSpecies(species);
   }
