@@ -9,6 +9,7 @@ import { AuthService, LoginStatus, RegistrationsStatus } from './auth.service';
 import axios from 'axios';
 import { Point } from 'geojson';
 import { ERROR_PASSWORD_CONFIRMATION } from '../error/error-message';
+import { CreateMemberDto, LoginMemberDto } from '../models/members/dto/members.dto';
 
 @Controller('auth')
 export class AuthController {
