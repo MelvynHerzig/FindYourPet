@@ -3,7 +3,7 @@
     <i class="icon fas fa-key"></i>
     <FormInput
         @valueInput="sendEvent"
-        :defaultValue="''"
+        :defaultValue="defaultValue"
         :type="'password'"
         :name="name"
         :placeholder="placeholder"

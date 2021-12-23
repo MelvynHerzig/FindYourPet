@@ -3,7 +3,7 @@
     <i class="icon fas fa-phone"></i>
     <FormInput
         @valueInput="sendEvent"
-        :defaultValue="''"
+        :defaultValue="defaultValue"
         :type="'number'"
         :name="name"
         :placeholder="placeholder"

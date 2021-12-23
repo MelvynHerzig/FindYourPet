@@ -3,6 +3,7 @@
     <div class="login">
       <h1>{{ $t("login.title") }}</h1>
       <form v-on:submit.prevent="login">
+
         <EmailInput
             @valueInput="setEmail"
             :name="'email'"
@@ -24,11 +25,12 @@
 </template>
 
 <script>
+import { login } from "../apicalls";
+import { manageErrors } from "../errors";
 import EmailInput from "../components/inputs/EmailInput";
 import PasswordInput from "../components/inputs/PasswordInput";
 import ToastError from "../components/toasts/ToastError";
 
-const axios = require('axios');
 
 export default {
   name: "Login",
@@ -39,22 +41,20 @@ export default {
       invalid: null,
       email: "",
       password: "",
-      token: null,
     }
   },
   methods: {
     login() {
-      axios.post(process.env.VUE_APP_ROOT_API + '/auth/login', {
+      login({
         email: this.email,
         password: this.password,
       })
-      .then(result => {
-        this.token = result.data;
-        console.log(result.data);
-      })
-      .catch(error => {
-        this.error = error;
-      });
+          .then(() => {
+            this.$router.push('/')
+          })
+          .catch(error => {
+            this.error = manageErrors(error.message);
+          });
     },
     setEmail(value) {
       this.email = value;

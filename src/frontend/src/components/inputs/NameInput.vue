@@ -3,7 +3,7 @@
     <i class="icon fas fa-user"></i>
     <FormInput
         @valueInput="sendEvent"
-        :defaultValue="''"
+        :defaultValue="defaultValue"
         :type="'text'"
         :name="name"
         :placeholder="placeholder"

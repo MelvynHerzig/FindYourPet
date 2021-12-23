@@ -21,7 +21,8 @@ import { isSupportedLangAbr } from './species.utils';
  */
 @Controller('species')
 export class SpeciesController {
-  constructor(private speciesService: SpeciesService) {}
+  constructor(private speciesService: SpeciesService) {
+  }
 
   @Post()
   create(@Body() species: SpeciesInterface): Observable<SpeciesInterface> {
@@ -33,10 +34,7 @@ export class SpeciesController {
   @Get('/:lang')
   findAll(@Param('lang') lang: string): Observable<SpeciesInterface[]> {
     if (!isSupportedLangAbr(lang)) {
-      throw new HttpException(
-        { status: HttpStatus.NOT_FOUND, error: 'Bad language' },
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException(ERROR_LANGUAGE, HttpStatus.NOT_FOUND);
     }
 
     // Getting species and keeping only desired language
@@ -53,18 +51,13 @@ export class SpeciesController {
     return species;
   }
 
-  // For example http://localhost:3000/species/fr/1
-  // Answer { "id": 25, "name": "chien" }
   @Get('/:lang/:id')
   findOne(
     @Param('lang') lang: string,
     @Param('id') id: string,
   ): Observable<SpeciesInterface> {
     if (!isSupportedLangAbr(lang)) {
-      throw new HttpException(
-        { status: HttpStatus.NOT_FOUND, error: 'Bad language' },
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException(ERROR_LANGUAGE, HttpStatus.NOT_FOUND);
     }
 
     const species = this.speciesService.findOneSpeciesById(parseInt(id));

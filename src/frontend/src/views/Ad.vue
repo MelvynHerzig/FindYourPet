@@ -5,7 +5,7 @@
       <div class="info">
         <div class="short">
           <img src="..\..\public\images\kitty.jpg" alt="image">
-          <h2>{{specie.name}}</h2>
+          <h2>{{species.name}}</h2>
           <h3>{{advert.petGender}}, {{advert.petAge}} {{$t("ad.years")}}</h3>
         </div>
         <div class="description">
@@ -22,31 +22,29 @@
 </template>
 
 <script>
-const axios = require('axios');
+import { getAdvertById, getSpeciesById } from "../apicalls";
 
 export default {
   name: "Ad",
   beforeMount() {
-    axios.get(process.env.VUE_APP_ROOT_API + '/adverts/' + this.$route.params.id).then(result => {
+    getAdvertById(this.$route.params.id).then(result => {
       this.advert = result.data;
-      console.log(result.data);
-      axios.get(process.env.VUE_APP_ROOT_API + '/species/' + this.$root.$i18n.locale + "/" + this.advert.speciesId).then(result => {
-        this.specie = result.data;
-        console.log(result.data);
+      getSpeciesById(this.advert.speciesId).then(result => {
+        this.species = result.data;
       });
     });
-    
+
   },
   data: function () {
     return {
       advert: {},
-      specie: {}
-    } 
+      species: {}
+    }
   },
 }
 </script>
 
-<style scoped>  
+<style scoped>
 
 h1,
 h2,
@@ -110,6 +108,6 @@ img{
   height: 200px;
   align-self: center;
   border-radius: 50px;
-  
+
 }
 </style>

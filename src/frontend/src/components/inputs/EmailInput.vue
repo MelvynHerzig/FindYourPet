@@ -3,7 +3,7 @@
     <i class="icon fas fa-envelope"></i>
     <FormInput
         @valueInput="sendEvent"
-        :defaultValue="''"
+        :defaultValue="defaultValue"
         :type="'email'"
         :name="name"
         :placeholder="$t('account.email')"

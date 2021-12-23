@@ -3,7 +3,7 @@
     <i class="icon fas fa-map-marker-alt"></i>
     <FormInput
         @valueInput="sendEvent"
-        :defaultValue="''"
+        :defaultValue="defaultValue"
         :type="type"
         :name="name"
         :placeholder="placeholder"
