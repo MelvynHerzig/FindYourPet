@@ -48,6 +48,13 @@
     "years": "ans"
   },
   "ad_create":{
-    "title": "Titre"
+    "title": "Titre",
+    "age": "Age",
+    "description": "Description",
+    "species": "Espèce",
+    "sex": "Sexe",
+    "button": "Envoyer",
+    "male": "mâle",
+    "female":"femelle"
   }
 }

@@ -42,6 +42,13 @@
     "years": "Jahre"
   },
   "ad_create":{
-    "title": "Title"
+    "title": "Title",
+    "age": "agieren",
+    "description": "descr",
+    "species": "Espessen",
+    "sex": "sex",
+    "button": "submitten",
+    "male": "male",
+    "female":"female"
   }
 }
