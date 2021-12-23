@@ -9,9 +9,14 @@ import {
   MemberDto,
   toMemberDto,
 } from './dto/members.dto';
-import bcrypt from 'bcryptjs';
 import { MembersInterface } from './members.interface';
 import { Point } from 'geojson';
+import {
+  ERROR_USER_NOT_FOUND,
+  ERROR_INVALID_CREDENTIALS,
+  ERROR_USER_ALREADY_EXIST,
+} from '../../error/error-message';
+const bcrypt = require('bcryptjs');
 
 /**
  * Service to query members
@@ -36,7 +41,7 @@ export class MembersService {
     const member = await this.memberRepository.findOne({ where: { email } });
 
     if (!member) {
-      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(ERROR_USER_NOT_FOUND, HttpStatus.NOT_FOUND);
     }
 
     const doesPasswordMatch = bcrypt.compareSync(password, member.password);
@@ -45,7 +50,7 @@ export class MembersService {
       return toMemberDto(member);
     }
 
-    throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+    throw new HttpException(ERROR_INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED);
   }
 
   async create(
@@ -60,7 +65,7 @@ export class MembersService {
     });
 
     if (memberInDb) {
-      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+      throw new HttpException(ERROR_USER_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
     }
 
     const member: MembersEntity = await this.memberRepository.create({

@@ -3,6 +3,7 @@
     <div class="login">
       <h1>{{ $t("login.title") }}</h1>
       <form v-on:submit.prevent="login">
+
         <EmailInput
             @valueInput="setEmail"
             :name="'email'"
@@ -15,20 +16,20 @@
         <button type="submit">{{ $t("login.button") }}</button>
       </form>
       <div v-if="error">
-          {{ error }}
+        {{ error }}
       </div>
       <div v-if="invalid">
-          {{ $t('login.fail') }}
+        {{ $t('login.fail') }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { login } from "../apicalls";
 import EmailInput from "../components/inputs/EmailInput";
 import PasswordInput from "../components/inputs/PasswordInput";
 
-const axios = require('axios');
 
 export default {
   name: "Login",
@@ -39,24 +40,21 @@ export default {
       invalid: null,
       email: "",
       password: "",
-      token: null,
     }
   },
   methods: {
     login() {
-      console.log(this.email);
-      console.log(this.password);
-      axios.post(process.env.VUE_APP_ROOT_API + '/auth/login', {
+
+      login({
         email: this.email,
         password: this.password,
       })
-      .then(result => {
-        this.token = result.data;
-        console.log(result.data);
-      })
-      .catch(error => {
-        this.error = error;
-      });
+          .then(() => {
+            this.$router.push('/')
+          })
+          .catch(error => {
+            this.error = error;
+          });
     },
     setEmail(value) {
       this.email = value;
