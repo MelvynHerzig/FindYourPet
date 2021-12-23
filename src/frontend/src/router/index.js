@@ -3,6 +3,7 @@ import LandingPage from '../views/LandingPage.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Ad from '../views/Ad.vue'
+import AdCreate from '../views/AdCreate.vue'
 
 const routes = [
   {
@@ -11,8 +12,8 @@ const routes = [
     component: LandingPage
   },
   {
-    path: '/annonces',
-    name: 'Annonces',
+    path: '/adverts',
+    name: 'Adverts',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -32,11 +33,16 @@ const routes = [
     path: '/adverts/:id',
     name: 'Ad',
     component: Ad
-  }
+  },
+  {
+    path: '/adverts/create',
+    name: 'AdCreation',
+    component: AdCreate
+  },
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes
 })
 
