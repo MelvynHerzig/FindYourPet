@@ -8,8 +8,7 @@ import {
 } from '../models/members/dto/members.dto';
 import { JwtPayload } from './jwt.strategy';
 import { Point } from 'geojson';
-import {ERROR_INVALID_TOKEN} from "../error/error-message";
-
+import { ERROR_INVALID_TOKEN } from '../error/error-message';
 
 export interface RegistrationsStatus {
   success: boolean;
@@ -27,16 +26,13 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(
-    memberDto: CreateMemberDto,
-    location: Point,
-  ): Promise<RegistrationsStatus> {
+  async register(memberDto: CreateMemberDto): Promise<RegistrationsStatus> {
     let status: RegistrationsStatus = {
       success: true,
       message: 'member registered',
     };
     try {
-      await this.membersService.create(memberDto, location);
+      await this.membersService.create(memberDto);
     } catch (err) {
       status = {
         success: false,

@@ -53,12 +53,18 @@ export class MembersService {
     throw new HttpException(ERROR_INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED);
   }
 
-  async create(
-    memberDto: CreateMemberDto,
-    location: Point,
-  ): Promise<MemberDto> {
-    const { firstname, name, email, password, street, NPA, city, phone } =
-      memberDto;
+  async create(memberDto: CreateMemberDto): Promise<MemberDto> {
+    const {
+      firstname,
+      name,
+      email,
+      password,
+      street,
+      NPA,
+      city,
+      phone,
+      location,
+    } = memberDto;
 
     const memberInDb = await this.memberRepository.findOne({
       where: { email },
