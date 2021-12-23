@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { MembersService } from './members.service';
 import { MembersInterface } from './members.interface';
-import { Observable } from 'rxjs';
+import { MemberDto } from './dto/members.dto';
 
 /**
  * Member controller
@@ -17,20 +17,10 @@ import { Observable } from 'rxjs';
 @Controller('members')
 export class MembersController {
   constructor(private memberService: MembersService) {}
-/*
-  @Post()
-  create(@Body() member: MembersInterface): Observable<MembersInterface> {
-    return this.memberService.createMember(member);
-  }
 
-  @Get()
-  findAll(): Observable<MembersInterface[]> {
-    return this.memberService.findAllMember();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string): Observable<MembersInterface> {
-    return this.memberService.findOneMemberById(parseInt(id));
+  @Get('/:id')
+  async findOne(@Param('id') id: string): Promise<MemberDto> {
+    return await this.memberService.findOne({ id: id });
   }
 
   @Put()
@@ -38,10 +28,4 @@ export class MembersController {
     return this.memberService.updateMember(member);
   }
 
-  @Delete(':id')
-  deleteOne(@Param('id') id: string) {
-    return this.memberService.deleteMember(parseInt(id));
-  }
-
- */
 }

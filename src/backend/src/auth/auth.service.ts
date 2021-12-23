@@ -7,6 +7,8 @@ import {
   MemberDto,
 } from '../models/members/dto/members.dto';
 import { JwtPayload } from './jwt.strategy';
+import { Point } from 'geojson';
+import { ERROR_INVALID_TOKEN } from '../error/error-message';
 
 export interface RegistrationsStatus {
   success: boolean;
@@ -22,7 +24,7 @@ export class AuthService {
   constructor(
     private readonly membersService: MembersService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async register(memberDto: CreateMemberDto): Promise<RegistrationsStatus> {
     let status: RegistrationsStatus = {
@@ -55,7 +57,7 @@ export class AuthService {
     const member = await this.membersService.findByPayload(payload);
 
     if (!member) {
-      throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(ERROR_INVALID_TOKEN, HttpStatus.UNAUTHORIZED);
     }
 
     return member;

@@ -1,12 +1,14 @@
 import {
   BeforeInsert,
   Column,
-  Entity,
+  Entity, Index,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AdvertsEntity } from '../adverts/adverts.entity';
-import bcrypt from "bcrypt";
+import { Point } from 'geojson';
+
+const bcrypt = require('bcryptjs');
 
 /**
  * Entity to represents a user of FindYourPet
@@ -25,12 +27,13 @@ export class MembersEntity {
   @Column()
   email: string;
 
-  @Column()
+  @Column({
+    length: 60,
+  })
   password: string;
 
-  @BeforeInsert() async hashPassword() {
-    // We should crypt pass here
-    this.password = this.password;
+  @BeforeInsert() hashPassword() {
+    this.password = bcrypt.hashSync(this.password, 10);
   }
 
   @Column()
@@ -44,6 +47,15 @@ export class MembersEntity {
 
   @Column()
   phone: string;
+
+  @Index({ spatial: true })
+  @Column({
+    type: 'geography',
+    spatialFeatureType: 'Point',
+    srid: 4326,
+    nullable: true,
+  })
+  location: Point;
 
   @OneToMany(() => AdvertsEntity, (advert) => advert.member)
   adverts: AdvertsEntity[];

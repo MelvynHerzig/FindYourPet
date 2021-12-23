@@ -34,6 +34,26 @@
     "login": "Connetti",
     "register": "Registrati"
   },
+  "account": {
+    "email": "E-mail",
+    "password": "Password",
+    "confirmPassword": "Conferma Password",
+    "firstName": "Cognome",
+    "name": "Nome",
+    "street": "Strada",
+    "city": "Città",
+    "npa": "NPA",
+    "phone": "Telefono"
+  },
+  "login":{
+    "title": "Connetti",
+    "button": "Per Accedere",
+    "fail": "Email o password incorretto"
+  },
+  "register": {
+    "title": "Registrati",
+    "button": "Registrati"
+  },
   "animal_ad" : {
     "age": "età"
   },

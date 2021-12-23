@@ -14,7 +14,7 @@
 </template>
 
 <script>
-const axios = require('axios');
+import { getAllAdverts } from "../apicalls";
 
 import AnimalAd from "./AnimalAd";
 
@@ -22,7 +22,7 @@ export default {
   name: "AnimalAdsList",
   components: {AnimalAd},
   beforeMount() {
-    axios.get(process.env.VUE_APP_ROOT_API + '/adverts').then(result => {
+    getAllAdverts().then(result => {
       this.adverts = result.data;
       console.log(result.data);
     });
@@ -50,12 +50,12 @@ button{
   color: black;
 }
 
-h1{ 
+h1{
   text-align: center;
 }
 
 .animalAdsList {
-  
+
   background: url("../assets/images/pets.jpg");
   background-attachment:fixed;
   background-repeat: no-repeat;
@@ -64,7 +64,7 @@ h1{
   width: 100%;
   height: 1000px;
   display: flex;
-  
+
 }
 
 .list {

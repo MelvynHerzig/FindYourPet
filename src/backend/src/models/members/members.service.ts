@@ -1,11 +1,22 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { MembersEntity } from './members.entity';
-import { MembersInterface } from './members.interface';
 import { InjectRepository } from '@nestjs/typeorm';
-import { from, Observable } from 'rxjs';
-import { CreateMemberDto, LoginMemberDto, MemberDto, toMemberDto } from "./dto/members.dto";
-import bcrypt from 'bcrypt';
+import { from } from 'rxjs';
+import {
+  CreateMemberDto,
+  LoginMemberDto,
+  MemberDto,
+  toMemberDto,
+} from './dto/members.dto';
+import { MembersInterface } from './members.interface';
+import { Point } from 'geojson';
+import {
+  ERROR_USER_NOT_FOUND,
+  ERROR_INVALID_CREDENTIALS,
+  ERROR_USER_ALREADY_EXIST,
+} from '../../error/error-message';
+const bcrypt = require('bcryptjs');
 
 /**
  * Service to query members
@@ -22,34 +33,45 @@ export class MembersService {
     return toMemberDto(member);
   }
 
-  async findByPayload({ email}: any): Promise<MemberDto> {
-    return await this.findOne({ where: {email}});
+  async findByPayload({ email }: any): Promise<MemberDto> {
+    return await this.findOne({ where: { email } });
   }
 
-  async findByLogin({ email, password}: LoginMemberDto): Promise<MemberDto> {
-    const member = await this.memberRepository.findOne({ where: {email}});
+  async findByLogin({ email, password }: LoginMemberDto): Promise<MemberDto> {
+    const member = await this.memberRepository.findOne({ where: { email } });
 
     if (!member) {
-      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(ERROR_USER_NOT_FOUND, HttpStatus.NOT_FOUND);
     }
 
-    // We should crypt here
-    if (member.password !== password) {
-      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+    const doesPasswordMatch = bcrypt.compareSync(password, member.password);
+
+    if (doesPasswordMatch) {
+      return toMemberDto(member);
     }
 
-    return toMemberDto(member);
+    throw new HttpException(ERROR_INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED);
   }
 
   async create(memberDto: CreateMemberDto): Promise<MemberDto> {
-    const { firstname, name, email, password, street, NPA, city } = memberDto;
+    const {
+      firstname,
+      name,
+      email,
+      password,
+      street,
+      NPA,
+      city,
+      phone,
+      location,
+    } = memberDto;
 
     const memberInDb = await this.memberRepository.findOne({
       where: { email },
     });
 
     if (memberInDb) {
-      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+      throw new HttpException(ERROR_USER_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
     }
 
     const member: MembersEntity = await this.memberRepository.create({
@@ -60,8 +82,15 @@ export class MembersService {
       street,
       NPA,
       city,
+      phone,
+      location,
     });
+
     await this.memberRepository.save(member);
     return toMemberDto(member);
+  }
+
+  updateMember(member: MembersInterface) {
+    return from(this.memberRepository.update(member.id, member));
   }
 }

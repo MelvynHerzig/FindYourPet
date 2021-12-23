@@ -40,6 +40,9 @@ export class AdvertsEntity {
   })
   petGender: PetGender;
 
+  @Column({ nullable: true })
+  memberId: string;
+
   @ManyToOne(() => MembersEntity, (member) => member.adverts)
   member: MembersEntity;
 

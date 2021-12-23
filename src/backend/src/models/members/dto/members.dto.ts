@@ -1,5 +1,6 @@
 import { AdvertsEntity } from '../../adverts/adverts.entity';
 import { MembersEntity } from '../members.entity';
+import { Point } from 'geojson';
 
 export class MemberDto {
   id: string;
@@ -23,6 +24,7 @@ export class CreateMemberDto {
   NPA: number;
   city: string;
   phone: string;
+  location: Point;
 }
 
 export class LoginMemberDto {
@@ -31,7 +33,8 @@ export class LoginMemberDto {
 }
 
 export const toMemberDto = (data: MembersEntity): MemberDto => {
-  const { id, firstname, name, email, street, NPA, city, phone, adverts } = data;
+  const { id, firstname, name, email, street, NPA, city, phone, adverts } =
+    data;
   return {
     id,
     firstname,
