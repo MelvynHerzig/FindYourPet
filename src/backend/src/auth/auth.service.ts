@@ -7,6 +7,7 @@ import {
   MemberDto,
 } from '../models/members/dto/members.dto';
 import { JwtPayload } from './jwt.strategy';
+import {ERROR_INVALID_TOKEN} from "../error/error-message";
 
 export interface RegistrationsStatus {
   success: boolean;
