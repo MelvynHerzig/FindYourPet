@@ -58,9 +58,7 @@ button{
   --select-color: #4e598c25;
   --transparent-background-color: rgba(255, 255, 255, 0.85);
   --transparent-border-color: #5a648f25
-
 }
-
 
 /*hide scrollbar*/
 body {

@@ -44,7 +44,7 @@
             :type="'text'"
             :placeholder="$t('account.city')"
         />
-        <select v-if="addressToSelect != null" v-model="address" class="addressSelection">
+        <select v-if="addressToSelect" v-model="address" class="addressSelection">
           <option v-for="addr in this.addressToSelect"
                   :key="addr.address"
                   :value="addr.address"
@@ -227,14 +227,23 @@ button:hover {
   background: url("../assets/images/dogs.jpg") no-repeat fixed center;
   background-size: contain;
   width: 100%;
-  height: 1100px;
+  height: 1000px;
   margin: auto;
   display: flex;
 }
 
 .addressSelection {
   justify-content: center;
-  margin: 10px;
+  margin-bottom: 20px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  border-radius: 5px;
+  width: 100%;
+  height: 42px;
+}
+.addressSelection:active,
+.addressSelection:focus,
+.addressSelection:hover {
+  border: 1px solid var(--footer-color);
 }
 
 </style>

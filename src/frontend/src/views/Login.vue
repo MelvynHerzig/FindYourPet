@@ -115,8 +115,4 @@ button:hover {
   display: flex;
 }
 
-.toast {
-  text-align: center;
-}
-
 </style>
