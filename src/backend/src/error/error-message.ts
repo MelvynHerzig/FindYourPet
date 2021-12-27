@@ -19,3 +19,6 @@ export const FILTER_INVALID_PET_MIN_AGE =
 export const FILTER_INVALID_RADIUS =
   'Search radius must be an integer and at least 1 kilometer';
 export const FILTER_INVALID_GENDER = "Pet gender must be 'male' or 'female'";
+
+/** Page **/
+export const FILTER_INVALID_PAGE = 'invalid page number';

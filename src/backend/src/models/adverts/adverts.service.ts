@@ -8,6 +8,7 @@ import { FilterDto } from './dto/filters.dto';
 import { SpeciesService } from '../species/species.service';
 import {
   FILTER_INVALID_GENDER,
+  FILTER_INVALID_PAGE,
   FILTER_INVALID_PET_MIN_AGE,
   FILTER_INVALID_RADIUS,
 } from '../../error/error-message';
@@ -18,6 +19,8 @@ import { MembersService } from '../members/members.service';
  */
 @Injectable()
 export class AdvertsService {
+  pageSize = 34;
+
   constructor(
     @InjectRepository(AdvertsEntity)
     private readonly advertRepository: Repository<AdvertsEntity>,
@@ -29,8 +32,18 @@ export class AdvertsService {
     return from(this.advertRepository.save(advert));
   }
 
-  findAllAdvert(): Observable<AdvertsInterface[]> {
-    return from(this.advertRepository.find());
+  findPageAdvert(pageNum: number): Observable<AdvertsInterface[]> {
+    this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
+
+    return from(
+      this.advertRepository.find({
+        order: {
+          id: 'ASC',
+        },
+        skip: (pageNum - 1) * this.pageSize,
+        take: this.pageSize,
+      }),
+    );
   }
 
   findOneAdvertById(id: number): Observable<AdvertsInterface> {
@@ -41,7 +54,23 @@ export class AdvertsService {
     return from(this.advertRepository.find({ memberId: uuid }));
   }
 
-  async filterAdvert(filters: FilterDto): Promise<AdvertsInterface[]> {
+  findTop10RecentAdvert(): Observable<AdvertsInterface[]> {
+    return from(
+      this.advertRepository.find({
+        order: {
+          lastModified: 'DESC',
+        },
+        take: 10,
+      }),
+    );
+  }
+
+  async filterAdvert(
+    filters: FilterDto,
+    pageNum: number,
+  ): Promise<AdvertsInterface[]> {
+    this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
+
     // TODO get user location that emited request
     const origin = await this.membersService.findLocationByPayload({
       email: 'mel2@heig-vd.ch',
@@ -79,6 +108,9 @@ export class AdvertsService {
           range: filters.radius * 1000, //KM conversion
         });
     }
+
+    // Page
+    query.skip((pageNum - 1) * this.pageSize).take(this.pageSize);
 
     // Renaming properties because of queryBuilder
     const adverts = await query.getRawMany();
