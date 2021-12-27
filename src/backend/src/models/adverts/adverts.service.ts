@@ -110,7 +110,10 @@ export class AdvertsService {
     }
 
     // Page
-    query.skip((pageNum - 1) * this.pageSize).take(this.pageSize);
+    query
+      .orderBy('adverts.id', 'ASC')
+      .skip((pageNum - 1) * this.pageSize)
+      .take(this.pageSize);
 
     // Renaming properties because of queryBuilder
     const adverts = await query.getRawMany();
