@@ -15,25 +15,26 @@
         />
         <button type="submit">{{ $t("login.button") }}</button>
       </form>
-      <div v-if="error">
-        {{ error }}
-      </div>
-      <div v-if="invalid">
-        {{ $t('login.fail') }}
-      </div>
+      <ToastError
+          v-if="error"
+          :text="error"
+          class="toast"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { login } from "../apicalls";
+import { manageErrors } from "../errors";
 import EmailInput from "../components/inputs/EmailInput";
 import PasswordInput from "../components/inputs/PasswordInput";
+import ToastError from "../components/toasts/ToastError";
 
 
 export default {
   name: "Login",
-  components: {EmailInput, PasswordInput},
+  components: {ToastError, EmailInput, PasswordInput},
   data() {
     return {
       error: null,
@@ -44,7 +45,6 @@ export default {
   },
   methods: {
     login() {
-
       login({
         email: this.email,
         password: this.password,
@@ -53,7 +53,7 @@ export default {
             this.$router.push('/')
           })
           .catch(error => {
-            this.error = error;
+            this.error = manageErrors(error.message);
           });
     },
     setEmail(value) {

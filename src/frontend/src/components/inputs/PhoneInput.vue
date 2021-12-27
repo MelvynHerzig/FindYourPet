@@ -3,7 +3,7 @@
     <i class="icon fas fa-phone"></i>
     <FormInput
         @valueInput="sendEvent"
-        :defaultValue="''"
+        :defaultValue="defaultValue"
         :type="'number'"
         :name="name"
         :placeholder="placeholder"
@@ -43,12 +43,6 @@ export default {
   top: 13px;
   left: 20px;
   color: grey;
-}
-
-.icon:active,
-.icon:focus,
-.icon:hover {
-  color: var(--footer-color);
 }
 
 </style>

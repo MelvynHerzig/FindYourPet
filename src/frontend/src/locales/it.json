@@ -34,6 +34,15 @@
     "login": "Connetti",
     "register": "Registrati"
   },
+  "errors": {
+    "langage": "Cattivo linguaggio usato per la richiesta",
+    "passwordConfirmation": "La conferma della password non corrisponde alla password",
+    "creditentials": "La password e/o l'e-mail non sono corrette",
+    "userAlreadyExist": "L'e-mail esiste già",
+    "userNotFound": "Email non trovata",
+    "invalidToken": "Token non valido utilizzato",
+    "invalidAddress": "Indirizzo non valido dato"
+  },
   "account": {
     "email": "E-mail",
     "password": "Password",
