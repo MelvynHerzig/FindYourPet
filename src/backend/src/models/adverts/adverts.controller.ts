@@ -3,13 +3,18 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
-  Put, UseGuards,
+  Put,
+  UseGuards,
 } from '@nestjs/common';
 import { AdvertsService } from './adverts.service';
 import { AdvertsInterface } from './adverts.interface';
-import { Observable } from 'rxjs';
+import { filter, Observable } from 'rxjs';
+import { FilterDto } from './dto/filters.dto';
+import { ERROR_PASSWORD_CONFIRMATION } from '../../error/error-message';
 
 /**
  * Advert controller
@@ -21,6 +26,19 @@ export class AdvertsController {
   @Post()
   create(@Body() advert: AdvertsInterface): Observable<AdvertsInterface> {
     return this.advertService.createAdvert(advert);
+  }
+
+  @Post('filters')
+  async findAllByFilter(
+    @Body() filterDto: FilterDto,
+  ): Promise<AdvertsInterface[]> {
+    try {
+      await this.advertService.checkFilter(filterDto);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+
+    return await this.advertService.filterAdvert(filterDto);
   }
 
   @Get()

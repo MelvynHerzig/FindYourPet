@@ -37,6 +37,11 @@ export class MembersService {
     return await this.findOne({ where: { email } });
   }
 
+  async findLocationByPayload({ email }: any): Promise<Point> {
+    const user = await this.memberRepository.findOne({ where: { email } });
+    return user.location;
+  }
+
   async findByLogin({ email, password }: LoginMemberDto): Promise<MemberDto> {
     const member = await this.memberRepository.findOne({ where: { email } });
 

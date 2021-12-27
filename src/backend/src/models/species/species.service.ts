@@ -5,6 +5,7 @@ import { SpeciesInterface } from './species.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
 import { jsonStringFromSpecies } from './species.utils';
+import { FILTER_INVALID_SPECIES } from '../../error/error-message';
 
 /**
  * Service to query species
@@ -93,12 +94,12 @@ export class SpeciesService {
     return from(this.speciesRepository.save(species));
   }
 
-  findAllSpecies(): Observable<SpeciesInterface[]> {
-    return from(this.speciesRepository.find());
+  findAllSpecies(): Promise<SpeciesInterface[]> {
+    return this.speciesRepository.find();
   }
 
-  findOneSpeciesById(id: number): Observable<SpeciesInterface> {
-    return from(this.speciesRepository.findOne(id));
+  async findOneSpeciesById(id: number): Promise<SpeciesInterface> {
+    return await this.speciesRepository.findOne(id);
   }
 
   updateSpecies(species: SpeciesInterface) {
@@ -107,5 +108,17 @@ export class SpeciesService {
 
   deleteSpecies(id: number) {
     return from(this.speciesRepository.delete(id));
+  }
+
+  async checkSpecies(id: number) {
+    try {
+      const species = await this.findOneSpeciesById(id);
+
+      if (species === undefined) {
+        throw FILTER_INVALID_SPECIES;
+      }
+    } catch (e) {
+      throw FILTER_INVALID_SPECIES;
+    }
   }
 }
