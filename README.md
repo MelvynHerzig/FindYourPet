@@ -110,13 +110,16 @@ $ npm install
 ```
 
 ### Projet Backend
+
 En résumé, il suffit de lancer un container docker avec:
+> Cette commande doit être exécutée depuis le dossier backend/database
 
 ```bash
 $ docker-compose up
 ```
 
 Puis lancer le mode voulu:
+> Toutes les commandes décrites ci-dessous doivent être lancées depuis le dossier backend
 
 ```bash
 # development
@@ -132,6 +135,7 @@ $ npm run start:prod
 ### Projet Frontend
 
 En résumé, il suffit de lancer le mode voulu:
+> Toutes les commandes décrites ci-dessous doivent être lancées depuis le dossier frontend
 
 ```bash
 # compiles and hot-reloads for development
