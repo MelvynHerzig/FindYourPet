@@ -1,5 +1,5 @@
 <template>
-  <div class="landing1">
+  <section class="landing1">
     <div class="inner">
       <img src="../assets/images/findyourpet_logo.png"/>
       <h1>{{$t("landing.welcome")}}</h1>
@@ -7,23 +7,17 @@
       <button @click="$router.push('/adverts')">{{$t("landing.see")}}</button>
       <button @click="$router.push('/adverts/create')"> {{$t("landing.create")}} </button>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>  
 
 h1,
-h2,
-h3,
-h4,
-h5,
-h6,
 p,
-li,
-button{
+button {
   color: black;
 }
 
@@ -39,21 +33,23 @@ button {
   border-color:var(--header-color);
 }
 
-button:hover{
+button:hover {
   cursor:pointer;
   background-color: var(--select-color);
 }
 
-.landing1{
+.landing1 {
   background: url("../assets/images/test.jpg");
   background-attachment:fixed;
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
   width: 100%;
-  height: 600px;
+  height: 100%;
   margin: auto;
   display: flex;
+  padding-top: 3em;
+  padding-bottom: 2em;
 }
 
 .inner {
@@ -67,4 +63,5 @@ button:hover{
   border: solid;
   border-color: var(--transparent-border-color);
 }
+
 </style>
