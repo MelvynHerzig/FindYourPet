@@ -1,26 +1,29 @@
 <template>
-  <div class="header">
-      <div class="logo">
-        <a @click="$router.push('/')">
-            <img src="@/assets/images/WIDE_logo.png" alt="logo" >
-        </a>
-      </div>
-      <div class="nav">
-       <button @click="$router.push('/')"> {{$t("header.home")}}  </button>
-       <button @click="$router.push('/adverts')">  {{$t("header.advert")}} </button>
-      </div>
-      <div class="account">      
-       <button @click="$router.push('/login')">  {{$t("header.login")}} </button>
-       <button @click="$router.push('/register')">  {{$t("header.register")}} </button>
-       <div class="locale">
-          <select v-model="this.$i18n.locale" value = "this.$i18n.locale" >
-            <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
-              {{ lang }}
-            </option>
-          </select>
-        </div>
-      </div>
-  </div>
+  <nav class="header">
+    <div class="logo">
+      <a @click="$router.push('/')">
+        <img src="@/assets/images/WIDE_logo.png" alt="logo" >
+      </a>
+    </div>
+    <div class="nav link">
+      <button @click="$router.push('/')"> {{$t("header.home")}} </button>
+      <button @click="$router.push('/annonces')"> {{$t("header.advert")}} </button>
+    </div>
+    <div class="account link">
+      <button @click="$router.push('/login')"> {{$t("header.login")}} </button>
+      <button @click="$router.push('/register')"> {{$t("header.register")}} </button>
+    </div>
+    <div class="locale">
+      <select v-model="$i18n.locale" value = "$i18n.locale">
+        <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
+          {{ lang }}
+        </option>
+      </select>
+    </div>
+    <a href="#hamburger-icon" @click="displayMenu">
+      <i class="fa fa-bars"></i>
+    </a>
+  </nav>
 </template>
 
 <script>
@@ -29,8 +32,19 @@ export default {
   name: 'locale-changer',
   data () {
     return { langs: ['fr', 'en', 'it', 'de'] }
+  },
+  methods: {
+    displayMenu() {
+      const link = document.querySelector('.link');
+      if (link.style.display === "none") {
+        link.style.display = "block";
+      }
+      else {
+        link.style.display = "none";
+      }
+    }
   }
-  
+
 }
 </script>
 
