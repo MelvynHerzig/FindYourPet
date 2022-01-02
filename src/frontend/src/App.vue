@@ -5,7 +5,7 @@
         crossorigin="anonymous">
   <div class="main-div">
     <Header/>  
-    <router-view/>
+    <router-view class="content"/>
     <Footer/>
   </div>
 </template>
@@ -90,4 +90,9 @@ body {
   background-attachment:fixed;
   background-position: left top;
 }
+
+.content {
+  padding-bottom: 200px;
+}
+
 </style>
