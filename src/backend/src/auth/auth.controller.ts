@@ -13,7 +13,6 @@ import {
   CreateMemberDto,
   LoginMemberDto,
 } from '../models/members/dto/members.dto';
-import { create } from 'domain';
 
 @Controller('auth')
 export class AuthController {
@@ -29,31 +28,6 @@ export class AuthController {
         HttpStatus.BAD_REQUEST,
       );
     }
-
-    // Getting geolocation
-    const addr = `${createMemberDto.street} ${createMemberDto.NPA} ${createMemberDto.city}`;
-    const response = await axios
-      .get(
-        `https://api3.geo.admin.ch/rest/services/api/SearchServer?searchText=${addr}&type=locations`,
-      )
-      .then((resp) => {
-        return resp.data.results;
-      });
-
-    if (response.length === 0) {
-      throw new HttpException(
-        'No matching result for street NPA city.',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    // Preparing location
-    const location: Point = {
-      type: 'Point',
-      coordinates: [response[0].attrs.lon, response[0].attrs.lat],
-    };
-
-    createMemberDto.location = location;
 
     const result: RegistrationsStatus = await this.authService.register(
       createMemberDto,

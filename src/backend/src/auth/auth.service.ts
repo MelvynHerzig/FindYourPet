@@ -9,6 +9,7 @@ import {
 import { JwtPayload } from './jwt.strategy';
 import { Point } from 'geojson';
 import { ERROR_INVALID_TOKEN } from '../error/error-message';
+import axios from 'axios';
 
 export interface RegistrationsStatus {
   success: boolean;
@@ -32,6 +33,31 @@ export class AuthService {
       message: 'member registered',
     };
     try {
+      // Getting geolocation
+      const addr = `${memberDto.street} ${memberDto.NPA} ${memberDto.city}`;
+      const response = await axios
+        .get(
+          `https://api3.geo.admin.ch/rest/services/api/SearchServer?searchText=${addr}&type=locations`,
+        )
+        .then((resp) => {
+          return resp.data.results;
+        });
+
+      if (response.length === 0) {
+        throw new HttpException(
+          'No matching result for street NPA city.',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      // Preparing location
+      const location: Point = {
+        type: 'Point',
+        coordinates: [response[0].attrs.lon, response[0].attrs.lat],
+      };
+
+      memberDto.location = location;
+
       await this.membersService.create(memberDto);
     } catch (err) {
       status = {

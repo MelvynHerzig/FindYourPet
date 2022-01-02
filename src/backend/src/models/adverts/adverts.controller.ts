@@ -3,13 +3,17 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
-  Put, UseGuards,
+  Put,
+  UseGuards,
 } from '@nestjs/common';
 import { AdvertsService } from './adverts.service';
 import { AdvertsInterface } from './adverts.interface';
-import { Observable } from 'rxjs';
+import { filter, Observable } from 'rxjs';
+import { FilterDto } from './dto/filters.dto';
 
 /**
  * Advert controller
@@ -23,12 +27,32 @@ export class AdvertsController {
     return this.advertService.createAdvert(advert);
   }
 
-  @Get()
-  findAll(): Observable<AdvertsInterface[]> {
-    return this.advertService.findAllAdvert();
+  @Post('filters/page/:pageNum')
+  async findAllByFilter(
+    @Body() filterDto: FilterDto,
+    @Param('pageNum') pageNum: string,
+  ): Promise<AdvertsInterface[]> {
+    try {
+      await this.advertService.checkFilter(filterDto);
+      return await this.advertService.filterAdvert(
+        filterDto,
+        parseInt(pageNum, 10),
+      );
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  @Get(':id')
+  @Get('page/:pageNum')
+  findPage(@Param('pageNum') pageNum: string): Observable<AdvertsInterface[]> {
+    try {
+      return this.advertService.findPageAdvert(parseInt(pageNum, 10));
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get('id/:id')
   findOneById(@Param('id') id: string): Observable<AdvertsInterface> {
     return this.advertService.findOneAdvertById(parseInt(id));
   }
@@ -36,6 +60,11 @@ export class AdvertsController {
   @Get('members/:uuid')
   findAllByUuid(@Param('uuid') uuid: string): Observable<AdvertsInterface[]> {
     return this.advertService.findAllAdvertByUuid(uuid);
+  }
+
+  @Get('recent')
+  findTopRecent(): Observable<AdvertsInterface[]> {
+    return this.advertService.findTop10RecentAdvert();
   }
 
   @Put()
