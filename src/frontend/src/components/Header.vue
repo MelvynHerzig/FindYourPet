@@ -78,6 +78,7 @@ button:hover {
   background-color: var(--header-color);
   width: 100%;
   top: 0;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
 }
