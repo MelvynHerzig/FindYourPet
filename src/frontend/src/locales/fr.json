@@ -34,6 +34,15 @@
     "login": "Se connecter",
     "register": "S'inscrire"
   },
+  "errors": {
+    "langage": "Mauvaise langue utilisée pour la requête",
+    "passwordConfirmation": "La Confirmation de Mot de passe ne correspond pas au Mot de passe",
+    "creditentials": "Mot de passe et/ou l'adresse email est incorrecte",
+    "userAlreadyExist": "L'email existe déjà",
+    "userNotFound": "l'email n'a pas été trouvée",
+    "invalidToken": "Jeton invalide utilisé",
+    "invalidAddress": "L'adresse fournie est invalide"
+  },
   "account": {
     "email": "Adresse email",
     "password": "Mot de passe",
@@ -60,5 +69,15 @@
   "ad":{
     "contact": "Contact",
     "years": "ans"
+  },
+  "ad_create":{
+    "title": "Titre",
+    "age": "Age",
+    "description": "Description",
+    "species": "Espèce",
+    "sex": "Sexe",
+    "button": "Envoyer",
+    "male": "mâle",
+    "female":"femelle"
   }
 }

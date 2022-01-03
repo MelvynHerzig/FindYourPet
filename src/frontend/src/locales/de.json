@@ -34,6 +34,15 @@
     "login": "Verbinden",
     "register": "Anmeldung"
   },
+  "errors": {
+    "langage": "Falsche Sprache für die Anfrage",
+    "passwordConfirmation": "Passwortbestätigung stimmt nicht mit dem Passwort überein",
+    "creditentials": "Passwort oder/und E-Mail sind falsch",
+    "userAlreadyExist": "E-Mail existiert bereits",
+    "userNotFound": "Email wurde nicht gefunden",
+    "invalidToken": "Ungültiges Token verwendet",
+    "invalidAddress": "Ungültige Adresse angegeben"
+  },
   "account": {
     "email": "E-Mail-Addresse",
     "password": "Passwort",
@@ -60,5 +69,15 @@
   "ad":{
     "contact": "Kontact",
     "years": "Jahre"
+  },
+  "ad_create":{
+    "title": "Title",
+    "age": "agieren",
+    "description": "descr",
+    "species": "Espessen",
+    "sex": "sex",
+    "button": "submitten",
+    "male": "male",
+    "female":"female"
   }
 }

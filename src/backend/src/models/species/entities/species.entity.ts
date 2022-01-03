@@ -1,17 +1,19 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { AdvertsEntity } from '../adverts/adverts.entity';
+import { Adverts } from '../../adverts/entities/adverts.entity';
+import { Exclude } from 'class-transformer';
 
 /**
  * Entity to represents a pet species of FindYourPet
  */
 @Entity('species')
-export class SpeciesEntity {
+export class Species {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
   name: string;
 
-  @OneToMany(() => AdvertsEntity, (advert) => advert.species)
-  adverts: AdvertsEntity[];
+  @Exclude()
+  @OneToMany(() => Adverts, (advert) => advert.species)
+  adverts: Adverts[];
 }

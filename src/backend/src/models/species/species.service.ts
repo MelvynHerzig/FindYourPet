@@ -1,10 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { SpeciesEntity } from './species.entity';
-import { SpeciesInterface } from './species.interface';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Species } from './entities/species.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { from, Observable } from 'rxjs';
-import { jsonStringFromSpecies } from './species.utils';
+import { isSupportedLangAbr, jsonStringFromSpecies } from './species.utils';
+import {
+  ERROR_LANGUAGE,
+  FILTER_INVALID_SPECIES,
+} from '../../error/error-message';
+import { CreateSpeciesDto } from './dto/create.species.dto';
+import { UpdateSpeciesDto } from './dto/update.species.dto.js';
 
 /**
  * Service to query species
@@ -12,22 +16,22 @@ import { jsonStringFromSpecies } from './species.utils';
 @Injectable()
 export class SpeciesService {
   constructor(
-    @InjectRepository(SpeciesEntity)
-    private readonly speciesRepository: Repository<SpeciesEntity>,
+    @InjectRepository(Species)
+    private readonly speciesRepository: Repository<Species>,
   ) {
-    const dog = new SpeciesEntity();
+    const dog = new Species();
     dog.name = jsonStringFromSpecies('dog', 'chien', 'Hund', 'cane');
     speciesRepository.save(dog).catch((err) => console.log(err));
 
-    const cat = new SpeciesEntity();
+    const cat = new Species();
     cat.name = jsonStringFromSpecies('cat', 'chat', 'Katze', 'gatto');
     speciesRepository.save(cat).catch((err) => console.log(err));
 
-    const bird = new SpeciesEntity();
+    const bird = new Species();
     bird.name = jsonStringFromSpecies('bird', 'oiseau', 'Vogel', 'ucello');
     speciesRepository.save(bird).catch((err) => console.log(err));
 
-    const reptile = new SpeciesEntity();
+    const reptile = new Species();
     reptile.name = jsonStringFromSpecies(
       'reptile',
       'reptile',
@@ -36,19 +40,19 @@ export class SpeciesService {
     );
     speciesRepository.save(reptile).catch((err) => console.log(err));
 
-    const horse = new SpeciesEntity();
+    const horse = new Species();
     horse.name = jsonStringFromSpecies('horse', 'cheval', 'Pferd', 'cavallo');
     speciesRepository.save(horse).catch((err) => console.log(err));
 
-    const fishJson = new SpeciesEntity();
+    const fishJson = new Species();
     fishJson.name = jsonStringFromSpecies('fish', 'poisson', 'Fisch', 'pesce');
     speciesRepository.save(fishJson).catch((err) => console.log(err));
 
-    const rabbit = new SpeciesEntity();
+    const rabbit = new Species();
     rabbit.name = jsonStringFromSpecies('rabbit', 'lapin', 'Hase', 'coniglio');
     speciesRepository.save(rabbit).catch((err) => console.log(err));
 
-    const poultry = new SpeciesEntity();
+    const poultry = new Species();
     poultry.name = jsonStringFromSpecies(
       'poultry',
       'volaille',
@@ -57,7 +61,7 @@ export class SpeciesService {
     );
     speciesRepository.save(poultry).catch((err) => console.log(err));
 
-    const hamster = new SpeciesEntity();
+    const hamster = new Species();
     hamster.name = jsonStringFromSpecies(
       'hamster',
       'hamster',
@@ -66,7 +70,7 @@ export class SpeciesService {
     );
     speciesRepository.save(hamster).catch((err) => console.log(err));
 
-    const guineaPig = new SpeciesEntity();
+    const guineaPig = new Species();
     guineaPig.name = jsonStringFromSpecies(
       'guinea pig',
       "cochon d'Inde",
@@ -75,7 +79,7 @@ export class SpeciesService {
     );
     speciesRepository.save(guineaPig).catch((err) => console.log(err));
 
-    const ferret = new SpeciesEntity();
+    const ferret = new Species();
     ferret.name = jsonStringFromSpecies(
       'ferret',
       'furet',
@@ -84,28 +88,73 @@ export class SpeciesService {
     );
     speciesRepository.save(ferret).catch((err) => console.log(err));
 
-    const other = new SpeciesEntity();
+    const other = new Species();
     other.name = jsonStringFromSpecies('other', 'autre', 'Sonstiges', 'Altro');
     speciesRepository.save(other).catch((err) => console.log(err));
   }
 
-  createSpecies(species: SpeciesInterface): Observable<SpeciesInterface> {
-    return from(this.speciesRepository.save(species));
+  async createSpecies(species: CreateSpeciesDto): Promise<Species> {
+    return this.speciesRepository.save(species);
   }
 
-  findAllSpecies(): Observable<SpeciesInterface[]> {
-    return from(this.speciesRepository.find());
+  async findAllSpecies(): Promise<Species[]> {
+    return this.speciesRepository.find();
   }
 
-  findOneSpeciesById(id: number): Observable<SpeciesInterface> {
-    return from(this.speciesRepository.findOne(id));
+  async findAllSpeciesTranslated(lang: string): Promise<Species[]> {
+    if (!isSupportedLangAbr(lang)) {
+      throw new HttpException(ERROR_LANGUAGE, HttpStatus.NOT_FOUND);
+    }
+
+    // Getting species and keeping only desired language
+    const species = await this.findAllSpecies();
+
+    species.map(async (sp) => (sp.name = this.getSpeciesName(sp, lang)));
+    return species;
   }
 
-  updateSpecies(species: SpeciesInterface) {
-    return from(this.speciesRepository.update(species.id, species));
+  async findOneSpeciesById(id: number): Promise<Species> {
+    return this.speciesRepository.findOne(id);
   }
 
-  deleteSpecies(id: number) {
-    return from(this.speciesRepository.delete(id));
+  async findOneSpeciesTranslated(id: number, lang: string): Promise<Species> {
+    if (!isSupportedLangAbr(lang)) {
+      throw new HttpException(ERROR_LANGUAGE, HttpStatus.NOT_FOUND);
+    }
+
+    const species = await this.findOneSpeciesById(id);
+    species.name = this.getSpeciesName(species, lang);
+
+    return species;
+  }
+
+  async updateSpecies(species: UpdateSpeciesDto): Promise<UpdateResult> {
+    return this.speciesRepository.update(species.id, species);
+  }
+
+  async deleteSpecies(id: number): Promise<DeleteResult> {
+    return this.speciesRepository.delete(id);
+  }
+
+  async checkSpecies(id: number): Promise<boolean> {
+    try {
+      const species = await this.findOneSpeciesById(id);
+
+      if (species === undefined) {
+        throw FILTER_INVALID_SPECIES;
+      }
+    } catch (e) {
+      throw FILTER_INVALID_SPECIES;
+    }
+
+    return true;
+  }
+
+  async getSpeciesNameFromId(id: number, lang: string): Promise<string> {
+    return JSON.parse((await this.findOneSpeciesById(id)).name)[lang];
+  }
+
+  getSpeciesName(species: Species, lang: string): string {
+    return JSON.parse(species.name)[lang];
   }
 }

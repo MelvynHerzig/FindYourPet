@@ -1,41 +1,58 @@
 <template>
   <div class="header">
-      <div class="logo">
-        <a @click="$router.push('/')">
-            <img src="@/assets/images/WIDE_logo.png" alt="logo" >
-        </a>
-      </div>
+    <a class="logo" @click="$router.push('/')">
+      <img src="@/assets/images/WIDE_logo.png" alt="logo" >
+    </a>
+    <div class="link" id="links">
       <div class="nav">
-       <button @click="$router.push('/')"> {{$t("header.home")}}  </button>
-       <button @click="$router.push('/annonces')">  {{$t("header.advert")}} </button>
+        <button @click="$router.push('/'); displayMenu()"> {{$t("header.home")}} </button>
+        <button @click="$router.push('/adverts');  displayMenu()"> {{$t("header.advert")}} </button>
       </div>
-      <div class="account">      
-       <button @click="$router.push('/login')">  {{$t("header.login")}} </button>
-       <button @click="$router.push('/register')">  {{$t("header.register")}} </button>
-       <div class="locale">
-          <select v-model="$i18n.locale" value = "$i18n.locale">
-            <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
-              {{ lang }}
-            </option>
-          </select>
-        </div>
+      <div class="account">
+        <button @click="$router.push('/login');  displayMenu()"> {{$t("header.login")}} </button>
+        <button @click="$router.push('/register');  displayMenu()"> {{$t("header.register")}} </button>
       </div>
+    </div>
+    <div>
+      <div class="locale">
+        <select v-model="$i18n.locale" value = "$i18n.locale">
+          <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
+            {{ lang }}
+          </option>
+        </select>
+      </div>
+      <a class="hamburger-icon" @click="displayMenu">
+        <i class="fa fa-bars fa-2x"></i>
+      </a>
+    </div>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'locale-changer',
   data () {
     return { langs: ['fr', 'en', 'it', 'de'] }
+  },
+  methods: {
+    displayMenu() {
+      const link = document.getElementById('links');
+      if (link.style.display === "flex") {
+        link.style.display = "none";
+      }
+      else {
+        link.style.display = "flex";
+      }
+    }
   }
+
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-button{
+button {
   height: 100%;
   padding: 20px;
   font-size: 24px;
@@ -45,7 +62,7 @@ button{
   color: white;
 }
 
-.account button{
+.account button {
   color: darkgrey;
   font-size: 18px;
 }
@@ -56,14 +73,23 @@ button:hover {
 }
 
 .header {
-  height: 80px;
-  width: 100%;
+  overflow: hidden;
   position: fixed;
-  z-index: 1;
+  background-color: var(--header-color);
+  width: 100%;
   top: 0;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
-  background-color: var(--header-color);
+}
+
+.header a:hover {
+  background-color: var(--header-selection-color);
+}
+
+.link {
+  display: none;
+  flex-direction: row;
 }
 
 .logo {
@@ -77,38 +103,27 @@ button:hover {
 }
 
 .logo img {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     margin: 5px;
 }
 
 .nav {
   display:flex;
-  justify-content: right;
-  width: 100%;
-  flex: 2;
+  flex-direction: row;
 }
 
 .account {
-    width: 20%;
-    display: flex;
-    justify-content: right;
-    flex: 1;
-}
-
-.account img {
-    width: 40px;
-    height: 40px;
-    margin-right: 40px;
-    align-self: center;
+  display: flex;
+  flex-direction: row;
 }
 
 .locale {
-  justify-content: center;
   background-color: var(--header-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: block;
+  position: absolute;
+  right: 5px;
+  top: 40px;
 }
 
 .locale select {
@@ -117,6 +132,32 @@ button:hover {
   padding: 10px;
   margin: 10px;
   background-color: var(--header-color);
+}
+
+.hamburger-icon {
+  color: white;
+  background: var(--header-color);
+  display: block;
+  position: absolute;
+  right: 30px;
+  top: 10px;
+}
+
+@media screen and (max-width: 600px) {
+  .link {
+    display: none;
+    flex-direction: column;
+  }
+
+  .nav {
+    display:flex;
+    flex-direction: column;
+  }
+
+  .account {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 </style>

@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import { getAllAdverts } from "../apicalls";
+import { getAllAdverts } from "../../logic/apicalls";
 
-import AnimalAd from "./AnimalAd";
+import AnimalAd from "../AnimalAd";
 
 export default {
   name: "AnimalAdsList",
@@ -56,7 +56,7 @@ h1{
 
 .animalAdsList {
 
-  background: url("../assets/images/pets.jpg");
+  background: url("../../assets/images/pets.jpg");
   background-attachment:fixed;
   background-repeat: no-repeat;
   background-size: cover;

@@ -1,20 +1,17 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { MembersEntity } from './members.entity';
+import { Repository, UpdateResult } from 'typeorm';
+import { Members } from './entities/members.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { from } from 'rxjs';
-import {
-  CreateMemberDto,
-  LoginMemberDto,
-  MemberDto,
-  toMemberDto,
-} from './dto/members.dto';
-import { MembersInterface } from './members.interface';
+import { CreateMemberDto } from './dto/create.members.dto';
 import {
   ERROR_INVALID_CREDENTIALS,
   ERROR_USER_ALREADY_EXIST,
   ERROR_USER_NOT_FOUND,
 } from '../../error/error-message';
+
+import { Point } from 'geojson';
+import { LoginMemberDto } from './dto/login.members.dto';
+import { UpdateMemberDto } from './dto/update.members.dto';
 
 // Need to use bcrypt like that, otherwise not working...
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -26,20 +23,23 @@ const bcrypt = require('bcryptjs');
 @Injectable()
 export class MembersService {
   constructor(
-    @InjectRepository(MembersEntity)
-    private readonly memberRepository: Repository<MembersEntity>,
+    @InjectRepository(Members)
+    private readonly memberRepository: Repository<Members>,
   ) {}
 
-  async findOne(options?: object): Promise<MemberDto> {
-    const member = await this.memberRepository.findOne(options);
-    return toMemberDto(member);
+  async findOne(options?: object): Promise<Members> {
+    return this.memberRepository.findOne(options);
   }
 
-  async findByPayload({ email }: any): Promise<MemberDto> {
+  async findByPayload({ email }: any): Promise<Members> {
     return await this.findOne({ where: { email } });
   }
 
-  async findByLogin({ email, password }: LoginMemberDto): Promise<MemberDto> {
+  async findLocationByPayload({ email }: any): Promise<Point> {
+    return (await this.findByPayload(email)).location;
+  }
+
+  async findByLogin({ email, password }: LoginMemberDto): Promise<Members> {
     const member = await this.memberRepository.findOne({ where: { email } });
 
     if (!member) {
@@ -49,15 +49,14 @@ export class MembersService {
     const doesPasswordMatch = bcrypt.compareSync(password, member.password);
 
     if (doesPasswordMatch) {
-      return toMemberDto(member);
+      return member;
     }
 
     throw new HttpException(ERROR_INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED);
   }
 
-  async create(memberDto: CreateMemberDto): Promise<MemberDto> {
-    const { firstname, name, email, password, street, NPA, city, phone } =
-      memberDto;
+  async create(memberDto: CreateMemberDto): Promise<Members> {
+    const { email } = memberDto;
 
     const memberInDb = await this.memberRepository.findOne({
       where: { email },
@@ -66,23 +65,15 @@ export class MembersService {
     if (memberInDb) {
       throw new HttpException(ERROR_USER_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
     }
-    const member: MembersEntity = await this.memberRepository.create({
-      firstname,
-      name,
-      email,
-      password,
-      street,
-      NPA,
-      city,
-      phone,
-    });
+
+    const member: Members = await this.memberRepository.create(memberDto);
 
     member.isAdmin = false;
     await this.memberRepository.save(member);
-    return toMemberDto(member);
+    return member;
   }
 
-  updateMember(member: MembersInterface) {
-    return from(this.memberRepository.update(member.id, member));
+  updateMember(member: UpdateMemberDto): Promise<UpdateResult> {
+    return this.memberRepository.update(member.id, member);
   }
 }

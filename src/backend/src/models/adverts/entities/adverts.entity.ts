@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { MembersEntity } from '../members/members.entity';
-import { SpeciesEntity } from '../species/species.entity';
+import { Members } from '../../members/entities/members.entity';
+import { Species } from '../../species/entities/species.entity';
 
 /**
  * A pet can be either a male or a female.
@@ -14,7 +14,7 @@ export enum PetGender {
  * Entity to represents an adverts to trade pets.
  */
 @Entity('adverts')
-export class AdvertsEntity {
+export class Adverts {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -43,12 +43,12 @@ export class AdvertsEntity {
   @Column({ nullable: true })
   memberId: string;
 
-  @ManyToOne(() => MembersEntity, (member) => member.adverts)
-  member: MembersEntity;
+  @ManyToOne(() => Members, (member) => member.adverts)
+  member: Members;
 
   @Column({ nullable: true })
   speciesId: number;
 
-  @ManyToOne(() => SpeciesEntity, (species) => species.adverts)
-  species: SpeciesEntity;
+  @ManyToOne(() => Species, (species) => species.adverts)
+  species: Species;
 }

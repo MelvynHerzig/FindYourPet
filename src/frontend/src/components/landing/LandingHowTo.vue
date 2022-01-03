@@ -1,58 +1,57 @@
 <template>
-  <div class="landing2">
+  <section class="how-to">
     <div class="title">
       <h1> {{$t("howto.title")}} </h1>
     </div>
     <div class="texts">
-      <div>
+      <div class="use-case">
         <h2>{{$t("howto.subtitle_announce")}} </h2>
-        <div>
-          <div>
+        <div class="steps">
+          <div class="step">
             <h3>{{$t("howto.step1")}} </h3>
             <p>{{$t("howto.1_announce")}} </p>
           </div>
-          <div>
+          <div class="step">
             <h3>{{$t("howto.step2")}} </h3>
             <p>{{$t("howto.2_announce")}} </p>
           </div>
-          <div>
+          <div class="step">
             <h3>{{$t("howto.step3")}} </h3>
             <p>{{$t("howto.3_announce")}} </p>
           </div>
         </div>
       </div>
-      <div>
+      <div class="use-case">
         <h2>{{$t("howto.subtitle_adopt")}} </h2>
-        <div>
-          <div>
+        <div class="steps">
+          <div class="step">
             <h3>{{$t("howto.step1")}} </h3>
             <p>{{$t("howto.1_adopt")}} </p>
           </div>
-          <div>
+          <div class="step">
             <h3>{{$t("howto.step2")}} </h3>
             <p>{{$t("howto.2_adopt")}} </p>
           </div>
-          <div>
+          <div class="step">
             <h3>{{$t("howto.step3")}} </h3>
             <p>{{$t("howto.3_adopt")}} </p>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>  
 
 h2,p {
   color: darkgray;
 }
 
-
-.landing2{
+.how-to {
   text-align: center;
   background-color: var(--header-color);
   width: 100%;
@@ -69,7 +68,7 @@ h2,p {
   justify-content: space-around;
 }
 
-.texts > div{
+.use-case {
   border-radius: 25px;
   width: 35%;
   border: solid;
@@ -77,13 +76,14 @@ h2,p {
   text-align: center;
 }
 
-.texts > div > div {
+.steps {
   padding: 10px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 
-.texts > div > div div{
+.step {
   padding: 10px;
   flex: 1;
 }

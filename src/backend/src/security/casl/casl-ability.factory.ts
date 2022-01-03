@@ -5,15 +5,13 @@ import {
   ExtractSubjectType,
   InferSubjects,
 } from '@casl/ability';
-import { AdvertsEntity } from '../../models/adverts/adverts.entity';
-import { MembersEntity } from '../../models/members/members.entity';
+import { Adverts } from '../../models/adverts/entities/adverts.entity';
+import { Members } from '../../models/members/entities/members.entity';
 import { Injectable } from '@nestjs/common';
-import { SpeciesEntity } from '../../models/species/species.entity';
+import { Species } from '../../models/species/entities/species.entity';
 
 type Subjects =
-  | InferSubjects<
-      typeof AdvertsEntity | typeof SpeciesEntity | typeof MembersEntity
-    >
+  | InferSubjects<typeof Adverts | typeof Species | typeof Members>
   | 'all';
 
 export type AppAbility = Ability<[Action, Subjects]>;
@@ -28,7 +26,7 @@ export enum Action {
 
 @Injectable()
 export class CaslAbilityFactory {
-  createForMember(member: MembersEntity) {
+  createForMember(member: Members) {
     const { can, cannot, build } = new AbilityBuilder<
       Ability<[Action, Subjects]>
     >(Ability as AbilityClass<AppAbility>);
@@ -39,15 +37,15 @@ export class CaslAbilityFactory {
       }
 
       // Adverts
-      can(Action.Read, AdvertsEntity);
-      can(Action.Create, AdvertsEntity);
-      can(Action.Manage, AdvertsEntity, { memberId: member.id });
+      can(Action.Read, Adverts);
+      can(Action.Create, Adverts);
+      can(Action.Manage, Adverts, { memberId: member.id });
 
       // Species
-      can(Action.Read, SpeciesEntity);
+      can(Action.Read, Species);
 
       // Members
-      can(Action.Manage, MembersEntity, { id: member.id });
+      can(Action.Manage, Members, { id: member.id });
     }
     return build({
       // Read https://casl.js.org/v5/en/guide/subject-type-detection#use-classes-as-subject-types for details

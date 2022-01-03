@@ -13,17 +13,17 @@
 <script>
 export default {
   name: "FormInput",
-  data() {
-    return {
-      inputValue: this.defaultValue,
-    }
-  },
   props: {
     type: String,
     name: String,
     defaultValue: String,
     placeholder: String,
     required: Boolean,
+  },
+  data() {
+    return {
+      inputValue: this.defaultValue,
+    }
   },
   methods: {
     handle() {

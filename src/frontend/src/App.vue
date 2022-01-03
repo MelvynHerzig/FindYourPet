@@ -3,9 +3,9 @@
         href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
         integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
         crossorigin="anonymous">
-  <div classe = "main-div">
+  <div class="main-div">
     <Header/>  
-    <router-view/>
+    <router-view class="content"/>
     <Footer/>
   </div>
 </template>
@@ -58,9 +58,7 @@ button{
   --select-color: #4e598c25;
   --transparent-background-color: rgba(255, 255, 255, 0.85);
   --transparent-border-color: #5a648f25
-
 }
-
 
 /*hide scrollbar*/
 body {
@@ -92,4 +90,9 @@ body {
   background-attachment:fixed;
   background-position: left top;
 }
+
+.content {
+  padding-bottom: 200px;
+}
+
 </style>

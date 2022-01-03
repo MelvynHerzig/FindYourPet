@@ -34,6 +34,15 @@
     "login": "Login",
     "register": "Register"
   },
+  "errors": {
+    "langage": "Bad langage used for the request",
+    "passwordConfirmation": "Password Confirmation does not match Password",
+    "credentials": "Password or/and Email are incorrect",
+    "userAlreadyExist": "Email already exists",
+    "userNotFound": "Email not found",
+    "invalidToken": "Invalid token used",
+    "invalidAddress": "Invalid Address given"
+  },
   "account": {
     "email": "Email Address",
     "password": "Password",
@@ -60,5 +69,16 @@
   "ad":{
     "contact": "Contact",
     "years": "years"
+  },
+  "ad_create":{
+    "title": "Title",
+    "age": "Age",
+    "description": "Description",
+    "species": "Species",
+    "sex": "Gender",
+    "button": "Submit",
+    "male": "male",
+    "female":"female"
+    
   }
 }

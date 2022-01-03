@@ -3,20 +3,26 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   Post,
-  Put, UseGuards,
+  Put,
+  UseGuards,
 } from '@nestjs/common';
 import { SpeciesService } from './species.service';
-import { SpeciesInterface } from './species.interface';
-import { Observable } from 'rxjs';
 import { AuthGuard } from '@nestjs/passport';
-import { isSupportedLangAbr } from './species.utils';
-import { CheckPolicies, PoliciesGuard } from "../../security/policy/policy.guard";
-import { ERROR_LANGUAGE } from "../../error/error-message";
-
+import {
+  CheckPolicies,
+  PoliciesGuard,
+} from '../../security/policy/policy.guard';
+import { CreateSpeciesDto } from './dto/create.species.dto';
+import { Species } from './entities/species.entity';
+import { UpdateSpeciesDto } from './dto/update.species.dto.js';
+import { DeleteResult, UpdateResult } from 'typeorm';
+import {
+  CreateSpeciesPolicyhandler,
+  DeleteSpeciesPolicyhandler,
+  UpdateSpeciesPolicyhandler,
+} from '../../security/policy/handler/species.policyhandler';
 
 /**
  * Race controller
@@ -25,65 +31,43 @@ import { ERROR_LANGUAGE } from "../../error/error-message";
 export class SpeciesController {
   constructor(private speciesService: SpeciesService) {}
 
-  @Post()
-  @UseGuards(PoliciesGuard)
-  @CheckPolicies()
-  create(@Body() species: SpeciesInterface): Observable<SpeciesInterface> {
-    return this.speciesService.createSpecies(species);
-  }
-
+  /******************* GET    ************************/
   // For example http://localhost:3000/species/fr
   // Answer [{ "id": 25, "name": "chien" }, { "id": 25, "name": "chat" }, ... ]
   @Get('/:lang')
-  findAll(@Param('lang') lang: string): Observable<SpeciesInterface[]> {
-    if (!isSupportedLangAbr(lang)) {
-      throw new HttpException(ERROR_LANGUAGE, HttpStatus.NOT_FOUND);
-    }
-
-    // Getting species and keeping only desired language
-    const species = this.speciesService.findAllSpecies();
-    species.subscribe({
-      next(sp) {
-        sp.map((sp) => (sp.name = JSON.parse(sp.name)[lang]));
-      },
-      error(err) {
-        console.error('something wrong occurred: ' + err);
-      },
-    });
-
-    return species;
+  async findAllTranslated(@Param('lang') lang: string): Promise<Species[]> {
+    return this.speciesService.findAllSpeciesTranslated(lang);
   }
 
   @Get('/:lang/:id')
-  findOne(
+  async findOneTranslated(
     @Param('lang') lang: string,
     @Param('id') id: string,
-  ): Observable<SpeciesInterface> {
-    if (!isSupportedLangAbr(lang)) {
-      throw new HttpException(ERROR_LANGUAGE, HttpStatus.NOT_FOUND);
-    }
-
-    const species = this.speciesService.findOneSpeciesById(parseInt(id));
-    species.subscribe({
-      next(sp) {
-        sp.name = JSON.parse(sp.name)[lang];
-      },
-      error(err) {
-        console.error('something wrong occurred: ' + err);
-      },
-    });
-
-    return species;
+  ): Promise<Species> {
+    return this.speciesService.findOneSpeciesTranslated(parseInt(id), lang);
   }
 
+  /******************* POST   ************************/
+  @Post()
+  @UseGuards(AuthGuard('jwt'), PoliciesGuard)
+  @CheckPolicies(new CreateSpeciesPolicyhandler())
+  create(@Body() species: CreateSpeciesDto): Promise<Species> {
+    return this.speciesService.createSpecies(species);
+  }
+
+  /******************* PUT    ************************/
   @Put()
-  update(@Body() species: SpeciesInterface) {
+  @UseGuards(AuthGuard('jwt'), PoliciesGuard)
+  @CheckPolicies(new UpdateSpeciesPolicyhandler())
+  update(@Body() species: UpdateSpeciesDto): Promise<UpdateResult> {
     return this.speciesService.updateSpecies(species);
   }
 
+  /******************* DELETE ************************/
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'))
-  deleteOne(@Param('id') id: string) {
+  @UseGuards(AuthGuard('jwt'), PoliciesGuard)
+  @CheckPolicies(new DeleteSpeciesPolicyhandler())
+  deleteOne(@Param('id') id: string): Promise<DeleteResult> {
     return this.speciesService.deleteSpecies(parseInt(id));
   }
 }
