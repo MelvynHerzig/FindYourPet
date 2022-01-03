@@ -6,7 +6,7 @@
     <div class="link" id="links">
       <div class="nav">
         <button @click="$router.push('/'); displayMenu()"> {{$t("header.home")}} </button>
-        <button @click="$router.push('/annonces');  displayMenu()"> {{$t("header.advert")}} </button>
+        <button @click="$router.push('/adverts');  displayMenu()"> {{$t("header.advert")}} </button>
       </div>
       <div class="account">
         <button @click="$router.push('/login');  displayMenu()"> {{$t("header.login")}} </button>
