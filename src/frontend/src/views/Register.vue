@@ -74,9 +74,9 @@ import PasswordInput from "../components/inputs/PasswordInput";
 import NameInput from "../components/inputs/NameInput";
 import LocationInput from "../components/inputs/LocationInput";
 import PhoneInput from "../components/inputs/PhoneInput";
-import { register, getSwissAdress } from "../apicalls";
-import { manageErrors } from "../errors";
-import { ERROR_INVALID_ADDRESS } from "../error-message.ts";
+import { register, getSwissAdress } from "../logic/apicalls";
+import { manageErrors } from "../logic/errors";
+import { ERROR_INVALID_ADDRESS } from "../logic/error-message.ts";
 
 export default {
   name: "Register",

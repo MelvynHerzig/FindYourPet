@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getAllAdverts } from "../apicalls";
+import { getAllAdverts } from "../logic/apicalls";
 
 import AnimalAd from "../components/AnimalAd";
 

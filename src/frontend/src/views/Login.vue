@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import { login } from "../apicalls";
-import { manageErrors } from "../errors";
+import { login } from "../logic/apicalls";
+import { manageErrors } from "../logic/errors";
 import EmailInput from "../components/inputs/EmailInput";
 import PasswordInput from "../components/inputs/PasswordInput";
 import ToastError from "../components/toasts/ToastError";
