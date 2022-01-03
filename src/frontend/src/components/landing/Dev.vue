@@ -10,7 +10,7 @@ export default {
   name: 'Dev',
   props: {
     url: String,
-    name: Text
+    name: String
   }
 }
 </script>

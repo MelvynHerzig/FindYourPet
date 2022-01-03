@@ -24,15 +24,19 @@
               </option>
             </select>
             <div>
-            <input class="input" type="number" v-model="age" v-bind:placeholder="$t('ad_create.age')" min="0" max = "200" required>
+            <input class="input" type="number" min="0" max = "200" required
+                   v-model="age"
+                   v-bind:placeholder="$t('ad_create.age')"
+            />
             </div>
           </div>
           <div>
           <div class="description">
-            <textarea class="input" v-model="description" v-bind:placeholder="$t('ad_create.description')" required cols="90" rows="10"  @valueInput="setDescription"/>
-          
+            <textarea class="input" cols="90" rows="10" required
+                      v-model="description"
+                      v-bind:placeholder="$t('ad_create.description')"
+            />
           </div>
-          
         <button type="submit">{{ $t("ad_create.button") }}</button>
           </div>
         </div>
@@ -54,7 +58,7 @@ export default {
       this.getSpecies();
     }
   },
-  data: function () {
+  data() {
     return {
       species: [],
       selectedSpecies: "",
@@ -144,10 +148,6 @@ form {
   text-align: center;
 }
 
-.description-input{
-  resize: none;
-}
-
 .info {
   display: flex;
   justify-content: space-around;
@@ -172,6 +172,7 @@ form {
   border-radius: 10px;
   border: solid;
   border-color: var(--transparent-border-color);
+  resize: none;
 }
 
 .preview {

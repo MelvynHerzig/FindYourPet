@@ -1,5 +1,5 @@
 <template>
-  <div class="advert" @click="$router.push('/adverts/' + advert.id)">
+  <div class="advert" @click="$router.push(`/adverts/${advert.id}`)">
     <div class="image">
       <img src="images/kitty.jpg" alt="image">
     </div>
@@ -25,12 +25,11 @@ export default {
     advert: {}
   },
   beforeMount() {
-    getSpeciesById(this.advert.speciesId).then(result => {
+    getSpeciesById(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
       this.specie = result.data;
     });
-
   },
-  data: function () {
+  data() {
     return {
       specie: {}
     }
@@ -45,7 +44,7 @@ h3, p {
 }
 
 .advert {
-  width: 100%;
+  width: 80%;
   height: 100%;
   background-color: var(--header-color);
   display: flex;
@@ -61,7 +60,6 @@ h3, p {
   cursor: pointer;
   background-color: var(--footer-color);
 }
-
 
 .advert div {
   margin-right: 20px;

@@ -35,7 +35,7 @@ export async function createAdvert(advertInformations) {
 }
 
 export async function getPageAdverts(pageNum) {
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/page/${pageNum}`);
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/page/${pageNum}`);
 }
 
 export async function getRecentAdverts() {
