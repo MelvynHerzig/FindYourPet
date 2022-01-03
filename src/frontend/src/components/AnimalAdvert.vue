@@ -1,5 +1,5 @@
 <template>
-  <div class="ad" @click="$router.push('/adverts/' + advert.id)">
+  <div class="advert" @click="$router.push('/adverts/' + advert.id)">
     <div class="image">
       <img src="images/kitty.jpg" alt="image">
     </div>
@@ -20,7 +20,7 @@
 import { getSpeciesById } from '../logic/apicalls'
 
 export default {
-  name: "AnimalAd",
+  name: "AnimalAdvert",
   props: {
     advert: {}
   },
@@ -44,7 +44,7 @@ h3, p {
   color: darkgrey;
 }
 
-.ad {
+.advert {
   width: 90%;
   height: 160px;
   background-color: var(--header-color);
@@ -56,13 +56,13 @@ h3, p {
   transition: all .3s;
 }
 
-.ad:hover {
+.advert:hover {
   cursor: pointer;
   background-color: var(--footer-color);
 }
 
 
-.ad div {
+.advert div {
   margin-right: 20px;
   margin-left: 20px;
 }
@@ -75,7 +75,6 @@ img {
 }
 
 .name {
-
   border-radius: 10px;
   flex: 1;
   width: 100px;
@@ -83,11 +82,9 @@ img {
   padding-left: 20px;
   border: solid;
   border-color: var(--header-selection-color);
-
 }
 
 .description {
-
   border-radius: 10px;
   padding-left: 20px;
   padding-bottom: 10px;
