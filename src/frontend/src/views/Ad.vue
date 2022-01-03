@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { getAdvertById, getSpeciesById } from "../apicalls";
+import { getAdvertById, getSpeciesById } from "../logic/apicalls";
 
 export default {
   name: "Ad",

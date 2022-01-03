@@ -1,7 +1,7 @@
 <template>
-  <section class="landing1">
+  <section class="welcome">
     <div class="inner">
-      <img src="../assets/images/findyourpet_logo.png"/>
+      <img src="../../assets/images/findyourpet_logo.png"/>
       <h1>{{$t("landing.welcome")}}</h1>
       <p>{{$t("landing.description")}}</p>
       <button @click="$router.push('/adverts')">{{$t("landing.see")}}</button>
@@ -38,8 +38,8 @@ button:hover {
   background-color: var(--select-color);
 }
 
-.landing1 {
-  background: url("../assets/images/test.jpg");
+.welcome {
+  background: url("../../assets/images/test.jpg");
   background-attachment:fixed;
   background-position: center;
   background-repeat: no-repeat;

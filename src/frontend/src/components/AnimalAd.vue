@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { getSpeciesById } from '../apicalls'
+import { getSpeciesById } from '../logic/apicalls'
 
 export default {
   name: "AnimalAd",

@@ -1,5 +1,5 @@
 <template>
-  <section class="landing2">
+  <section class="how-to">
     <div class="title">
       <h1> {{$t("howto.title")}} </h1>
     </div>
@@ -51,8 +51,7 @@ h2,p {
   color: darkgray;
 }
 
-
-.landing2 {
+.how-to {
   text-align: center;
   background-color: var(--header-color);
   width: 100%;
