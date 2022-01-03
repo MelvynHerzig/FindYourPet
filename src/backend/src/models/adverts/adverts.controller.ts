@@ -21,16 +21,14 @@ import {
   PoliciesGuard,
 } from '../../security/policy/policy.guard';
 import { AdvertsDto } from './dto/adverts.dto';
-import { CaslAbilityFactory } from '../../security/casl/casl-ability.factory';
-import { AuthGuard } from "@nestjs/passport";
+import { AuthGuard } from '@nestjs/passport';
 
 /**
  * Advert controller
  */
 @Controller('adverts')
 export class AdvertsController {
-  constructor(
-    private advertService: AdvertsService) {}
+  constructor(private advertService: AdvertsService) {}
 
   @Post()
   @UseGuards(AuthGuard('jwt'), PoliciesGuard)

@@ -7,7 +7,7 @@ import {
   MemberDto,
 } from '../models/members/dto/members.dto';
 import { JwtPayload } from './jwt.strategy';
-import { ERROR_INVALID_TOKEN } from "../error/error-message";
+import { ERROR_INVALID_TOKEN } from '../error/error-message';
 
 export interface RegistrationsStatus {
   success: boolean;
@@ -23,8 +23,7 @@ export class AuthService {
   constructor(
     private readonly membersService: MembersService,
     private readonly jwtService: JwtService,
-  ) {
-  }
+  ) {}
 
   async register(memberDto: CreateMemberDto): Promise<RegistrationsStatus> {
     let status: RegistrationsStatus = {
@@ -34,7 +33,6 @@ export class AuthService {
     try {
       await this.membersService.create(memberDto);
     } catch (err) {
-      console.log(err);
       status = {
         success: false,
         message: err,
@@ -60,14 +58,12 @@ export class AuthService {
     if (!member) {
       throw new HttpException(ERROR_INVALID_TOKEN, HttpStatus.UNAUTHORIZED);
     }
-    console.log('auth');
-    console.log(member);
 
     return member;
   }
 
-  private _createToken({email}: MemberDto): any {
-    const member: JwtPayload = {email};
+  private _createToken({ email }: MemberDto): any {
+    const member: JwtPayload = { email };
 
     const accessToken = this.jwtService.sign(member);
 

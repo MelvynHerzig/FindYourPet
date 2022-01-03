@@ -1,12 +1,20 @@
-import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { AuthService, LoginStatus, RegistrationsStatus } from './auth.service';
-import { CreateMemberDto, LoginMemberDto } from '../models/members/dto/members.dto';
+import {
+  CreateMemberDto,
+  LoginMemberDto,
+} from '../models/members/dto/members.dto';
 import { ERROR_PASSWORD_CONFIRMATION } from '../error/error-message';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {
-  }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('register')
   public async register(

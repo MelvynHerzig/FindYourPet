@@ -27,5 +27,4 @@ export class MembersController {
   update(@Body() member: MembersInterface) {
     return this.memberService.updateMember(member);
   }
-
 }

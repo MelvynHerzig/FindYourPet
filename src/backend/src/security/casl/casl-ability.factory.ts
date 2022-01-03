@@ -11,7 +11,9 @@ import { Injectable } from '@nestjs/common';
 import { SpeciesEntity } from '../../models/species/species.entity';
 
 type Subjects =
-  | InferSubjects<typeof AdvertsEntity | typeof SpeciesEntity | typeof MembersEntity>
+  | InferSubjects<
+      typeof AdvertsEntity | typeof SpeciesEntity | typeof MembersEntity
+    >
   | 'all';
 
 export type AppAbility = Ability<[Action, Subjects]>;
@@ -27,7 +29,9 @@ export enum Action {
 @Injectable()
 export class CaslAbilityFactory {
   createForMember(member: MembersEntity) {
-    const {can, cannot, build} = new AbilityBuilder<Ability<[Action, Subjects]>>(Ability as AbilityClass<AppAbility>);
+    const { can, cannot, build } = new AbilityBuilder<
+      Ability<[Action, Subjects]>
+    >(Ability as AbilityClass<AppAbility>);
 
     if (member) {
       if (member.isAdmin) {
@@ -37,13 +41,13 @@ export class CaslAbilityFactory {
       // Adverts
       can(Action.Read, AdvertsEntity);
       can(Action.Create, AdvertsEntity);
-      can(Action.Manage, AdvertsEntity, {memberId: member.id});
+      can(Action.Manage, AdvertsEntity, { memberId: member.id });
 
       // Species
       can(Action.Read, SpeciesEntity);
 
       // Members
-      can(Action.Manage, MembersEntity, {id: member.id});
+      can(Action.Manage, MembersEntity, { id: member.id });
     }
     return build({
       // Read https://casl.js.org/v5/en/guide/subject-type-detection#use-classes-as-subject-types for details
