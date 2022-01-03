@@ -42,16 +42,16 @@
 </template>
 
 <script>
-const axios = require('axios');
+import { createAdvert, getAllSpecies } from "../logic/apicalls";
 
 export default {
-  name: "AdCreate",
+  name: "AdvertCreation",
   mounted() {
-    this.getSpecies()
+    this.getSpecies();
   },
   watch:{
     '$i18n.locale': function() {
-      this.getSpecies()
+      this.getSpecies();
     }
   },
   data: function () {
@@ -67,10 +67,9 @@ export default {
     } 
   },
   methods: {
-    getSpecies(){
-      axios.get(process.env.VUE_APP_ROOT_API + '/species/' + this.$root.$i18n.locale).then(result => {
+    getSpecies() {
+      getAllSpecies(this.$root.$i18n.locale).then(result => {
         this.species = result.data;
-        console.log(result.data);
       });
     },
     Preview_image(event) {
@@ -78,20 +77,13 @@ export default {
       this.url= URL.createObjectURL(this.image)
     },
     submit() {
-      axios.post(process.env.VUE_APP_ROOT_API + '/adverts', {
+      createAdvert({
         title: this.title,
         description: this.description,
         petAge: this.age,
         imagePath: "/",
         petGender: this.selectedSex,
         speciesId: this.selectedSpecies
-      })
-      .then(result => {
-        console.log(result.data);
-      
-      })
-      .catch(error => {
-        this.error = error;
       });
     }
   }

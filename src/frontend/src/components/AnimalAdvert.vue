@@ -45,11 +45,12 @@ h3, p {
 }
 
 .advert {
-  width: 90%;
-  height: 160px;
+  width: 100%;
+  height: 100%;
   background-color: var(--header-color);
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   padding: 10px;
   margin: 30px;
   border-radius: 10px;

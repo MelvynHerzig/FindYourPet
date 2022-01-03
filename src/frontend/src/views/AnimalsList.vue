@@ -1,13 +1,27 @@
 <template>
   <div class="animalsList">
     <div class="filters">
-      C'est ici que les filtres irons
+      <select class="input" v-model="selectedSpecies" required>
+        <option disabled hidden value="">{{$t("ad_create.species")}}</option>
+        <option v-for="specie in species" :key="specie.id" v-bind:value="specie.id">
+          {{ specie.name }}
+        </option>
+      </select>
+      <select class="input" v-model="selectedSex" required>
+        <option disabled hidden value="">{{$t("ad_create.sex")}}</option>
+        <option value = "male">
+          {{$t("ad_create.male")}}
+        </option>
+        <option value = "female">
+          {{$t("ad_create.female")}}
+        </option>
+      </select>
     </div>
     <div class="inner">
       <div class="list">
         <ul>
           <li v-for="advert in this.adverts" :key="advert.id" style="list-style-type:none">
-            <AnimalAd :advert="advert"/>
+            <AnimalAdvert :advert="advert"/>
           </li>
         </ul>
       </div>
@@ -16,51 +30,51 @@
 </template>
 
 <script>
-import { getAllAdverts } from "../logic/apicalls";
+import {getPageAdverts, getAllSpecies} from "../logic/apicalls";
 
-import AnimalAd from "../components/AnimalAd";
+import AnimalAdvert from "../components/AnimalAdvert";
 
 export default {
-  name: "AnimalAdsList",
-  components: {AnimalAd},
+  name: "AnimalsList",
+  components: {AnimalAdvert},
   beforeMount() {
-    getAllAdverts().then(result => {
-      this.adverts = result.data;
-    });
-
+    this.getAdverts();
   },
   data: function () {
     return {
-      adverts: []
+      adverts: [],
+      species: [],
+      selectedSpecies: "",
+      selectedSex: "",
     }
   },
+  methods: {
+    getSpecies() {
+      getAllSpecies(this.$root.$i18n.locale).then(result => {
+        this.species = result.data;
+      });
+    },
+    getAdverts() {
+      getPageAdverts(1).then(result => {
+        this.adverts = result.data;
+      });
+    }
+  }
 }
 </script>
 
 <style scoped>
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-li,
-button{
-  color: black;
-}
-
-h1{
+h1 {
   text-align: center;
 }
 
-.filter {
+/*.filters {
   background-color: var(--footer-color);
   position: fixed;
   height: 70%;
   align-self: center;
-}
+}*/
 
 .animalsList {
   background-color: var(--header-selection-color);
@@ -74,6 +88,6 @@ h1{
   width: 80%;
   border: solid;
   border-color: var(--transparent-border-color);
-  }
+}
 
 </style>

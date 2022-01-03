@@ -31,7 +31,6 @@ import EmailInput from "../components/inputs/EmailInput";
 import PasswordInput from "../components/inputs/PasswordInput";
 import ToastError from "../components/toasts/ToastError";
 
-
 export default {
   name: "Login",
   components: {ToastError, EmailInput, PasswordInput},
