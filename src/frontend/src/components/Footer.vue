@@ -8,10 +8,10 @@
     </div>
     <div class="right">
       <div>
-        <a @click="$router.push('/')"><img src="../assets/images/insta.png" alt="instagram"></a>
-        <a @click="$router.push('/')"><img src="../assets/images/twitter.png" alt="twitter"></a>
-        <a @click="$router.push('/')"><img src="../assets/images/fb.png" alt="facebook"></a>
-        <a @click="$router.push('/')"><img src="../assets/images/tumblr.png" alt="tumblr"></a>
+        <router-link to="/"><img src="../assets/images/insta.png" alt="instagram"></router-link>
+        <router-link to="/"><img src="../assets/images/twitter.png" alt="twitter"></router-link>
+        <router-link to="/"><img src="../assets/images/fb.png" alt="facebook"></router-link>
+        <router-link to="/"><img src="../assets/images/tumblr.png" alt="tumblr"></router-link>
       </div>
     </div>
   </footer>
