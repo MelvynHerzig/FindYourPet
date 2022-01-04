@@ -29,9 +29,21 @@ export default {
       this.specie = result.data;
     });
   },
+  watch:{
+    '$i18n.locale': function() {
+      this.getSpecies()
+    }
+  },
   data() {
     return {
       specie: {}
+    }
+  },
+  methods: {
+    getSpecies(){
+      getSpeciesById(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
+          this.specie = result.data;
+      });
     }
   },
 }
