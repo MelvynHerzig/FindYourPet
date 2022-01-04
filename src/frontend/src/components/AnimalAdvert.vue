@@ -44,14 +44,14 @@ h3, p {
 }
 
 .advert {
-  width: 80%;
+  width: 95%;
   height: 100%;
   background-color: var(--header-color);
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-bottom: 30px;
   padding: 10px;
-  margin: 30px;
   border-radius: 10px;
   transition: all .3s;
 }
@@ -76,7 +76,6 @@ img {
 .name {
   border-radius: 10px;
   flex: 1;
-  width: 100px;
   text-align: left;
   padding-left: 20px;
   border: solid;
@@ -87,10 +86,39 @@ img {
   border-radius: 10px;
   padding-left: 20px;
   padding-bottom: 10px;
+  min-width: 100px;
   border: solid;
   border-color: var(--header-selection-color);
   flex: 2;
   overflow: hidden;
+}
+
+@media screen and (max-width: 600px) {
+  .advert {
+    width: 82%;
+    height: 100%;
+    background-color: var(--header-color);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: all .3s;
+  }
+
+  .advert div {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50px;
+    align-self: center;
+    align-items: center;
+    padding-left: 20px;
+  }
 }
 
 </style>
