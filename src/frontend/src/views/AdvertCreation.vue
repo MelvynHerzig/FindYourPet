@@ -32,7 +32,7 @@
           </div>
           <div>
           <div class="description">
-            <textarea class="input" cols="90" rows="10" required
+            <textarea class="input" required
                       v-model="description"
                       v-bind:placeholder="$t('ad_create.description')"
             />
@@ -150,6 +150,8 @@ form {
 .input, .img-input, .title-input{
   border-radius: 5px;
   border: 1px solid #ccc;
+  padding: 5px;
+  margin: 5px;
 }
 
 .input:active, .input:focus, .img-input:active, .img-input:focus , .title-input:active, .title-input:focus {
@@ -160,21 +162,25 @@ form {
   font-size: 32px;
   width: 80%;
   text-align: center;
+
 }
 
 .info {
   display: flex;
+  flex-direction : column;
+  flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
 }
 
 .short {
-  height: 300px;
+  height: 375px;
   flex: 2;
   margin: 10px;
   justify-items: left;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
 }
@@ -186,6 +192,12 @@ form {
   border-radius: 10px;
   border: solid;
   border-color: var(--transparent-border-color);
+  resize: none;
+}
+
+.description textarea{
+  width:  calc(30vw - 20px);
+  height: calc(20vh - 20px);
   resize: none;
 }
 
