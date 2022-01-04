@@ -46,8 +46,8 @@ export async function getRecentAdverts() {
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/recent`);
 }
 
-export async function getAdvertById(id) {
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${id}`);
+export async function getAdvertByEmail(email) {
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${email}`);
 }
 
 /***************** Authentification ********************/
@@ -72,6 +72,12 @@ export async function register(userInformations) {
         .catch(error => {
             this.error = manageErrors(error.message);
         });
+}
+
+/***************** Members ********************/
+
+export async function getMemberById(idMember) {
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/members/${idMember}`);
 }
 
 /***************** api3.geo.admin.ch ********************/

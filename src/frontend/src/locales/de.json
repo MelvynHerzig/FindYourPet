@@ -32,7 +32,9 @@
     "home": "Home",
     "advert": "Werbung",
     "login": "Verbinden",
-    "register": "Anmeldung"
+    "register": "Anmeldung",
+    "disconnect": "Trennen",
+    "profile": "Profil"
   },
   "errors": {
     "langage": "Falsche Sprache für die Anfrage",
@@ -69,6 +71,11 @@
     "maxDistance": "Maximale Entfernung zum Haus des Tierhalters",
     "filterButton": "Filter",
     "loadMore": "Mehr Haustier-Anzeigen laden"
+  },
+  "profile": {
+    "profileInfos": "Profil Informationen",
+    "advertsTitle": "Ihre Inserate",
+    "modifyButton": "Ändern"
   },
   "animal_ad" : {
     "age": "Alter"
