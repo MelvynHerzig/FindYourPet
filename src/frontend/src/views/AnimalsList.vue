@@ -5,19 +5,19 @@
         <MinimumInput
             @valueInput="setMinAge"
             :name="'minAge'"
-            :placeholder="'minimum age'"
+            :placeholder="$t('advertsList.minAge')"
             class="input"
         />
         <MaximumInput
             @valueInput="setMaxAge"
             :name="'maxAge'"
-            :placeholder="'maximum age'"
+            :placeholder="$t('advertsList.maxAge')"
             class="input"
         />
         <MaximumInput
             @valueInput="setMaxDistance"
             :name="'maxDistance'"
-            :placeholder="'distance maximum'"
+            :placeholder="$t('advertsList.maxDistance')"
             class="input"
         />
         <select class="dropdown" v-model="selectedSpecies">
@@ -29,13 +29,13 @@
         <select class="dropdown" v-model="selectedGender">
           <option disabled hidden value="">{{$t("ad_create.sex")}}</option>
           <option value = "male">
-            {{$t("ad_create.male")}}
+            {{ $t("ad_create.male") }}
           </option>
           <option value = "female">
-            {{$t("ad_create.female")}}
+            {{ $t("ad_create.female") }}
           </option>
         </select>
-        <button type="submit">Filter</button>
+        <button type="submit">{{ $t('advertsList.filterButton') }}</button>
       </form>
     </div>
     <div class="inner">
@@ -50,7 +50,7 @@
     <div class="page">
       <a v-if="smthToLoad===true" href="#" @click="getPage(actualPage+1)">
         <i class="fas fa-spinner"></i>
-        Load More
+        {{ $t('advertsList.loadMore') }}
       </a>
       <a href="#filters"><i class="fas fa-arrow-up fa-2x"></i></a>
     </div>
@@ -146,13 +146,19 @@ export default {
       }
     },
     setMinAge(value) {
-      this.minAge = value;
+      if(value >= 0) {
+        this.minAge = value;
+      }
     },
     setMaxAge(value) {
-      this.maxAge = value;
+      if(value > 1) {
+        this.maxAge = value;
+      }
     },
     setMaxDistance(value) {
-      this.maxDistance = value;
+      if(value >= 1) {
+        this.maxDistance = value;
+      }
     },
     isAFilterActive() {
       return this.selectedSpecies !== ""
@@ -193,7 +199,7 @@ export default {
 .inner {
   background: var(--transparent-background-color);
   padding: 20px;
-  margin: auto auto 3em;
+  margin: auto auto 3em auto;
   width: 80%;
   height: 80%;
   border-radius: 10px;
@@ -232,13 +238,6 @@ button:hover {
   border: 1px solid var(--footer-color);
 }
 
-.back-top {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
 .page {
   display: flex;
   flex-direction: row;
@@ -246,10 +245,33 @@ button:hover {
   align-items: center;
   padding-right: 40%;
   padding-left: 40%;
+  margin-bottom: 3em;
 }
 
 p {
   color: black;
+}
+
+@media screen and (max-width: 600px) {
+  .inner {
+    background: var(--transparent-background-color);
+    margin: auto auto 3em auto;
+    width: 80%;
+    height: 80%;
+    border-radius: 10px;
+    border: solid;
+    border-color: var(--transparent-border-color);
+  }
+
+  .page {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 10%;
+    padding-left: 10%;
+    margin-bottom: 3em;
+  }
 }
 
 </style>

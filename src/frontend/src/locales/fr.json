@@ -63,6 +63,13 @@
     "title": "Inscription",
     "button": "S'inscrire"
   },
+  "advertsList": {
+    "minAge": "Age minimum de l'animal de compagnie",
+    "maxAge": "Age maximum de l'animal de compagnie",
+    "maxDistance": "Distance maximum vous séparant de la maison du propriétaire de l'animal de compagnie",
+    "filterButton": "Filtrer",
+    "loadMore": "Charger plus d'annonces d'animal de compagnie"
+  },
   "animal_ad" : {
     "age": "age"
   },
