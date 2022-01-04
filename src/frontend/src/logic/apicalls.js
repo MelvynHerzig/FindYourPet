@@ -38,6 +38,10 @@ export async function getPageAdverts(pageNum) {
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/page/${pageNum}`);
 }
 
+export async function getPageFilteredAdverts(pageNum, filters) {
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/filters/page/${pageNum}`, filters);
+}
+
 export async function getRecentAdverts() {
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/recent`);
 }

@@ -11,22 +11,22 @@
         <MaximumInput
             @valueInput="setMaxAge"
             :name="'maxAge'"
-            :placeholder="'distance maximum'"
-            class="input"
-        />
-        <MaximumInput
-            @valueInput="setMaxAge"
-            :name="'maxDistance'"
             :placeholder="'maximum age'"
             class="input"
         />
-        <select class="dropdown" v-model="selectedSpecies" required>
+        <MaximumInput
+            @valueInput="setMaxDistance"
+            :name="'maxDistance'"
+            :placeholder="'distance maximum'"
+            class="input"
+        />
+        <select class="dropdown" v-model="selectedSpecies">
           <option disabled hidden value="">{{$t("ad_create.species")}}</option>
           <option v-for="specie in species" :key="specie.id" v-bind:value="specie.id">
             {{ specie.name }}
           </option>
         </select>
-        <select class="dropdown" v-model="selectedSex" required>
+        <select class="dropdown" v-model="selectedGender">
           <option disabled hidden value="">{{$t("ad_create.sex")}}</option>
           <option value = "male">
             {{$t("ad_create.male")}}
@@ -35,7 +35,7 @@
             {{$t("ad_create.female")}}
           </option>
         </select>
-        <button>Filter</button>
+        <button type="submit">Filter</button>
       </form>
     </div>
     <div class="inner">
@@ -47,32 +47,50 @@
         </ul>
       </div>
     </div>
-    <a href="#filters">Back to top</a>
+    <div class="page">
+      <a v-if="smthToLoad===true" href="#" @click="getPage(actualPage+1)">
+        <i class="fas fa-spinner"></i>
+        Load More
+      </a>
+      <a href="#filters"><i class="fas fa-arrow-up fa-2x"></i></a>
+    </div>
+    <ToastError
+        v-if="error"
+        :text="error"
+        class="toast"
+    />
   </div>
 </template>
 
 <script>
-import {getPageAdverts, getAllSpecies} from "../logic/apicalls";
-
+import { getPageAdverts, getPageFilteredAdverts, getAllSpecies } from "../logic/apicalls";
+import { manageErrors } from "../logic/errors"
+import ToastError from "../components/toasts/ToastError";
 import AnimalAdvert from "../components/AnimalAdvert";
 import MinimumInput from "../components/inputs/MinimumInput";
 import MaximumInput from "../components/inputs/MaximumInput";
 
 export default {
   name: "AnimalsList",
-  components: {MaximumInput, MinimumInput, AnimalAdvert},
+  components: {MaximumInput, MinimumInput, AnimalAdvert, ToastError},
   beforeMount() {
-    this.getAdverts();
+    this.getAdverts(this.actualPage);
     this.getSpecies();
   },
   data() {
     return {
+      error: null,
+      invalidMessage: null,
       adverts: [],
       species: [],
       selectedSpecies: "",
-      selectedSex: "",
+      selectedGender: "",
       minAge: null,
       maxAge: null,
+      maxDistance: null,
+      actualPage: 1,
+      smthToLoad: true,
+      filteredRequest: false,
     }
   },
   methods: {
@@ -81,15 +99,51 @@ export default {
         this.species = result.data;
       });
     },
-    getAdverts() {
-      getPageAdverts(1).then(result => {
-        this.adverts = result.data;
+    getAdverts(page) {
+      getPageAdverts(page).then(result => {
+        if(result !== null) {
+          if(!this.filteredRequest) {
+            this.adverts = this.adverts.concat(result.data);
+          } else {
+            this.adverts = result.data;
+            this.filteredRequest = false;
+          }
+        } else {
+          this.smthToLoad = false;
+        }
+      }).catch(error => {
+        this.error = manageErrors(error.message);
       });
     },
-    filter() {
-      getPageAdverts(1).then(result => {
-        this.adverts = result.data;
+    filter(page) {
+      getPageFilteredAdverts(page, {
+        speciesId: this.selectedSpecies,
+        gender: this.selectedGender,
+        petMinAge: this.minAge,
+        petMaxAge: this.maxAge,
+        radius: this.maxDistance,
+      }).then(result => {
+        if(result !== null) {
+          if(this.filteredRequest) {
+            this.adverts = this.adverts.concat(result.data);
+          } else {
+            this.adverts = result.data;
+            this.filteredRequest = true;
+          }
+        } else {
+          this.smthToLoad = false;
+        }
+      }).catch(error => {
+        this.error = manageErrors(error.message);
       });
+    },
+    getPage(page) {
+      this.actualPage = page;
+      if(this.isAFilterActive()) {
+        this.filter(this.actualPage);
+      } else {
+        this.getAdverts(this.actualPage);
+      }
     },
     setMinAge(value) {
       this.minAge = value;
@@ -97,6 +151,16 @@ export default {
     setMaxAge(value) {
       this.maxAge = value;
     },
+    setMaxDistance(value) {
+      this.maxDistance = value;
+    },
+    isAFilterActive() {
+      return this.selectedSpecies !== ""
+          || this.selectedGender !== ""
+          || this.minAge !== null
+          || this.maxAge !== null
+          || this.maxDistance !== null;
+    }
   }
 }
 </script>
@@ -104,7 +168,10 @@ export default {
 <style scoped>
 
 .animalsList {
-  padding-top: 10px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .filters {
@@ -123,13 +190,6 @@ export default {
   align-items: center;
 }
 
-.animalsList {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
 .inner {
   background: var(--transparent-background-color);
   padding: 20px;
@@ -139,9 +199,6 @@ export default {
   border-radius: 10px;
   border: solid;
   border-color: var(--transparent-border-color);
-}
-
-.list {
 }
 
 button {
@@ -173,7 +230,26 @@ button:hover {
 .dropdown:focus,
 .dropdown:hover {
   border: 1px solid var(--footer-color);
-  background-color: transparent;
+}
+
+.back-top {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.page {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 40%;
+  padding-left: 40%;
+}
+
+p {
+  color: black;
 }
 
 </style>

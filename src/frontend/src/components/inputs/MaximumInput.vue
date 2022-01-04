@@ -7,7 +7,7 @@
         :type="'number'"
         :name="name"
         :placeholder="placeholder"
-        :required="true"
+        :required="false"
         class="input"
     />
   </div>
