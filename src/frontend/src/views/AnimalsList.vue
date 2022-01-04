@@ -146,13 +146,19 @@ export default {
       }
     },
     setMinAge(value) {
-      this.minAge = value;
+      if(value >= 0) {
+        this.minAge = value;
+      }
     },
     setMaxAge(value) {
-      this.maxAge = value;
+      if(value > 1) {
+        this.maxAge = value;
+      }
     },
     setMaxDistance(value) {
-      this.maxDistance = value;
+      if(value >= 1) {
+        this.maxDistance = value;
+      }
     },
     isAFilterActive() {
       return this.selectedSpecies !== ""
@@ -193,7 +199,7 @@ export default {
 .inner {
   background: var(--transparent-background-color);
   padding: 20px;
-  margin: auto auto 3em;
+  margin: auto auto 3em auto;
   width: 80%;
   height: 80%;
   border-radius: 10px;
@@ -232,13 +238,6 @@ button:hover {
   border: 1px solid var(--footer-color);
 }
 
-.back-top {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
 .page {
   display: flex;
   flex-direction: row;
@@ -246,10 +245,33 @@ button:hover {
   align-items: center;
   padding-right: 40%;
   padding-left: 40%;
+  margin-bottom: 3em;
 }
 
 p {
   color: black;
+}
+
+@media screen and (max-width: 600px) {
+  .inner {
+    background: var(--transparent-background-color);
+    margin: auto auto 3em auto;
+    width: 80%;
+    height: 80%;
+    border-radius: 10px;
+    border: solid;
+    border-color: var(--transparent-border-color);
+  }
+
+  .page {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 10%;
+    padding-left: 10%;
+    margin-bottom: 3em;
+  }
 }
 
 </style>
