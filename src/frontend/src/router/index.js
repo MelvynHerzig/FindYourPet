@@ -2,8 +2,8 @@ import { createRouter, createWebHistory} from 'vue-router'
 import LandingPage from '../views/LandingPage.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import Ad from '../views/Ad.vue'
-import AdCreate from '../views/AdCreate.vue'
+import Advert from '../views/Advert.vue'
+import AdvertCreation from '../views/AdvertCreation.vue';
 
 const routes = [
   {
@@ -31,13 +31,13 @@ const routes = [
   },
   {
     path: '/adverts/:id',
-    name: 'Ad',
-    component: Ad
+    name: 'Advert',
+    component: Advert
   },
   {
     path: '/adverts/create',
-    name: 'AdCreation',
-    component: AdCreate
+    name: 'AdvertCreation',
+    component: AdvertCreation
   },
 ]
 

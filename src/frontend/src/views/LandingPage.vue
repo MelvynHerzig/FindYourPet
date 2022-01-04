@@ -14,7 +14,7 @@ import RecentAnimalsList from '../components/landing/RecentAnimalsList.vue'
 import DevTeam from '../components/landing/DevTeam.vue'
 
 export default {
-  name: 'App',
+  name: 'LandingPage',
   components: {
     LandingWelcome,
     LandingHowTo,

@@ -3,7 +3,6 @@
     <div class="login">
       <h1>{{ $t("login.title") }}</h1>
       <form v-on:submit.prevent="login">
-
         <EmailInput
             @valueInput="setEmail"
             :name="'email'"
@@ -30,7 +29,6 @@ import { manageErrors } from "../logic/errors";
 import EmailInput from "../components/inputs/EmailInput";
 import PasswordInput from "../components/inputs/PasswordInput";
 import ToastError from "../components/toasts/ToastError";
-
 
 export default {
   name: "Login",
@@ -110,7 +108,7 @@ button:hover {
   background: url("../assets/images/dogs.jpg") no-repeat fixed center;
   background-size: contain;
   width: 100%;
-  height: 600px;
+  height: 1000px;
   margin: auto;
   display: flex;
 }

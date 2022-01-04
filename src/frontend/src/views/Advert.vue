@@ -1,5 +1,5 @@
 <template>
-  <div class="ad">
+  <div class="advert">
     <div class="inner">
       <h1>{{advert.title}}</h1>
       <div class="info">
@@ -25,7 +25,7 @@
 import { getAdvertById, getSpeciesById } from "../logic/apicalls";
 
 export default {
-  name: "Ad",
+  name: "Advert",
   beforeMount() {
     getAdvertById(this.$route.params.id).then(result => {
       this.advert = result.data;
@@ -58,7 +58,7 @@ button{
   color: black;
 }
 
-.ad{
+.advert{
   background: url("../assets/images/test.jpg");
   background-attachment:fixed;
   background-position: center;

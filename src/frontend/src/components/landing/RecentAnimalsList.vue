@@ -5,7 +5,7 @@
       <div class="list">
         <ul>
           <li v-for="advert in this.adverts.slice(0,3)" :key="advert.id" style="list-style-type:none">
-            <AnimalAd :advert="advert"/>
+            <AnimalAdvert :advert="advert"/>
           </li>
         </ul>
       </div>
@@ -14,19 +14,17 @@
 </template>
 
 <script>
-import { getAllAdverts } from "../../logic/apicalls";
+import { getRecentAdverts } from "../../logic/apicalls";
 
-import AnimalAd from "../AnimalAd";
+import AnimalAdvert from "../AnimalAdvert";
 
 export default {
-  name: "AnimalAdsList",
-  components: {AnimalAd},
+  name: "RecentAnimalsList",
+  components: { AnimalAdvert },
   beforeMount() {
-    getAllAdverts().then(result => {
+    getRecentAdverts().then(result => {
       this.adverts = result.data;
-      console.log(result.data);
     });
-
   },
   data: function () {
     return {
@@ -38,24 +36,12 @@ export default {
 
 <style scoped>
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-li,
-button{
+h1 {
   color: black;
-}
-
-h1{
   text-align: center;
 }
 
 .animalAdsList {
-
   background: url("../../assets/images/pets.jpg");
   background-attachment:fixed;
   background-repeat: no-repeat;
@@ -64,7 +50,6 @@ h1{
   width: 100%;
   height: 1000px;
   display: flex;
-
 }
 
 .list {
@@ -81,6 +66,6 @@ h1{
   border-radius: 10px;
   border: solid;
   border-color: var(--transparent-border-color);
-  }
+}
 
 </style>
