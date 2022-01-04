@@ -22,12 +22,12 @@
 </template>
 
 <script>
-import { getAdvertByEmail, getSpeciesById } from "../logic/apicalls";
+import { getAdvertById, getSpeciesById } from "../logic/apicalls";
 
 export default {
   name: "Advert",
   beforeMount() {
-    getAdvertByEmail(this.$route.params.id).then(result => {
+    getAdvertById(this.$route.params.id).then(result => {
       this.advert = result.data;
       getSpeciesById(this.advert.speciesId).then(result => {
         this.species = result.data;

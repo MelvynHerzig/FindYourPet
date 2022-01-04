@@ -32,9 +32,7 @@
     "home": "Home",
     "advert": "Annunci",
     "login": "Connetti",
-    "register": "Registrati",
-    "disconnect": "Scollegare",
-    "profile": "Profilo"
+    "register": "Registrati"
   },
   "errors": {
     "langage": "Cattivo linguaggio usato per la richiesta",
@@ -71,11 +69,6 @@
     "maxDistance": "Distanza massima della casa del proprietario dell'animale",
     "filterButton": "Filtro",
     "loadMore": "Carica altri annunci di animali domestici"
-  },
-  "profile": {
-    "profileInfos": "Informazioni sul profilo",
-    "advertsTitle": "I vostri annunci",
-    "modifyButton": "Modificare"
   },
   "animal_ad" : {
     "age": "età"

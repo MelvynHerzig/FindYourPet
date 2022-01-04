@@ -4,7 +4,6 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Advert from '../views/Advert.vue'
 import AdvertCreation from '../views/AdvertCreation.vue';
-import Profile from "../views/Profile";
 
 const routes = [
   {
@@ -18,7 +17,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import('../views/AdvertsList.vue')
+    component: () => import('../views/AnimalsList.vue')
   },
   {
     path: '/login',
@@ -39,11 +38,6 @@ const routes = [
     path: '/adverts/create',
     name: 'AdvertCreation',
     component: AdvertCreation
-  },
-  {
-    path: '/profile',
-    name: 'Profile',
-    component: Profile
   },
 ]
 

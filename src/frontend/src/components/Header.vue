@@ -12,10 +12,6 @@
         <button @click="$router.push('/login');  displayMenu()"> {{$t("header.login")}} </button>
         <button @click="$router.push('/register');  displayMenu()"> {{$t("header.register")}} </button>
       </div>
-      <div class="account">
-        <button @click="$router.push('/profile');  displayMenu()"> {{$t("header.profile")}} </button>
-        <button @click="displayMenu()"> {{$t("header.disconnect")}} </button>
-      </div>
     </div>
     <div>
       <div class="locale">
