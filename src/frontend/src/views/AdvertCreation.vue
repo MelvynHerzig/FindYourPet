@@ -41,15 +41,22 @@
           </div>
         </div>
     </form>
-    
+    <ToastError
+          v-if="error"
+          :text="error"
+          class="toast"
+      />
   </div>
 </template>
 
 <script>
 import { createAdvert, getAllSpecies } from "../logic/apicalls";
+import { manageErrors } from "../logic/errors";
+import ToastError from "../components/toasts/ToastError";
 
 export default {
   name: "AdvertCreation",
+  components: {ToastError},
   mounted() {
     this.getSpecies();
   },
@@ -60,6 +67,7 @@ export default {
   },
   data() {
     return {
+      error: null,
       species: [],
       selectedSpecies: "",
       selectedSex: "",
@@ -88,7 +96,13 @@ export default {
         imagePath: "/",
         petGender: this.selectedSex,
         speciesId: this.selectedSpecies
-      });
+      }) .then(() => {
+            this.$router.push('/') // TODO profile page
+          })
+          .catch(error => {
+            this.error = manageErrors(error.message);
+          });
+      
     }
   }
 }
