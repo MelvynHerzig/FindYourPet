@@ -1,5 +1,5 @@
 <template>
-  <section class="animalsList">
+  <div class="animalsList">
     <div class="filters" id="filters">
       <form v-on:submit.prevent="filter">
         <MinimumInput
@@ -59,7 +59,7 @@
         :text="error"
         class="toast"
     />
-  </section>
+  </div>
 </template>
 
 <script>

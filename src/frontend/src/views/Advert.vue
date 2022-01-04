@@ -1,5 +1,5 @@
 <template>
-  <section class="advert">
+  <div class="advert">
     <div class="inner">
       <h1>{{advert.title}}</h1>
       <div class="info">
@@ -18,7 +18,7 @@
       <h2> {{$t("ad.contact")}} </h2>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
