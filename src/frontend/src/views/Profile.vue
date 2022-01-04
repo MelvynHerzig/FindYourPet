@@ -1,6 +1,7 @@
 <template>
-  <div>
-  </div>
+  <section>
+
+  </section>
 </template>
 
 <script>

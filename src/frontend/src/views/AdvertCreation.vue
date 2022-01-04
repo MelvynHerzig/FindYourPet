@@ -1,5 +1,5 @@
 <template>
-  <div class="ad-edit">
+  <section class="ad-edit">
     <form v-on:submit.prevent="submit">
       <input class="title-input" type="text" v-model="title" v-bind:placeholder="$t('ad_create.title')" required>
         <div class="info">
@@ -42,7 +42,7 @@
         </div>
     </form>
     
-  </div>
+  </section>
 </template>
 
 <script>

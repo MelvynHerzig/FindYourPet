@@ -1,5 +1,5 @@
 <template>
-  <div class="animalAdsList">
+  <section class="animalAdsList">
     <div class="inner">
       <h1>{{$t("recent.title")}}</h1>
       <div class="list">
@@ -10,7 +10,7 @@
         </ul>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>

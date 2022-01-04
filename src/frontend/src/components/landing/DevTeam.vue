@@ -1,5 +1,5 @@
 <template>
-  <div class="dev-team">
+  <section class="dev-team">
     <div class = "title">
     <h1>{{$t("dev_team.title")}}</h1>
     </div>
@@ -9,7 +9,7 @@
       <Dev url = "images/Forestier.png" name= "Quentin Forestier" />
       <Dev url = "images/Herzig.png" name= "Melvyn Herzig" />
     </div>
-  </div>
+  </section>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg">
+  <section class="bg">
     <div class="login">
       <h1>{{ $t("login.title") }}</h1>
       <form v-on:submit.prevent="login">
@@ -20,7 +20,7 @@
           class="toast"
       />
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
