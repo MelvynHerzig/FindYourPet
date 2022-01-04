@@ -5,19 +5,19 @@
         <MinimumInput
             @valueInput="setMinAge"
             :name="'minAge'"
-            :placeholder="'minimum age'"
+            :placeholder="$t('advertsList.minAge')"
             class="input"
         />
         <MaximumInput
             @valueInput="setMaxAge"
             :name="'maxAge'"
-            :placeholder="'maximum age'"
+            :placeholder="$t('advertsList.maxAge')"
             class="input"
         />
         <MaximumInput
             @valueInput="setMaxDistance"
             :name="'maxDistance'"
-            :placeholder="'distance maximum'"
+            :placeholder="$t('advertsList.maxDistance')"
             class="input"
         />
         <select class="dropdown" v-model="selectedSpecies">
@@ -29,13 +29,13 @@
         <select class="dropdown" v-model="selectedGender">
           <option disabled hidden value="">{{$t("ad_create.sex")}}</option>
           <option value = "male">
-            {{$t("ad_create.male")}}
+            {{ $t("ad_create.male") }}
           </option>
           <option value = "female">
-            {{$t("ad_create.female")}}
+            {{ $t("ad_create.female") }}
           </option>
         </select>
-        <button type="submit">Filter</button>
+        <button type="submit">{{ $t('advertsList.filterButton') }}</button>
       </form>
     </div>
     <div class="inner">
@@ -50,7 +50,7 @@
     <div class="page">
       <a v-if="smthToLoad===true" href="#" @click="getPage(actualPage+1)">
         <i class="fas fa-spinner"></i>
-        Load More
+        {{ $t('advertsList.loadMore') }}
       </a>
       <a href="#filters"><i class="fas fa-arrow-up fa-2x"></i></a>
     </div>

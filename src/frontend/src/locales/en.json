@@ -63,6 +63,13 @@
     "title": "Register",
     "button": "Register"
   },
+  "advertsList": {
+    "minAge": "Minimum age of pet",
+    "maxAge": "Maximum age of pet",
+    "maxDistance": "Maximum distance of the pet owner's house",
+    "filterButton": "Filter",
+    "loadMore": "Load more pet adverts"
+  },
   "animal_ad" : {
     "age": "age"
   },

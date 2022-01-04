@@ -63,6 +63,13 @@
     "title": "Registrati",
     "button": "Registrati"
   },
+  "advertsList": {
+    "minAge": "Età minima dell'animale domestico",
+    "maxAge": "Età massima dell'animale domestico",
+    "maxDistance": "Distanza massima della casa del proprietario dell'animale",
+    "filterButton": "Filtro",
+    "loadMore": "Carica altri annunci di animali domestici"
+  },
   "animal_ad" : {
     "age": "età"
   },

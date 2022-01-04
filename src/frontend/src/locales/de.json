@@ -63,6 +63,13 @@
     "title": "Anmeldung",
     "button": "Jetzt Anmelden"
   },
+  "advertsList": {
+    "minAge": "Mindestalter des Haustiers",
+    "maxAge": "Höchstalter des Haustiers",
+    "maxDistance": "Maximale Entfernung zum Haus des Tierhalters",
+    "filterButton": "Filter",
+    "loadMore": "Mehr Haustier-Anzeigen laden"
+  },
   "animal_ad" : {
     "age": "Alter"
   },
