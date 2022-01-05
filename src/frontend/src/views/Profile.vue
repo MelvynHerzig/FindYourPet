@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     getActualMember() {
-      getMemberById(0).then(result => {
+      getMemberByEmail(email).then(result => { // TODO
         this.member = result.data;
       }).catch(error => {
         this.error = error;

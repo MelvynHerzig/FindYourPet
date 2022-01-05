@@ -78,6 +78,12 @@ export async function register(userInformations) {
         });
 }
 
+/***************** Members ********************/
+
+export async function getMemberByEmail(email) {
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/members/${email}`);
+}
+
 /***************** api3.geo.admin.ch ********************/
 
 export async function getSwissAdress(addr) {

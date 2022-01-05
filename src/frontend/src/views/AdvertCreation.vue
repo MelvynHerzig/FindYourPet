@@ -97,7 +97,7 @@ export default {
         petGender: this.selectedSex,
         speciesId: this.selectedSpecies
       }) .then(() => {
-            this.$router.push('/') // TODO profile page
+            this.$router.push('/profile')
           })
           .catch(error => {
             this.error = manageErrors(error.message);
