@@ -6,7 +6,7 @@
         <div class="short">
           <img src="..\..\public\images\kitty.jpg" alt="image">
           <h2>{{species.name}}</h2>
-          <h3>{{advert.petGender}}, {{advert.petAge}} {{$t("ad.years")}}</h3>
+          <h3>{{$t("ad_create." + advert.petGender)}}, {{advert.petAge}} {{$t("ad.years")}}</h3>
         </div>
         <div class="description">
           <p>
@@ -29,16 +29,25 @@ export default {
   beforeMount() {
     getAdvertById(this.$route.params.id).then(result => {
       this.advert = result.data;
-      getSpeciesById(this.advert.speciesId).then(result => {
-        this.species = result.data;
-      });
+      this.getSpecies();
     });
-
+  },
+  watch:{
+    '$i18n.locale': function() {
+      this.getSpecies();
+    }
   },
   data: function () {
     return {
       advert: {},
       species: {}
+    }
+  },
+  methods: {
+    getSpecies(){
+      getSpeciesById(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
+          this.species = result.data;
+      });
     }
   },
 }
@@ -85,6 +94,8 @@ button{
 
 .info {
   display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
 }
@@ -101,6 +112,8 @@ button{
   border-radius: 10px;
   border: solid;
   border-color: var(--transparent-border-color);
+  max-width: 95%;
+  overflow: auto;
 }
 
 img{

@@ -47,7 +47,7 @@ export async function getRecentAdverts() {
 }
 
 export async function getAdvertById(id) {
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${id}`);
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/id/${id}`);
 }
 
 /***************** Authentification ********************/

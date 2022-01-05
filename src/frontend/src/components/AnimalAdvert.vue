@@ -6,7 +6,7 @@
     <div class="name">
       <h1>{{ advert.title }}</h1>
       <h3>{{ specie.name }}</h3>
-      <h3>{{ $t("animal_ad.age") }}: {{ advert.petAge }}</h3>
+      <h3>{{$t("ad_create." + advert.petGender)}}, {{ $t("animal_ad.age") }}: {{ advert.petAge }}</h3>
     </div>
     <div class="description">
       <p>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+
 import { getSpeciesById } from '../logic/apicalls'
 
 export default {
@@ -25,9 +26,7 @@ export default {
     advert: {}
   },
   beforeMount() {
-    getSpeciesById(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
-      this.specie = result.data;
-    });
+    this.getSpecies();
   },
   watch:{
     '$i18n.locale': function() {
@@ -36,7 +35,7 @@ export default {
   },
   data() {
     return {
-      specie: {}
+      specie: {},
     }
   },
   methods: {
@@ -92,6 +91,8 @@ img {
   padding-left: 20px;
   border: solid;
   border-color: var(--header-selection-color);
+  max-width: 75%;
+  overflow: auto;
 }
 
 .description {
@@ -102,7 +103,8 @@ img {
   border: solid;
   border-color: var(--header-selection-color);
   flex: 2;
-  overflow: hidden;
+  max-width: 75%;
+  overflow: auto;
 }
 
 @media screen and (max-width: 600px) {
