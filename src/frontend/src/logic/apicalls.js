@@ -12,6 +12,10 @@ axios.interceptors.request.use(function (config) {
     return config;
 });
 
+
+/***************** Token Management ********************/
+//export function get
+
 /***************** Species ********************/
 
 export async function getAllSpecies(lang) {
