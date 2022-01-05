@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { getPageAdverts, getPageFilteredAdverts, getAllSpecies } from "../logic/apicalls";
+import { getPageAdverts, getPageFilteredAdverts, getAllSpeciesFromLang } from "../logic/apicalls";
 import { manageErrors } from "../logic/errors"
 import ToastError from "../components/toasts/ToastError";
 import AnimalAdvert from "../components/AnimalAdvert";
@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     getSpecies() {
-      getAllSpecies(this.$root.$i18n.locale).then(result => {
+      getAllSpeciesFromLang(this.$root.$i18n.locale).then(result => {
         this.species = result.data;
       });
     },

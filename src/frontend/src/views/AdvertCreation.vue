@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { createAdvert, getAllSpecies } from "../logic/apicalls";
+import { createAdvert, getAllSpeciesFromLang } from "../logic/apicalls";
 import { manageErrors } from "../logic/errors";
 import ToastError from "../components/toasts/ToastError";
 
@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     getSpecies() {
-      getAllSpecies(this.$root.$i18n.locale).then(result => {
+      getAllSpeciesFromLang(this.$root.$i18n.locale).then(result => {
         this.species = result.data;
       });
     },

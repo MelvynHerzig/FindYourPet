@@ -106,3 +106,4 @@ dist
 #iml
 src/.idea/src.iml
 src/.idea/workspace.xml
+.idea/
