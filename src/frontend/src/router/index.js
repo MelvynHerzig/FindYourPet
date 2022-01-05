@@ -5,6 +5,7 @@ import Register from '../views/Register.vue'
 import Advert from '../views/Advert.vue'
 import AdvertCreation from '../views/AdvertCreation.vue';
 import Profile from "../views/Profile";
+import {memberIsConnected} from "../logic/apicalls";
 
 const routes = [
   {
@@ -38,12 +39,14 @@ const routes = [
   {
     path: '/adverts/create',
     name: 'AdvertCreation',
-    component: AdvertCreation
+    component: AdvertCreation,
+    beforeEnter: requireAuth
   },
   {
     path: '/profile',
     name: 'Profile',
-    component: Profile
+    component: Profile,
+    beforeEnter: requireAuth
   },
 ]
 
@@ -53,3 +56,11 @@ const router = createRouter({
 })
 
 export default router
+
+function requireAuth(to, from, next) {
+  if(!memberIsConnected()) {
+    next({ name: 'Login' });
+  } else {
+    next();
+  }
+}

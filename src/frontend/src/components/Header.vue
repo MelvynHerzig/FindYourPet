@@ -10,6 +10,7 @@
       </div>
       <div v-if="isConnected() === true" class="account">
         <button @click="$router.push('/profile');  displayMenu()"> {{$t("header.profile")}} </button>
+        <button @click="$router.push('/adverts/create');  displayMenu()"> {{$t("header.advertCreation")}} </button>
         <button @click="disconnectMember(); displayMenu()"> {{$t("header.disconnect")}} </button>
       </div>
       <div v-else class="account">

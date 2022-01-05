@@ -31,6 +31,7 @@
   "header":{
     "home": "Home",
     "advert": "Werbung",
+    "advertCreation": "Erstellung von Anzeigen",
     "login": "Verbinden",
     "register": "Anmeldung"
   },
