@@ -66,21 +66,14 @@ export default {
 
 <style scoped>
 
-h1,
-button {
-  color: black;
-}
-
-h1 {
-  text-align: center;
-}
-
 .bg {
   background: url("../assets/images/dogs.jpg") no-repeat fixed center;
   background-size: contain;
   width: 100%;
-  height: 1000px;
+  height: 100%;
   margin: auto;
+  padding-top: 3em;
+  padding-bottom: 3em;
   display: flex;
 }
 
@@ -88,7 +81,6 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   background: var(--transparent-background-color);
   padding: 20px;
   margin: auto;
@@ -98,6 +90,15 @@ h1 {
   text-align: center;
   border: solid;
   border-color: var(--transparent-border-color);
+}
+
+h1,
+button {
+  color: black;
+}
+
+h1 {
+  text-align: center;
 }
 
 button {

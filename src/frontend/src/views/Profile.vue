@@ -3,14 +3,16 @@
     <div class="bgProfile">
       <div class="profileInfo">
         <h1>{{ $t('profile.profileInfos') }}</h1>
-        <p><i class="icon fas fa-user"></i>{{ member.firstname }}</p>
-        <p><i class="icon fas fa-user"></i>{{ member.name }}</p>
-        <p><i class="icon fas fa-envelope"></i>{{ member.email }}</p>
-        <p><i class="icon fas fa-map-marker-alt"></i>{{ member.street }}</p>
-        <p><i class="icon fas fa-map-marker-alt"></i>{{ member.NPA }}</p>
-        <p><i class="icon fas fa-map-marker-alt"></i>{{ member.city }}</p>
-        <p><i class="icon fas fa-phone"></i>{{ member.phone }}</p>
-        <button type="submit">{{ $t('profile.modifyButton') }}</button>
+        <div class="infos">
+          <p><i class="icon fas fa-user"></i>  {{ member.firstname }}</p>
+          <p><i class="icon fas fa-user"></i>  {{ member.name }}</p>
+          <p><i class="icon fas fa-envelope"></i>  {{ member.email }}</p>
+          <p><i class="icon fas fa-map-marker-alt"></i>  {{ member.street }}</p>
+          <p><i class="icon fas fa-map-marker-alt"></i>  {{ member.NPA }}</p>
+          <p><i class="icon fas fa-map-marker-alt"></i>  {{ member.city }}</p>
+          <p><i class="icon fas fa-phone"></i>  {{ member.phone }}</p>
+          <button type="submit">{{ $t('profile.modifyButton') }}</button>
+        </div>
       </div>
     </div>
     <div class="inner">
@@ -44,7 +46,19 @@ export default {
         street: "Rue du Village 28",
         NPA: "1347",
         city: "Le Solliat",
-        phone: "078 837 77 18"
+        phone: "078 837 77 18",
+        adverts: [
+          {
+            title: "Balou",
+            petAge: 16,
+            description: "Ceci est une annonce fictive teste présente en attendant l'api"
+          },
+          {
+            title: "Tiki",
+            petAge: 7,
+            description: "Ceci est une annonce fictive teste présente en attendant l'api"
+          },
+        ]
       },
     }
   },
@@ -67,14 +81,15 @@ export default {
 <style scoped>
 
 .main {
-  padding-top: 30px;
+  padding-top: 3em;
 }
 
 .bgProfile {
   background: url("../assets/images/pets.jpg") no-repeat fixed center;
   background-size: contain;
   width: 100%;
-  height: 1000px;
+  height: 100%;
+  padding-bottom: 3em;
   margin: auto;
   display: flex;
 }
@@ -84,7 +99,6 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   background: var(--transparent-background-color);
   padding: 20px;
   margin: auto;
@@ -94,6 +108,12 @@ export default {
   text-align: center;
   border: solid;
   border-color: var(--transparent-border-color);
+}
+
+.infos {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
 }
 
 .inner {
@@ -121,7 +141,7 @@ p {
 button {
   display: inline-block;
   padding: 20px;
-  margin: 30px;
+  margin: 30px 30px 30px 0;
   letter-spacing: .15rem;
   transition: all .3s;
   position: relative;
