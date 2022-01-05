@@ -195,6 +195,15 @@ h1 {
   text-align: center;
 }
 
+.bg {
+  background: url("../assets/images/dogs.jpg") no-repeat fixed center;
+  background-size: contain;
+  width: 100%;
+  height: 1000px;
+  margin: auto;
+  display: flex;
+}
+
 .register {
   background: var(--transparent-background-color);
   padding: 20px;
@@ -222,15 +231,6 @@ button {
 button:hover {
   cursor: pointer;
   background-color: var(--select-color);
-}
-
-.bg {
-  background: url("../assets/images/dogs.jpg") no-repeat fixed center;
-  background-size: contain;
-  width: 100%;
-  height: 1000px;
-  margin: auto;
-  display: flex;
 }
 
 .addressSelection {
