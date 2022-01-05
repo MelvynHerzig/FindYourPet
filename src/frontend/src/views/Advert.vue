@@ -29,9 +29,7 @@ export default {
   beforeMount() {
     getAdvertById(this.$route.params.id).then(result => {
       this.advert = result.data;
-      getSpeciesById(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
-        this.species = result.data;
-      });
+      this.getSpecies();
     });
   },
   watch:{

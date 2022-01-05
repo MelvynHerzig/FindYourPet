@@ -26,9 +26,7 @@ export default {
     advert: {}
   },
   beforeMount() {
-    getSpeciesById(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
-      this.specie = result.data;
-    });
+    this.getSpecies();
   },
   watch:{
     '$i18n.locale': function() {
