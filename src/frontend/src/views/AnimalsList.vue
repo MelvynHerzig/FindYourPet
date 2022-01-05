@@ -1,5 +1,5 @@
 <template>
-  <section class="animalsList">
+  <div class="animalsList">
     <div class="filters" id="filters">
       <form v-on:submit.prevent="filter">
         <MinimumInput
@@ -59,7 +59,7 @@
         :text="error"
         class="toast"
     />
-  </section>
+  </div>
 </template>
 
 <script>
@@ -71,7 +71,7 @@ import MinimumInput from "../components/inputs/MinimumInput";
 import MaximumInput from "../components/inputs/MaximumInput";
 
 export default {
-  name: "AdvertsList",
+  name: "AnimalsList",
   components: {MaximumInput, MinimumInput, AnimalAdvert, ToastError},
   beforeMount() {
     this.getAdverts(this.actualPage);

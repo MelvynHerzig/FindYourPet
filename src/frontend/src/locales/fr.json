@@ -32,9 +32,7 @@
     "home": "Accueil",
     "advert": "Annonces",
     "login": "Se connecter",
-    "register": "S'inscrire",
-    "disconnect": "Se déconnecter",
-    "profile": "Profil"
+    "register": "S'inscrire"
   },
   "errors": {
     "langage": "Mauvaise langue utilisée pour la requête",
@@ -71,11 +69,6 @@
     "maxDistance": "Distance maximum vous séparant de la maison du propriétaire de l'animal de compagnie",
     "filterButton": "Filtrer",
     "loadMore": "Charger plus d'annonces d'animal de compagnie"
-  },
-  "profile": {
-    "profileInfos": "Informations du Profil",
-    "advertsTitle": "Vos annonces",
-    "modifyButton": "Modifier"
   },
   "animal_ad" : {
     "age": "age"
