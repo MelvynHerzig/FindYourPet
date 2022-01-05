@@ -1,10 +1,7 @@
-import { Members } from '../entities/members.entity';
 import { OmitType } from '@nestjs/mapped-types';
+import { MemberDto } from './members.dto';
 
-export class CreateMemberDto extends OmitType(Members, [
-  'id',
-  'isAdmin',
-  'adverts',
-] as const) {
+export class CreateMemberDto extends OmitType(MemberDto, ['id'] as const) {
+  password: string;
   confirmPassword: string;
 }

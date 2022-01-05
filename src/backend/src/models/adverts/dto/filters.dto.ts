@@ -9,6 +9,7 @@ export class FilterDto {
 
   // Filter by age
   petMinAge: number;
+  petMaxAge: number;
 
   // Filter by distance (KM)
   radius: number;

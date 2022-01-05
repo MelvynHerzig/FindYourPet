@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Adverts } from '../../adverts/entities/adverts.entity';
+import { Advert } from '../../adverts/entities/adverts.entity';
 import { Point } from 'geojson';
 import { Exclude } from 'class-transformer';
 
@@ -18,7 +18,7 @@ const bcrypt = require('bcryptjs');
  * Entity to represents a user of FindYourPet
  */
 @Entity('member')
-export class Members {
+export class Member {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -31,7 +31,6 @@ export class Members {
   @Column()
   email: string;
 
-  @Exclude()
   @Column({
     length: 60,
   })
@@ -65,11 +64,4 @@ export class Members {
     nullable: true,
   })
   location: Point;
-
-  @OneToMany(() => Adverts, (advert) => advert.member)
-  adverts: Adverts[];
-
-  constructor(partial: Partial<Members>) {
-    Object.assign(this, partial);
-  }
 }

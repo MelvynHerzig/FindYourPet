@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { AdvertsService } from './adverts.service';
@@ -23,10 +24,10 @@ import {
 } from '../../security/policy/policy.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { FilterDto } from './dto/filters.dto';
-import { Adverts } from './entities/adverts.entity';
-import { CreateAdvertsDto } from './dto/create.adverts.dto';
-import { UpdateAdvertsDto } from './dto/update.adverts.dto';
+import { CreateAdvertDto } from './dto/create.adverts.dto';
+import { UpdateAdvertDto } from './dto/update.adverts.dto';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { AdvertDto } from './dto/advert.dto';
 
 /**
  * Advert controller
@@ -37,45 +38,64 @@ export class AdvertsController {
 
   /*******************  GET   ************************/
 
-  @Get('page/:pageNum/:lang')
+  @Get(':lang/page/:pageNum')
   async findPage(
     @Param('pageNum') pageNum: string,
     @Param('lang') lang: string,
-  ): Promise<Adverts[]> {
+  ): Promise<AdvertDto[]> {
     try {
-      return this.advertService.findPageAdvert(parseInt(pageNum, 10));
+      return this.advertService.ToAdvertsDto(
+        await this.advertService.findPageAdvert(parseInt(pageNum, 10)),
+        lang,
+      );
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
-  @Get('id/:id')
-  async findOneById(@Param('id') id: string): Promise<Adverts> {
-    return this.advertService.findOneAdvertById(parseInt(id));
+  @Get(':lang/id/:id')
+  async findOneById(
+    @Param('id') id: string,
+    @Param('lang') lang: string,
+  ): Promise<AdvertDto> {
+    return this.advertService.ToAdvertDto(
+      await this.advertService.findOneAdvertById(parseInt(id)),
+      lang,
+    );
   }
 
-  @Get('members/:uuid')
+  @Get(':lang/members/:uuid')
   @UseGuards(AuthGuard('jwt'), PoliciesGuard)
   @CheckPolicies(new ManageAdvertsPolicyhandler())
-  async findAllByUuid(@Param('uuid') uuid: string): Promise<Adverts[]> {
-    return this.advertService.findAllAdvertByUuid(uuid);
+  async findAllByUuid(
+    @Param('uuid') uuid: string,
+    @Param('lang') lang: string,
+  ): Promise<AdvertDto[]> {
+    return this.advertService.ToAdvertsDto(
+      await this.advertService.findAllAdvertByUuid(uuid),
+      lang,
+    );
   }
 
-  @Get('recent')
-  async findTopRecent(): Promise<Adverts[]> {
-    return this.advertService.findTop10RecentAdvert();
+  @Get(':lang/recent')
+  async findTopRecent(@Param('lang') lang: string): Promise<AdvertDto[]> {
+    return this.advertService.ToAdvertsDto(
+      await this.advertService.findTop10RecentAdvert(),
+      lang,
+    );
   }
 
-  @Get('filters/page/:pageNum')
+  @Get(':lang/filters/page/:pageNum')
   async findAllByFilter(
     @Body() filterDto: FilterDto,
     @Param('pageNum') pageNum: string,
-  ): Promise<Adverts[]> {
+    @Param('lang') lang: string,
+  ): Promise<AdvertDto[]> {
     try {
       await this.advertService.checkFilter(filterDto);
-      return await this.advertService.filterAdvert(
-        filterDto,
-        parseInt(pageNum, 10),
+      return this.advertService.ToAdvertsDto(
+        await this.advertService.filterAdvert(filterDto, parseInt(pageNum, 10)),
+        lang,
       );
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
@@ -87,17 +107,34 @@ export class AdvertsController {
   @Post()
   @UseGuards(AuthGuard('jwt'), PoliciesGuard)
   @CheckPolicies(new CreateAdvertsPolicyhandler())
-  async create(@Body() advert: CreateAdvertsDto): Promise<Adverts> {
-    console.log(advert);
-    return this.advertService.createAdvert(advert);
+  async create(
+    @Body() advert: CreateAdvertDto,
+    @Request() req,
+  ): Promise<AdvertDto> {
+    const memberId = await req.user.id;
+
+    return this.advertService.ToAdvertDto(
+      await this.advertService.createAdvert(
+        this.advertService.ToAdvert({ ...advert, memberId: memberId }),
+      ),
+      'en',
+    );
   }
 
   /*******************  PUT   ************************/
   @Put()
   @UseGuards(AuthGuard('jwt'), PoliciesGuard)
   @CheckPolicies(new UpdateAdvertsPolicyhandler())
-  async update(@Body() advert: UpdateAdvertsDto): Promise<UpdateResult> {
-    return this.advertService.updateAdvert(advert);
+  async update(
+    @Body() advert: UpdateAdvertDto,
+    @Request() req,
+  ): Promise<UpdateResult> {
+    return this.advertService.updateAdvert(
+      this.advertService.ToAdvert({
+        ...advert,
+        memberId: await req.user.id,
+      }),
+    );
   }
 
   /******************* DELETE ************************/

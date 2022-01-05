@@ -1,8 +1,7 @@
-import { Adverts } from '../entities/adverts.entity';
+import { Advert } from '../entities/adverts.entity';
 import { OmitType } from '@nestjs/mapped-types';
 
-export class UpdateAdvertsDto extends OmitType(Adverts, [
+export class UpdateAdvertDto extends OmitType(Advert, [
   'lastModified',
-  'member',
-  'species',
+  'memberId',
 ] as const) {}

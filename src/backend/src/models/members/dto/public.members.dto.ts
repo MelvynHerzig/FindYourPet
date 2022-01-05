@@ -1,7 +1,7 @@
-import { Members } from '../entities/members.entity';
 import { PickType } from '@nestjs/mapped-types';
+import { MemberDto } from './members.dto';
 
-export class AdvertsMemberDto extends PickType(Members, [
+export class PublicMemberDto extends PickType(MemberDto, [
   'id',
   'firstname',
   'name',

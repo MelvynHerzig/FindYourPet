@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Repository, UpdateResult } from 'typeorm';
-import { Members } from './entities/members.entity';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Member } from './entities/members.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateMemberDto } from './dto/create.members.dto';
 import {
@@ -23,15 +23,15 @@ const bcrypt = require('bcryptjs');
 @Injectable()
 export class MembersService {
   constructor(
-    @InjectRepository(Members)
-    private readonly memberRepository: Repository<Members>,
+    @InjectRepository(Member)
+    private readonly memberRepository: Repository<Member>,
   ) {}
 
-  async findOne(options?: object): Promise<Members> {
+  async findOne(options?: object): Promise<Member> {
     return this.memberRepository.findOne(options);
   }
 
-  async findByPayload({ email }: any): Promise<Members> {
+  async findByPayload({ email }: any): Promise<Member> {
     return await this.findOne({ where: { email } });
   }
 
@@ -39,7 +39,7 @@ export class MembersService {
     return (await this.findByPayload(email)).location;
   }
 
-  async findByLogin({ email, password }: LoginMemberDto): Promise<Members> {
+  async findByLogin({ email, password }: LoginMemberDto): Promise<Member> {
     const member = await this.memberRepository.findOne({ where: { email } });
 
     if (!member) {
@@ -55,8 +55,8 @@ export class MembersService {
     throw new HttpException(ERROR_INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED);
   }
 
-  async create(memberDto: CreateMemberDto): Promise<Members> {
-    const { email } = memberDto;
+  async create(members: Member): Promise<Member> {
+    const { email } = members;
 
     const memberInDb = await this.memberRepository.findOne({
       where: { email },
@@ -66,14 +66,25 @@ export class MembersService {
       throw new HttpException(ERROR_USER_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
     }
 
-    const member: Members = await this.memberRepository.create(memberDto);
+    const member: Member = await this.memberRepository.create(members);
 
     member.isAdmin = false;
     await this.memberRepository.save(member);
+
     return member;
   }
 
-  updateMember(member: UpdateMemberDto): Promise<UpdateResult> {
+  async update(member: Member): Promise<UpdateResult> {
+    const realMember = await this.findByPayload({ email: member.email });
+
+    member.password = realMember.password;
+    member.isAdmin = realMember.isAdmin;
+    member.location = realMember.location;
+
     return this.memberRepository.update(member.id, member);
+  }
+
+  async delete(memberId: string): Promise<DeleteResult> {
+    return this.memberRepository.delete(memberId);
   }
 }

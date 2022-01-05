@@ -1,7 +1,3 @@
-import { OmitType } from '@nestjs/mapped-types';
-import { Members } from '../entities/members.entity';
+import { MemberDto } from './members.dto';
 
-export class UpdateMemberDto extends OmitType(Members, [
-  'isAdmin',
-  'adverts',
-] as const) {}
+export class UpdateMemberDto extends MemberDto {}

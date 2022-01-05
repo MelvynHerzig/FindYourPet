@@ -5,13 +5,14 @@ import {
   ExtractSubjectType,
   InferSubjects,
 } from '@casl/ability';
-import { Adverts } from '../../models/adverts/entities/adverts.entity';
-import { Members } from '../../models/members/entities/members.entity';
+import { Advert } from '../../models/adverts/entities/adverts.entity';
+import { Member } from '../../models/members/entities/members.entity';
 import { Injectable } from '@nestjs/common';
 import { Species } from '../../models/species/entities/species.entity';
+import { PublicMemberDto } from '../../models/members/dto/public.members.dto';
 
 type Subjects =
-  | InferSubjects<typeof Adverts | typeof Species | typeof Members>
+  | InferSubjects<typeof Advert | typeof Species | typeof Member>
   | 'all';
 
 export type AppAbility = Ability<[Action, Subjects]>;
@@ -26,26 +27,29 @@ export enum Action {
 
 @Injectable()
 export class CaslAbilityFactory {
-  createForMember(member: Members) {
+  createForMember(member: Member) {
     const { can, cannot, build } = new AbilityBuilder<
       Ability<[Action, Subjects]>
     >(Ability as AbilityClass<AppAbility>);
 
     if (member) {
-      if (member.isAdmin) {
-        can(Action.Manage, 'all'); // read-write access to everything
-      }
-
       // Adverts
-      can(Action.Read, Adverts);
-      can(Action.Create, Adverts);
-      can(Action.Manage, Adverts, { memberId: member.id });
+      can(Action.Read, Advert);
+      can(Action.Create, Advert);
+      can(Action.Manage, Advert, { memberId: member.id });
 
       // Species
       can(Action.Read, Species);
 
       // Members
-      can(Action.Manage, Members, { id: member.id });
+      can(Action.Read, Member, { id: member.id });
+      can(Action.Update, Member, { id: member.id });
+      can(Action.Delete, Member, { id: member.id });
+
+      // Admin
+      if (member.isAdmin) {
+        can(Action.Manage, 'all'); // read-write access to everything
+      }
     }
     return build({
       // Read https://casl.js.org/v5/en/guide/subject-type-detection#use-classes-as-subject-types for details

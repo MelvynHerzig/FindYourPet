@@ -1,45 +1,42 @@
 import { Injectable } from '@nestjs/common';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { Adverts, PetGender } from './entities/adverts.entity';
+import { Advert, PetGender } from './entities/adverts.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { from } from 'rxjs';
 import { FilterDto } from './dto/filters.dto';
 import { SpeciesService } from '../species/species.service';
 import {
   FILTER_INVALID_GENDER,
   FILTER_INVALID_PAGE,
+  FILTER_INVALID_PET_MAX_AGE,
   FILTER_INVALID_PET_MIN_AGE,
   FILTER_INVALID_RADIUS,
 } from '../../error/error-message';
 import { MembersService } from '../members/members.service';
-import { CreateAdvertsDto } from './dto/create.adverts.dto';
-import { UpdateAdvertsDto } from './dto/update.adverts.dto';
-
-export interface AdvertsStatus {
-  success: boolean;
-  message: string;
-}
+import { UpdateAdvertDto } from './dto/update.adverts.dto';
+import { AdvertDto } from './dto/advert.dto';
+import { ToTranslatedSpeciesDto } from '../species/dto/translated.species.dto';
+import { ToPublicMemberDto } from '../members/dto/members.dto';
 
 /**
  * Service to query adverts
  */
 @Injectable()
 export class AdvertsService {
-  pageSize = 34;
+  pageSize = 20;
 
   constructor(
-    @InjectRepository(Adverts)
-    private readonly advertRepository: Repository<Adverts>,
+    @InjectRepository(Advert)
+    private readonly advertRepository: Repository<Advert>,
     private speciesService: SpeciesService,
     private membersService: MembersService,
   ) {}
 
-  async createAdvert(advert: CreateAdvertsDto): Promise<Adverts> {
+  async createAdvert(advert: Advert): Promise<Advert> {
     return this.advertRepository.save(advert);
   }
 
-  async findPageAdvert(pageNum: number): Promise<Adverts[]> {
-    this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
+  async findPageAdvert(pageNum: number): Promise<Advert[]> {
+    await this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
 
     return this.advertRepository.find({
       order: {
@@ -50,15 +47,15 @@ export class AdvertsService {
     });
   }
 
-  async findOneAdvertById(id: number): Promise<Adverts> {
+  async findOneAdvertById(id: number): Promise<Advert> {
     return this.advertRepository.findOne(id);
   }
 
-  async findAllAdvertByUuid(uuid: string): Promise<Adverts[]> {
+  async findAllAdvertByUuid(uuid: string): Promise<Advert[]> {
     return this.advertRepository.find({ memberId: uuid });
   }
 
-  async findTop10RecentAdvert(): Promise<Adverts[]> {
+  async findTop10RecentAdvert(): Promise<Advert[]> {
     return this.advertRepository.find({
       order: {
         lastModified: 'DESC',
@@ -67,7 +64,7 @@ export class AdvertsService {
     });
   }
 
-  async filterAdvert(filters: FilterDto, pageNum: number): Promise<Adverts[]> {
+  async filterAdvert(filters: FilterDto, pageNum: number): Promise<Advert[]> {
     this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
 
     // TODO get user location that emited request
@@ -93,6 +90,11 @@ export class AdvertsService {
     // Filter by age
     if (filters.petMinAge !== undefined) {
       query.andWhere(`adverts.petAge >= ${filters.petMinAge}`);
+    }
+
+    // Filter by age
+    if (filters.petMaxAge !== undefined) {
+      query.andWhere(`adverts.petAge <= ${filters.petMaxAge}`);
     }
 
     // Filter by distance
@@ -131,7 +133,7 @@ export class AdvertsService {
     return adverts;
   }
 
-  async updateAdvert(advert: UpdateAdvertsDto): Promise<UpdateResult> {
+  async updateAdvert(advert: Advert): Promise<UpdateResult> {
     return this.advertRepository.update(advert.id, advert);
   }
 
@@ -160,6 +162,22 @@ export class AdvertsService {
       );
     }
 
+    if (filterDto.petMaxAge !== undefined) {
+      this.checkIfNumberIsSmallerThan(
+        filterDto.petMaxAge,
+        0,
+        FILTER_INVALID_PET_MAX_AGE,
+      );
+
+      if (filterDto.petMinAge !== undefined) {
+        this.checkIfNumberIsSmallerThan(
+          filterDto.petMaxAge,
+          filterDto.petMinAge,
+          FILTER_INVALID_PET_MAX_AGE,
+        );
+      }
+    }
+
     if (filterDto.gender !== undefined) {
       if (!Object.values(PetGender).includes(filterDto.gender)) {
         throw FILTER_INVALID_GENDER;
@@ -171,5 +189,76 @@ export class AdvertsService {
     if (!Number.isInteger(num) || num < min) {
       throw error;
     }
+  }
+
+  async ToAdvertDto(advert, lang: string): Promise<AdvertDto> {
+    const {
+      id,
+      title,
+      description,
+      imagePath,
+      lastModified,
+      petAge,
+      petGender,
+      speciesId,
+      memberId,
+    } = advert;
+
+    return {
+      id,
+      title,
+      description,
+      imagePath,
+      lastModified,
+      petAge,
+      petGender,
+      species: ToTranslatedSpeciesDto(
+        await this.speciesService.findOneSpeciesById(speciesId),
+        lang,
+      ),
+      member: ToPublicMemberDto(
+        await this.membersService.findOne({ id: memberId }),
+      ),
+    };
+  }
+
+  async ToAdvertsDto(adverts, lang: string): Promise<AdvertDto[]> {
+    const result: AdvertDto[] = [];
+
+    for (const advert of adverts) {
+      result.push(await this.ToAdvertDto(advert, lang));
+    }
+    return result;
+  }
+
+  ToAdvert(advert): Advert {
+    const {
+      id,
+      title,
+      description,
+      imagePath,
+      lastModified,
+      petAge,
+      petGender,
+      speciesId,
+      species,
+      memberId,
+      member,
+    } = advert;
+    console.log(advert);
+    const sId = speciesId === undefined ? species.id : speciesId;
+    const mId = memberId === undefined ? member.id : memberId;
+
+    return {
+      id,
+      title,
+      description,
+      imagePath,
+      lastModified,
+      petAge,
+      petGender,
+      memberId: mId,
+      speciesId: sId,
+    };
   }
 }

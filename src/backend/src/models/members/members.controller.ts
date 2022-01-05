@@ -1,27 +1,26 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
   Param,
   Put,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { MembersService } from './members.service';
-import { Members } from './entities/members.entity';
 import { UpdateMemberDto } from './dto/update.members.dto';
-import { UpdateResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
 import {
   CheckPolicies,
   PoliciesGuard,
 } from '../../security/policy/policy.guard';
 import {
+  DeleteMembersPolicyhandler,
   ReadMembersPolicyhandler,
   UpdateMembersPolicyhandler,
 } from '../../security/policy/handler/members.policyhandler';
+import { MemberDto, ToMember, ToMemberDto } from './dto/members.dto';
 
 /**
  * Member controller
@@ -31,22 +30,25 @@ export class MembersController {
   constructor(private memberService: MembersService) {}
 
   /******************* GET    ************************/
-  @Get('/:id')
+  @Get('email/:email')
   @UseGuards(AuthGuard('jwt'), PoliciesGuard)
   @CheckPolicies(new ReadMembersPolicyhandler())
-  async findOne(@Param('id') id: string): Promise<Members> {
-    const member: Members = await this.memberService.findOne({ id: id });
-    return new Members(member);
+  async findOneByEmail(@Param('email') email: string): Promise<MemberDto> {
+    return ToMemberDto(await this.memberService.findOne({ email: email }));
   }
-
-  /******************* POST   ************************/
 
   /******************* PUT    ************************/
   @Put()
   @UseGuards(AuthGuard('jwt'), PoliciesGuard)
   @CheckPolicies(new UpdateMembersPolicyhandler())
-  update(@Body() member: UpdateMemberDto): Promise<UpdateResult> {
-    return this.memberService.updateMember(member);
+  async update(@Body() member: UpdateMemberDto): Promise<UpdateResult> {
+    return this.memberService.update(ToMember(member));
   }
   /******************* DELETE ************************/
+  @Delete(':uuid')
+  @UseGuards(AuthGuard('jwt'), PoliciesGuard)
+  @CheckPolicies(new DeleteMembersPolicyhandler())
+  async delete(@Param('uuid') uuid: string): Promise<DeleteResult> {
+    return this.memberService.delete(uuid);
+  }
 }

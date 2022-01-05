@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Members } from '../../members/entities/members.entity';
+import { Member } from '../../members/entities/members.entity';
 import { Species } from '../../species/entities/species.entity';
 
 /**
@@ -14,7 +14,7 @@ export enum PetGender {
  * Entity to represents an adverts to trade pets.
  */
 @Entity('adverts')
-export class Adverts {
+export class Advert {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -43,12 +43,6 @@ export class Adverts {
   @Column({ nullable: true })
   memberId: string;
 
-  @ManyToOne(() => Members, (member) => member.adverts)
-  member: Members;
-
   @Column({ nullable: true })
   speciesId: number;
-
-  @ManyToOne(() => Species, (species) => species.adverts)
-  species: Species;
 }

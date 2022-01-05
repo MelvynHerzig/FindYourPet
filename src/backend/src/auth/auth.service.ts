@@ -7,7 +7,7 @@ import { Point } from 'geojson';
 import { ERROR_INVALID_TOKEN } from '../error/error-message';
 import axios from 'axios';
 import { LoginMemberDto } from '../models/members/dto/login.members.dto';
-import { Members } from '../models/members/entities/members.entity';
+import { Member } from '../models/members/entities/members.entity';
 
 export interface RegistrationsStatus {
   success: boolean;
@@ -25,14 +25,16 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(memberDto: CreateMemberDto): Promise<RegistrationsStatus> {
+  async register(member: Member): Promise<RegistrationsStatus> {
     let status: RegistrationsStatus = {
       success: true,
       message: 'member registered',
     };
+    console.log(member);
+
     try {
       // Getting geolocation
-      const addr = `${memberDto.street} ${memberDto.NPA} ${memberDto.city}`;
+      const addr = `${member.street} ${member.NPA} ${member.city}`;
 
       const response = await axios
         .get(
@@ -50,12 +52,12 @@ export class AuthService {
       }
 
       // Preparing location
-      memberDto.location = {
+      member.location = {
         type: 'Point',
         coordinates: [response[0].attrs.lon, response[0].attrs.lat],
       };
 
-      await this.membersService.create(memberDto);
+      await this.membersService.create(member);
     } catch (err) {
       status = {
         success: false,
@@ -71,12 +73,13 @@ export class AuthService {
     const token = this._createToken(member);
 
     return {
+      id: member.id,
       email: member.email,
       ...token,
     };
   }
 
-  async validateUser(payload: JwtPayload): Promise<Members> {
+  async validateUser(payload: JwtPayload): Promise<Member> {
     const member = await this.membersService.findByPayload(payload);
 
     if (!member) {
@@ -86,7 +89,7 @@ export class AuthService {
     return member;
   }
 
-  private _createToken({ email }: Members): any {
+  private _createToken({ email }: Member): any {
     const member: JwtPayload = { email };
 
     const accessToken = this.jwtService.sign(member);

@@ -9,6 +9,7 @@ import {
 } from '../../error/error-message';
 import { CreateSpeciesDto } from './dto/create.species.dto';
 import { UpdateSpeciesDto } from './dto/update.species.dto.js';
+import { ToSpecies } from './dto/species.dto';
 
 /**
  * Service to query species
@@ -19,7 +20,7 @@ export class SpeciesService {
     @InjectRepository(Species)
     private readonly speciesRepository: Repository<Species>,
   ) {
-    const dog = new Species();
+    /*const dog = new Species();
     dog.name = jsonStringFromSpecies('dog', 'chien', 'Hund', 'cane');
     speciesRepository.save(dog).catch((err) => console.log(err));
 
@@ -90,10 +91,10 @@ export class SpeciesService {
 
     const other = new Species();
     other.name = jsonStringFromSpecies('other', 'autre', 'Sonstiges', 'Altro');
-    speciesRepository.save(other).catch((err) => console.log(err));
+    speciesRepository.save(other).catch((err) => console.log(err));*/
   }
 
-  async createSpecies(species: CreateSpeciesDto): Promise<Species> {
+  async createSpecies(species: Species): Promise<Species> {
     return this.speciesRepository.save(species);
   }
 
@@ -101,34 +102,11 @@ export class SpeciesService {
     return this.speciesRepository.find();
   }
 
-  async findAllSpeciesTranslated(lang: string): Promise<Species[]> {
-    if (!isSupportedLangAbr(lang)) {
-      throw new HttpException(ERROR_LANGUAGE, HttpStatus.NOT_FOUND);
-    }
-
-    // Getting species and keeping only desired language
-    const species = await this.findAllSpecies();
-
-    species.map(async (sp) => (sp.name = this.getSpeciesName(sp, lang)));
-    return species;
-  }
-
   async findOneSpeciesById(id: number): Promise<Species> {
     return this.speciesRepository.findOne(id);
   }
 
-  async findOneSpeciesTranslated(id: number, lang: string): Promise<Species> {
-    if (!isSupportedLangAbr(lang)) {
-      throw new HttpException(ERROR_LANGUAGE, HttpStatus.NOT_FOUND);
-    }
-
-    const species = await this.findOneSpeciesById(id);
-    species.name = this.getSpeciesName(species, lang);
-
-    return species;
-  }
-
-  async updateSpecies(species: UpdateSpeciesDto): Promise<UpdateResult> {
+  async updateSpecies(species: Species): Promise<UpdateResult> {
     return this.speciesRepository.update(species.id, species);
   }
 
@@ -148,13 +126,5 @@ export class SpeciesService {
     }
 
     return true;
-  }
-
-  async getSpeciesNameFromId(id: number, lang: string): Promise<string> {
-    return JSON.parse((await this.findOneSpeciesById(id)).name)[lang];
-  }
-
-  getSpeciesName(species: Species, lang: string): string {
-    return JSON.parse(species.name)[lang];
   }
 }

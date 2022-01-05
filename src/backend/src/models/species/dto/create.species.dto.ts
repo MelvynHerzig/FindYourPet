@@ -1,4 +1,4 @@
-import { Species } from '../entities/species.entity';
-import { PickType } from '@nestjs/mapped-types';
+import { OmitType } from '@nestjs/mapped-types';
+import { SpeciesDto } from './species.dto';
 
-export class CreateSpeciesDto extends PickType(Species, ['name'] as const) {}
+export class CreateSpeciesDto extends OmitType(SpeciesDto, ['id'] as const) {}

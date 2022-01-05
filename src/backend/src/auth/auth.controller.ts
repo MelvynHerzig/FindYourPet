@@ -9,6 +9,8 @@ import { AuthService, LoginStatus, RegistrationsStatus } from './auth.service';
 import { ERROR_PASSWORD_CONFIRMATION } from '../error/error-message';
 import { CreateMemberDto } from '../models/members/dto/create.members.dto';
 import { LoginMemberDto } from '../models/members/dto/login.members.dto';
+import { ToMember } from '../models/members/dto/members.dto';
+import { Member } from '../models/members/entities/members.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -24,9 +26,8 @@ export class AuthController {
         HttpStatus.BAD_REQUEST,
       );
     }
-
     const result: RegistrationsStatus = await this.authService.register(
-      createMemberDto,
+      ToMember(createMemberDto),
     );
     if (!result.success) {
       throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
