@@ -14,7 +14,35 @@ axios.interceptors.request.use(function (config) {
 
 
 /***************** Token Management ********************/
-//export function get
+
+export function memberIsConnected() {
+    return cookies.isKey('token')
+        && cookies.get('token') !== null
+        && cookies.get('token') !== undefined;
+}
+
+export function getMemberConnectedEmail() {
+    if(memberIsConnected()) {
+        return cookies.get('token').email;
+    }
+}
+
+export function getMemberConnectedId() {
+    if(memberIsConnected()) {
+        return cookies.get('token').id;
+    }
+}
+
+export function getMemberConnectedToken() {
+    if(memberIsConnected()) {
+        return cookies.get('token');
+    }
+}
+
+export function destroyMemberToken() {
+    cookies.set('token', null);
+    cookies.remove('token');
+}
 
 /***************** Species ********************/
 

@@ -8,13 +8,13 @@
         <button @click="$router.push('/'); displayMenu()"> {{$t("header.home")}} </button>
         <button @click="$router.push('/adverts');  displayMenu()"> {{$t("header.advert")}} </button>
       </div>
-      <div class="account">
+      <div v-if="isConnected() === true" class="account">
+        <button @click="$router.push('/profile');  displayMenu()"> {{$t("header.profile")}} </button>
+        <button @click="disconnectMember(); displayMenu()"> {{$t("header.disconnect")}} </button>
+      </div>
+      <div v-else class="account">
         <button @click="$router.push('/login');  displayMenu()"> {{$t("header.login")}} </button>
         <button @click="$router.push('/register');  displayMenu()"> {{$t("header.register")}} </button>
-      </div>
-      <div class="account">
-        <button @click="$router.push('/profile');  displayMenu()"> {{$t("header.profile")}} </button>
-        <button @click="displayMenu()"> {{$t("header.disconnect")}} </button>
       </div>
     </div>
     <div>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { memberIsConnected, destroyMemberToken } from '../logic/apicalls';
 
 export default {
   name: 'locale-changer',
@@ -48,9 +49,17 @@ export default {
       else {
         link.style.display = "flex";
       }
+    },
+    isConnected() {
+      return memberIsConnected();
+    },
+    disconnectMember() {
+      destroyMemberToken();
     }
+  },
+  mounted() {
+    this.isConnected();
   }
-
 }
 </script>
 
