@@ -48,8 +48,10 @@ h1 {
   background-size: cover;
   margin:auto;
   width: 100%;
-  height: 1000px;
+  height: 100%;
   display: flex;
+  padding-top: 3em;
+  padding-bottom: 3em;
 }
 
 .list {
