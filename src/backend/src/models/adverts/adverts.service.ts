@@ -191,7 +191,7 @@ export class AdvertsService {
     }
   }
 
-  async ToAdvertDto(advert, lang: string): Promise<AdvertDto> {
+  async ToAdvertDto(advert, lang: string, logged: boolean): Promise<AdvertDto> {
     const {
       id,
       title,
@@ -216,17 +216,21 @@ export class AdvertsService {
         await this.speciesService.findOneSpeciesById(speciesId),
         lang,
       ),
-      member: ToPublicMemberDto(
-        await this.membersService.findOne({ id: memberId }),
-      ),
+      member: logged
+        ? ToPublicMemberDto(await this.membersService.findOne({ id: memberId }))
+        : undefined,
     };
   }
 
-  async ToAdvertsDto(adverts, lang: string): Promise<AdvertDto[]> {
+  async ToAdvertsDto(
+    adverts,
+    lang: string,
+    logged: boolean,
+  ): Promise<AdvertDto[]> {
     const result: AdvertDto[] = [];
 
     for (const advert of adverts) {
-      result.push(await this.ToAdvertDto(advert, lang));
+      result.push(await this.ToAdvertDto(advert, lang, logged));
     }
     return result;
   }

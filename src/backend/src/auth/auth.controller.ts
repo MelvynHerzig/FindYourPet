@@ -10,7 +10,6 @@ import { ERROR_PASSWORD_CONFIRMATION } from '../error/error-message';
 import { CreateMemberDto } from '../models/members/dto/create.members.dto';
 import { LoginMemberDto } from '../models/members/dto/login.members.dto';
 import { ToMember } from '../models/members/dto/members.dto';
-import { Member } from '../models/members/entities/members.entity';
 
 @Controller('auth')
 export class AuthController {

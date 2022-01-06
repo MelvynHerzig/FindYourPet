@@ -28,6 +28,10 @@ import { CreateAdvertDto } from './dto/create.adverts.dto';
 import { UpdateAdvertDto } from './dto/update.adverts.dto';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { AdvertDto } from './dto/advert.dto';
+import { ExtractJwt } from 'passport-jwt';
+import { isJWT } from 'class-validator';
+import { JwtService } from '@nestjs/jwt';
+import { JwtStrategy } from '../../auth/jwt.strategy';
 
 /**
  * Advert controller
@@ -42,11 +46,14 @@ export class AdvertsController {
   async findPage(
     @Param('pageNum') pageNum: string,
     @Param('lang') lang: string,
+    @Request() req,
   ): Promise<AdvertDto[]> {
     try {
+      const jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
       return this.advertService.ToAdvertsDto(
         await this.advertService.findPageAdvert(parseInt(pageNum, 10)),
         lang,
+        isJWT(jwt),
       );
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
@@ -57,10 +64,16 @@ export class AdvertsController {
   async findOneById(
     @Param('id') id: string,
     @Param('lang') lang: string,
+    @Request() req,
   ): Promise<AdvertDto> {
+    const jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+    isJWT(
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InF1ZW50aW5AZ21haWwuY29tIiwiaWF0IjoxNjQxNDcxMDg5LCJleHAiOjE2NDE0NzE5ODl9.8lqHYFD8mbbD2vrYfpPq5zP21e3TSGaHEzzr9AueKLE',
+    );
     return this.advertService.ToAdvertDto(
       await this.advertService.findOneAdvertById(parseInt(id)),
       lang,
+      isJWT(jwt),
     );
   }
 
@@ -74,14 +87,20 @@ export class AdvertsController {
     return this.advertService.ToAdvertsDto(
       await this.advertService.findAllAdvertByUuid(uuid),
       lang,
+      true,
     );
   }
 
   @Get(':lang/recent')
-  async findTopRecent(@Param('lang') lang: string): Promise<AdvertDto[]> {
+  async findTopRecent(
+    @Param('lang') lang: string,
+    @Request() req,
+  ): Promise<AdvertDto[]> {
+    const jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
     return this.advertService.ToAdvertsDto(
       await this.advertService.findTop10RecentAdvert(),
       lang,
+      isJWT(jwt),
     );
   }
 
@@ -90,12 +109,15 @@ export class AdvertsController {
     @Body() filterDto: FilterDto,
     @Param('pageNum') pageNum: string,
     @Param('lang') lang: string,
+    @Request() req,
   ): Promise<AdvertDto[]> {
     try {
       await this.advertService.checkFilter(filterDto);
+      const jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
       return this.advertService.ToAdvertsDto(
         await this.advertService.filterAdvert(filterDto, parseInt(pageNum, 10)),
         lang,
+        isJWT(jwt),
       );
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
@@ -118,6 +140,7 @@ export class AdvertsController {
         this.advertService.ToAdvert({ ...advert, memberId: memberId }),
       ),
       'en',
+      true,
     );
   }
 
