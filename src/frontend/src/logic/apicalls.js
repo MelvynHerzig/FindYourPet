@@ -12,13 +12,46 @@ axios.interceptors.request.use(function (config) {
     return config;
 });
 
+
+/***************** Token Management ********************/
+
+export function memberIsConnected() {
+    return cookies.isKey('token')
+        && cookies.get('token') !== null
+        && cookies.get('token') !== undefined;
+}
+
+export function getMemberConnectedEmail() {
+    if(memberIsConnected()) {
+        return cookies.get('token').email;
+    }
+}
+
+export function getMemberConnectedId() {
+    if(memberIsConnected()) {
+        return cookies.get('token').id;
+    }
+}
+
+export function getMemberConnectedToken() {
+    if(memberIsConnected()) {
+        return cookies.get('token');
+    }
+}
+
+export function destroyMemberToken() {
+    cookies.set('token', null);
+    cookies.remove('token');
+}
+
 /***************** Species ********************/
 
-export async function getAllSpecies(lang) {
+export async function getAllSpeciesFromLang(lang) {
     return axios.get(`${process.env.VUE_APP_ROOT_API}/species/${lang}`);
 }
 
-export async function getSpeciesById(id, lang) {
+export async function getSpeciesByIdFromLang(id, lang) {
+    // TODO: rajouter /id une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/species/${lang}/${id}`);
 }
 
@@ -34,19 +67,33 @@ export async function createAdvert(advertInformations) {
         });
 }
 
+export async function updateAdvert(advertInformations) {
+    return axios.put(`${process.env.VUE_APP_ROOT_API}/adverts`, advertInformations)
+        .then(result => {
+            console.log(result.data);
+        })
+        .catch(error => {
+            this.error = error;
+        });
+}
+
 export async function getPageAdverts(pageNum) {
+    // TODO: rajouter /:lang une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/page/${pageNum}`);
 }
 
 export async function getPageFilteredAdverts(pageNum, filters) {
+    // TODO: rajouter /:lang une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/filters/page/${pageNum}`, filters);
 }
 
 export async function getRecentAdverts() {
+    // TODO: rajouter /:lang une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/recent`);
 }
 
 export async function getAdvertById(id) {
+    // TODO: rajouter /:lang une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/id/${id}`);
 }
 
@@ -72,6 +119,16 @@ export async function register(userInformations) {
         .catch(error => {
             this.error = manageErrors(error.message);
         });
+}
+
+/***************** Members ********************/
+
+export async function getMemberByEmail(email) {
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/members/email/${email}`);
+}
+
+export async function updateMemberByEmail(memberInformations) {
+    return axios.put(`${process.env.VUE_APP_ROOT_API}/members/`, memberInformations);
 }
 
 /***************** api3.geo.admin.ch ********************/

@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { getMemberById } from "../logic/apicalls";
+import {getMemberByEmail, getMemberConnectedEmail } from "../logic/apicalls";
 import AnimalAdvert from "../components/AnimalAdvert";
 
 export default {
@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     getActualMember() {
-      getMemberById(0).then(result => {
+      getMemberByEmail(getMemberConnectedEmail()).then(result => {
         this.member = result.data;
       }).catch(error => {
         this.error = error;

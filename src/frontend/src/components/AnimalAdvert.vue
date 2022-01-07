@@ -18,7 +18,7 @@
 
 <script>
 
-import { getSpeciesById } from '../logic/apicalls'
+import { getSpeciesByIdFromLang } from '../logic/apicalls'
 
 export default {
   name: "AnimalAdvert",
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     getSpecies(){
-      getSpeciesById(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
+      getSpeciesByIdFromLang(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
           this.specie = result.data;
       });
     }

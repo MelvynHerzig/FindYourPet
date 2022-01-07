@@ -15,6 +15,7 @@
             class="input"
         />
         <MaximumInput
+            v-if="isConnected() === true"
             @valueInput="setMaxDistance"
             :name="'maxDistance'"
             :placeholder="$t('advertsList.maxDistance')"
@@ -63,7 +64,7 @@
 </template>
 
 <script>
-import { getPageAdverts, getPageFilteredAdverts, getAllSpecies } from "../logic/apicalls";
+import {getPageAdverts, getPageFilteredAdverts, getAllSpeciesFromLang, memberIsConnected} from "../logic/apicalls";
 import { manageErrors } from "../logic/errors"
 import ToastError from "../components/toasts/ToastError";
 import AnimalAdvert from "../components/AnimalAdvert";
@@ -71,7 +72,7 @@ import MinimumInput from "../components/inputs/MinimumInput";
 import MaximumInput from "../components/inputs/MaximumInput";
 
 export default {
-  name: "AnimalsList",
+  name: "AdvertsList",
   components: {MaximumInput, MinimumInput, AnimalAdvert, ToastError},
   beforeMount() {
     this.getAdverts(this.actualPage);
@@ -95,7 +96,7 @@ export default {
   },
   methods: {
     getSpecies() {
-      getAllSpecies(this.$root.$i18n.locale).then(result => {
+      getAllSpeciesFromLang(this.$root.$i18n.locale).then(result => {
         this.species = result.data;
       });
     },
@@ -166,7 +167,10 @@ export default {
           || this.minAge !== null
           || this.maxAge !== null
           || this.maxDistance !== null;
-    }
+    },
+    isConnected() {
+      return memberIsConnected();
+    },
   }
 }
 </script>

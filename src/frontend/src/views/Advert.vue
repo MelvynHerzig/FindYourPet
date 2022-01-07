@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { getAdvertById, getSpeciesById } from "../logic/apicalls";
+import { getAdvertById, getSpeciesByIdFromLang } from "../logic/apicalls";
 
 export default {
   name: "Advert",
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     getSpecies(){
-      getSpeciesById(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
+      getSpeciesByIdFromLang(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
           this.species = result.data;
       });
     }

@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { createAdvert, getAllSpecies } from "../logic/apicalls";
+import {createAdvert, getAllSpeciesFromLang, getMemberConnectedId} from "../logic/apicalls";
 import { manageErrors } from "../logic/errors";
 import ToastError from "../components/toasts/ToastError";
 
@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     getSpecies() {
-      getAllSpecies(this.$root.$i18n.locale).then(result => {
+      getAllSpeciesFromLang(this.$root.$i18n.locale).then(result => {
         this.species = result.data;
       });
     },
@@ -94,15 +94,19 @@ export default {
         description: this.description,
         petAge: this.age,
         imagePath: "/",
+        //memberId: getMemberConnectedId(), TODO
         petGender: this.selectedSex,
         speciesId: this.selectedSpecies
       }) .then(() => {
-            this.$router.push('/') // TODO profile page
+            this.$router.push('/profile')
           })
           .catch(error => {
             this.error = manageErrors(error.message);
           });
       
+    },
+    getMemberConnected() {
+      return getMemberConnectedId;
     }
   }
 }
