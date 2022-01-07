@@ -134,6 +134,7 @@ export class AdvertsService {
   }
 
   async updateAdvert(advert: Advert): Promise<UpdateResult> {
+    advert.lastModified = new Date();
     return this.advertRepository.update(advert.id, advert);
   }
 
@@ -249,9 +250,19 @@ export class AdvertsService {
       memberId,
       member,
     } = advert;
-    console.log(advert);
-    const sId = speciesId === undefined ? species.id : speciesId;
-    const mId = memberId === undefined ? member.id : memberId;
+
+    const sId =
+      speciesId === undefined
+        ? species !== undefined
+          ? species.id
+          : undefined
+        : speciesId;
+    const mId =
+      memberId === undefined
+        ? member !== undefined
+          ? member.id
+          : undefined
+        : memberId;
 
     return {
       id,

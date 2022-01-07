@@ -28,15 +28,16 @@ export enum Action {
 @Injectable()
 export class CaslAbilityFactory {
   createForMember(member: Member) {
-    const { can, cannot, build } = new AbilityBuilder<
-      Ability<[Action, Subjects]>
-    >(Ability as AbilityClass<AppAbility>);
+    const { can, build } = new AbilityBuilder<Ability<[Action, Subjects]>>(
+      Ability as AbilityClass<AppAbility>,
+    );
 
     if (member) {
       // Adverts
       can(Action.Read, Advert);
       can(Action.Create, Advert);
-      can(Action.Manage, Advert, { memberId: member.id });
+      can(Action.Update, Advert, { memberId: member.id });
+      can(Action.Delete, Advert, { memberId: member.id });
 
       // Species
       can(Action.Read, Species);
@@ -48,7 +49,10 @@ export class CaslAbilityFactory {
 
       // Admin
       if (member.isAdmin) {
-        can(Action.Manage, 'all'); // read-write access to everything
+        can(Action.Read, 'all');
+        can(Action.Create, 'all');
+        can(Action.Update, 'all');
+        can(Action.Delete, 'all');
       }
     }
     return build({

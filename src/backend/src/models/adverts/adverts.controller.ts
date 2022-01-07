@@ -67,9 +67,6 @@ export class AdvertsController {
     @Request() req,
   ): Promise<AdvertDto> {
     const jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
-    isJWT(
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InF1ZW50aW5AZ21haWwuY29tIiwiaWF0IjoxNjQxNDcxMDg5LCJleHAiOjE2NDE0NzE5ODl9.8lqHYFD8mbbD2vrYfpPq5zP21e3TSGaHEzzr9AueKLE',
-    );
     return this.advertService.ToAdvertDto(
       await this.advertService.findOneAdvertById(parseInt(id)),
       lang,
