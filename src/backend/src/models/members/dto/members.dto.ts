@@ -8,7 +8,6 @@ export class MemberDto extends OmitType(Member, [
   'password',
   'location',
   'isAdmin',
-  'hashPassword',
 ]) {}
 
 export function ToMember(member): Member {
@@ -37,7 +36,6 @@ export function ToMember(member): Member {
     phone,
     isAdmin,
     location,
-    hashPassword: undefined,
   };
 }
 

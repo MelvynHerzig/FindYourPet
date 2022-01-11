@@ -7,6 +7,6 @@ export function ToTranslatedSpeciesDto(species: Species, lang: string) {
   const { id } = species;
   return {
     id,
-    name: getSpeciesName(species)[lang],
+    name: lang !== undefined ? getSpeciesName(species)[lang] : species.name,
   };
 }

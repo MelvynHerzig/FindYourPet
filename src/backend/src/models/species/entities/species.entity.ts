@@ -1,5 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Advert } from '../../adverts/entities/adverts.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 /**
  * Entity to represents a pet species of FindYourPet

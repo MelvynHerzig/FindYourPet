@@ -3,12 +3,9 @@ import {
   Column,
   Entity,
   Index,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Advert } from '../../adverts/entities/adverts.entity';
 import { Point } from 'geojson';
-import { Exclude } from 'class-transformer';
 
 // Doesn't work with import style..
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -28,18 +25,15 @@ export class Member {
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    unique: true,
+  })
   email: string;
 
   @Column({
     length: 60,
   })
   password: string;
-
-  @BeforeInsert()
-  hashPassword() {
-    this.password = bcrypt.hashSync(this.password, 10);
-  }
 
   @Column()
   street: string;

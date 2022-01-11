@@ -1,4 +1,3 @@
-import { Advert } from '../entities/adverts.entity';
 import { OmitType } from '@nestjs/mapped-types';
 import { UpdateAdvertDto } from './update.adverts.dto';
 

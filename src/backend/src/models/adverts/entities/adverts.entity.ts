@@ -1,6 +1,5 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Member } from '../../members/entities/members.entity';
-import { Species } from '../../species/entities/species.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 /**
  * A pet can be either a male or a female.
@@ -24,8 +23,10 @@ export class Advert {
   @Column()
   description: string;
 
-  @Column()
-  imagePath: string;
+  @Column({
+    nullable: true,
+  })
+  imageId: number;
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   lastModified: Date;

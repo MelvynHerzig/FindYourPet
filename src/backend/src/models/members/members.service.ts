@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Member } from './entities/members.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateMemberDto } from './dto/create.members.dto';
 import {
   ERROR_INVALID_CREDENTIALS,
   ERROR_USER_ALREADY_EXIST,
@@ -11,7 +10,6 @@ import {
 
 import { Point } from 'geojson';
 import { LoginMemberDto } from './dto/login.members.dto';
-import { UpdateMemberDto } from './dto/update.members.dto';
 
 // Need to use bcrypt like that, otherwise not working...
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -67,7 +65,7 @@ export class MembersService {
     }
 
     const member: Member = await this.memberRepository.create(members);
-
+    member.password = bcrypt.hashSync(member.password, 10);
     member.isAdmin = false;
     await this.memberRepository.save(member);
 

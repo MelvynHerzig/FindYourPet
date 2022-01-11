@@ -11,5 +11,6 @@ import { MembersModule } from '../members/members.module';
   imports: [TypeOrmModule.forFeature([Advert]), SpeciesModule, MembersModule],
   providers: [AdvertsService, CaslAbilityFactory],
   controllers: [AdvertsController],
+  exports: [AdvertsService],
 })
 export class AdvertsModule {}

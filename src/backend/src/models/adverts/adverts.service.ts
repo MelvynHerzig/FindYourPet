@@ -12,7 +12,6 @@ import {
   FILTER_INVALID_RADIUS,
 } from '../../error/error-message';
 import { MembersService } from '../members/members.service';
-import { UpdateAdvertDto } from './dto/update.adverts.dto';
 import { AdvertDto } from './dto/advert.dto';
 import { ToTranslatedSpeciesDto } from '../species/dto/translated.species.dto';
 import { ToPublicMemberDto } from '../members/dto/members.dto';
@@ -197,7 +196,7 @@ export class AdvertsService {
       id,
       title,
       description,
-      imagePath,
+      imageId,
       lastModified,
       petAge,
       petGender,
@@ -209,7 +208,7 @@ export class AdvertsService {
       id,
       title,
       description,
-      imagePath,
+      imageId,
       lastModified,
       petAge,
       petGender,
@@ -241,7 +240,7 @@ export class AdvertsService {
       id,
       title,
       description,
-      imagePath,
+      imageId,
       lastModified,
       petAge,
       petGender,
@@ -268,7 +267,7 @@ export class AdvertsService {
       id,
       title,
       description,
-      imagePath,
+      imageId,
       lastModified,
       petAge,
       petGender,

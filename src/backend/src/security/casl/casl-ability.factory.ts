@@ -9,7 +9,6 @@ import { Advert } from '../../models/adverts/entities/adverts.entity';
 import { Member } from '../../models/members/entities/members.entity';
 import { Injectable } from '@nestjs/common';
 import { Species } from '../../models/species/entities/species.entity';
-import { PublicMemberDto } from '../../models/members/dto/public.members.dto';
 
 type Subjects =
   | InferSubjects<typeof Advert | typeof Species | typeof Member>
