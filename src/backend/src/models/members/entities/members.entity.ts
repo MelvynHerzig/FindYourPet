@@ -1,10 +1,4 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { Point } from 'geojson';
 
 // Doesn't work with import style..

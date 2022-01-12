@@ -6,10 +6,10 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { AuthService, LoginStatus, RegistrationsStatus } from './auth.service';
-import { ERROR_PASSWORD_CONFIRMATION } from '../error/error-message';
 import { CreateMemberDto } from '../models/members/dto/create.members.dto';
 import { LoginMemberDto } from '../models/members/dto/login.members.dto';
 import { ToMember } from '../models/members/dto/members.dto';
+import { ERROR_PASSWORD_CONFIRMATION } from '../error/error-message';
 
 @Controller('auth')
 export class AuthController {

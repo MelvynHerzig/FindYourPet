@@ -1,9 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MembersService } from '../models/members/members.service';
 import { JwtService } from '@nestjs/jwt';
-import { CreateMemberDto } from '../models/members/dto/create.members.dto';
 import { JwtPayload } from './jwt.strategy';
-import { Point } from 'geojson';
 import { ERROR_INVALID_TOKEN } from '../error/error-message';
 import axios from 'axios';
 import { LoginMemberDto } from '../models/members/dto/login.members.dto';
@@ -30,8 +28,6 @@ export class AuthService {
       success: true,
       message: 'member registered',
     };
-    console.log(member);
-
     try {
       // Getting geolocation
       const addr = `${member.street} ${member.NPA} ${member.city}`;

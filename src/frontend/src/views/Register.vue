@@ -194,6 +194,15 @@ h1 {
   text-align: center;
 }
 
+.bg {
+  background: url("../assets/images/dogs.jpg") no-repeat fixed center;
+  background-size: contain;
+  width: 100%;
+  height: 1000px;
+  margin: auto;
+  display: flex;
+}
+
 .register {
   background: var(--transparent-background-color);
   padding: 20px;
@@ -223,13 +232,18 @@ button:hover {
   background-color: var(--select-color);
 }
 
-.bg {
-  background: url("../assets/images/dogs.jpg") no-repeat fixed center;
-  background-size: contain;
+.addressSelection {
+  justify-content: center;
+  margin-bottom: 20px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  border-radius: 5px;
   width: 100%;
-  height: 1000px;
-  margin: auto;
-  display: flex;
+  height: 42px;
+}
+.addressSelection:active,
+.addressSelection:focus,
+.addressSelection:hover {
+  border: 1px solid var(--footer-color);
 }
 
 .addressSelection {

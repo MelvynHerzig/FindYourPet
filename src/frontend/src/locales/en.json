@@ -31,6 +31,7 @@
   "header": {
     "home": "Home",
     "advert": "Advertisements",
+    "advertCreation": "Advert Creation",
     "login": "Login",
     "register": "Register"
   },
@@ -61,7 +62,22 @@
   },
   "register": {
     "title": "Register",
-    "button": "Register"
+    "button": "Register",
+    "register": "Register",
+    "disconnect": "Disconnect",
+    "profile": "Profile"
+  },
+  "advertsList": {
+    "minAge": "Minimum age of pet",
+    "maxAge": "Maximum age of pet",
+    "maxDistance": "Maximum distance of the pet owner's house",
+    "filterButton": "Filter",
+    "loadMore": "Load more pet adverts"
+  },
+  "profile": {
+    "profileInfos": "Profile Informations",
+    "advertsTitle": "Your adverts",
+    "modifyButton": "Modify"
   },
   "animal_ad" : {
     "age": "age"

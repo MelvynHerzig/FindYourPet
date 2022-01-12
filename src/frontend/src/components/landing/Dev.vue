@@ -10,12 +10,11 @@ export default {
   name: 'Dev',
   props: {
     url: String,
-    name: Text
+    name: String
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 div{
    display: flex;

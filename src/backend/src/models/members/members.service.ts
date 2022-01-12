@@ -59,7 +59,6 @@ export class MembersService {
     const memberInDb = await this.memberRepository.findOne({
       where: { email },
     });
-
     if (memberInDb) {
       throw new HttpException(ERROR_USER_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
     }

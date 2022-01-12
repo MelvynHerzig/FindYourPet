@@ -16,7 +16,7 @@
 import Dev from './Dev.vue'
 
 export default {
-  name: 'App',
+  name: 'DevTeam',
   components: {
     Dev
   }

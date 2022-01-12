@@ -3,7 +3,6 @@
     <div class="login">
       <h1>{{ $t("login.title") }}</h1>
       <form v-on:submit.prevent="login">
-
         <EmailInput
             @valueInput="setEmail"
             :name="'email'"
@@ -30,7 +29,6 @@ import { manageErrors } from "../logic/errors";
 import EmailInput from "../components/inputs/EmailInput";
 import PasswordInput from "../components/inputs/PasswordInput";
 import ToastError from "../components/toasts/ToastError";
-
 
 export default {
   name: "Login",
@@ -68,16 +66,21 @@ export default {
 
 <style scoped>
 
-h1,
-button {
-  color: black;
-}
-
-h1 {
-  text-align: center;
+.bg {
+  background: url("../assets/images/dogs.jpg") no-repeat fixed center;
+  background-size: contain;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  padding-top: 3em;
+  padding-bottom: 3em;
+  display: flex;
 }
 
 .login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background: var(--transparent-background-color);
   padding: 20px;
   margin: auto;
@@ -87,6 +90,15 @@ h1 {
   text-align: center;
   border: solid;
   border-color: var(--transparent-border-color);
+}
+
+h1,
+button {
+  color: black;
+}
+
+h1 {
+  text-align: center;
 }
 
 button {
@@ -104,15 +116,6 @@ button {
 button:hover {
   cursor: pointer;
   background-color: var(--select-color);
-}
-
-.bg {
-  background: url("../assets/images/dogs.jpg") no-repeat fixed center;
-  background-size: contain;
-  width: 100%;
-  height: 600px;
-  margin: auto;
-  display: flex;
 }
 
 </style>

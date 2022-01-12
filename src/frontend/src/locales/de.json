@@ -31,6 +31,7 @@
   "header":{
     "home": "Home",
     "advert": "Werbung",
+    "advertCreation": "Erstellung von Anzeigen",
     "login": "Verbinden",
     "register": "Anmeldung"
   },
@@ -61,7 +62,22 @@
   },
   "register": {
     "title": "Anmeldung",
-    "button": "Jetzt Anmelden"
+    "button": "Jetzt Anmelden",
+    "register": "Anmeldung",
+    "disconnect": "Trennen",
+    "profile": "Profil"
+  },
+  "advertsList": {
+    "minAge": "Mindestalter des Haustiers",
+    "maxAge": "Höchstalter des Haustiers",
+    "maxDistance": "Maximale Entfernung zum Haus des Tierhalters",
+    "filterButton": "Filter",
+    "loadMore": "Mehr Haustier-Anzeigen laden"
+  },
+  "profile": {
+    "profileInfos": "Profil Informationen",
+    "advertsTitle": "Ihre Inserate",
+    "modifyButton": "Ändern"
   },
   "animal_ad" : {
     "age": "Alter"

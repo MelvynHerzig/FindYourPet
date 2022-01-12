@@ -31,8 +31,20 @@
   "header":{
     "home": "Accueil",
     "advert": "Annonces",
+    "advertCreation": "Création d'Annonce",
     "login": "Se connecter",
-    "register": "S'inscrire"
+    "register": "S'inscrire",
+    "disconnect": "Se déconnecter",
+    "profile": "Profil"
+  },
+  "errors": {
+    "langage": "Mauvaise langue utilisée pour la requête",
+    "passwordConfirmation": "La Confirmation de Mot de passe ne correspond pas au Mot de passe",
+    "creditentials": "Mot de passe et/ou l'adresse email est incorrecte",
+    "userAlreadyExist": "L'email existe déjà",
+    "userNotFound": "l'email n'a pas été trouvée",
+    "invalidToken": "Jeton invalide utilisé",
+    "invalidAddress": "L'adresse fournie est invalide"
   },
   "errors": {
     "langage": "Mauvaise langue utilisée pour la requête",
@@ -62,6 +74,18 @@
   "register": {
     "title": "Inscription",
     "button": "S'inscrire"
+  },
+  "advertsList": {
+    "minAge": "Age minimum de l'animal de compagnie",
+    "maxAge": "Age maximum de l'animal de compagnie",
+    "maxDistance": "Distance maximum vous séparant de la maison du propriétaire de l'animal de compagnie",
+    "filterButton": "Filtrer",
+    "loadMore": "Charger plus d'annonces d'animal de compagnie"
+  },
+  "profile": {
+    "profileInfos": "Informations du Profil",
+    "advertsTitle": "Vos annonces",
+    "modifyButton": "Modifier"
   },
   "animal_ad" : {
     "age": "age"
