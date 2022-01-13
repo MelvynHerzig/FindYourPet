@@ -22,7 +22,7 @@ export default {
   name: "RecentAnimalsList",
   components: { AnimalAdvert },
   beforeMount() {
-    getRecentAdverts().then(result => {
+    getRecentAdverts(this.$root.$i18n.locale).then(result => {
       this.adverts = result.data;
     });
   },

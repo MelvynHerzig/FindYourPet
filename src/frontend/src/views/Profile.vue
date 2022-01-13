@@ -51,11 +51,13 @@ export default {
           {
             title: "Balou",
             petAge: 16,
+            species:{id:1},
             description: "Ceci est une annonce fictive teste présente en attendant l'api"
           },
           {
             title: "Tiki",
             petAge: 7,
+            species:{id:1},
             description: "Ceci est une annonce fictive teste présente en attendant l'api"
           },
         ]

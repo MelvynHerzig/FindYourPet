@@ -52,7 +52,7 @@ export async function getAllSpeciesFromLang(lang) {
 
 export async function getSpeciesByIdFromLang(id, lang) {
     // TODO: rajouter /id une fois PR de refactor backend faite
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/species/${lang}/${id}`);
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/species/${lang}/id/${id}`);
 }
 
 /***************** Adverts ********************/
@@ -77,9 +77,9 @@ export async function updateAdvert(advertInformations) {
         });
 }
 
-export async function getPageAdverts(pageNum) {
+export async function getPageAdverts(pageNum, lang) {
     // TODO: rajouter /:lang une fois PR de refactor backend faite
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/page/${pageNum}`);
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/page/${pageNum}`);
 }
 
 export async function getPageFilteredAdverts(pageNum, filters) {
@@ -87,9 +87,9 @@ export async function getPageFilteredAdverts(pageNum, filters) {
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/filters/page/${pageNum}`, filters);
 }
 
-export async function getRecentAdverts() {
+export async function getRecentAdverts(lang) {
     // TODO: rajouter /:lang une fois PR de refactor backend faite
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/recent`);
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/recent`);
 }
 
 export async function getAdvertById(id) {

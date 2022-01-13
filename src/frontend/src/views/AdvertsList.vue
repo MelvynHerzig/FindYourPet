@@ -101,7 +101,7 @@ export default {
       });
     },
     getAdverts(page) {
-      getPageAdverts(page).then(result => {
+      getPageAdverts(page,this.$root.$i18n.locale).then(result => {
         if(result !== null) {
           if(!this.filteredRequest) {
             this.adverts = this.adverts.concat(result.data);

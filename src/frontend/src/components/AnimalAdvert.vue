@@ -13,12 +13,18 @@
         {{ advert.description }}
       </p>
     </div>
+    <div class="modification">
+      <p>
+        <button @click="$router.push('/adverts')">{{$t("landing.see")}}</button>
+        <button @click="$router.push('/adverts/create')"> {{$t("landing.create")}} </button>
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
 
-import { getSpeciesByIdFromLang } from '../logic/apicalls'
+import { getMemberConnectedId, getSpeciesByIdFromLang } from '../logic/apicalls'
 
 export default {
   name: "AnimalAdvert",
@@ -27,6 +33,7 @@ export default {
   },
   beforeMount() {
     this.getSpecies();
+    this.checkOwner();
   },
   watch:{
     '$i18n.locale': function() {
@@ -36,13 +43,17 @@ export default {
   data() {
     return {
       specie: {},
+      isOwner: false
     }
   },
   methods: {
     getSpecies(){
-      getSpeciesByIdFromLang(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
+      getSpeciesByIdFromLang(this.advert.species.id, this.$root.$i18n.locale).then(result => {
           this.specie = result.data;
       });
+    },
+    checkOwner(){
+      this.isOwner = this.advert.member.id === getMemberConnectedId();
     }
   },
 }
@@ -107,6 +118,27 @@ img {
   overflow: auto;
 }
 
+.modification {
+  display: flex;
+}
+
+button {
+  display: inline-block;
+  padding: 20px;
+  margin: 30px;
+  letter-spacing: .15rem;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  border-color:var(--header-color);
+}
+
+button:hover {
+  cursor:pointer;
+  background-color: var(--select-color);
+} 
+
 @media screen and (max-width: 600px) {
   .advert {
     width: 82%;
@@ -133,6 +165,7 @@ img {
     align-items: center;
     padding-left: 20px;
   }
+  
 }
 
 </style>
