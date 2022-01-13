@@ -107,3 +107,5 @@ dist
 src/.idea/src.iml
 src/.idea/workspace.xml
 .idea/
+
+src/backend/package-lock.json

@@ -246,18 +246,4 @@ button:hover {
   border: 1px solid var(--footer-color);
 }
 
-.addressSelection {
-  justify-content: center;
-  margin-bottom: 20px;
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  border-radius: 5px;
-  width: 100%;
-  height: 42px;
-}
-.addressSelection:active,
-.addressSelection:focus,
-.addressSelection:hover {
-  border: 1px solid var(--footer-color);
-}
-
 </style>
