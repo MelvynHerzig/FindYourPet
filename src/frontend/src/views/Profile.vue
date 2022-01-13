@@ -1,5 +1,5 @@
 <template>
-  <section class="main">
+  <section v-if="member" class="main">
     <div class="bgProfile">
       <div class="profileInfo">
         <h1>{{ $t('profile.profileInfos') }}</h1>
@@ -15,17 +15,18 @@
         </div>
       </div>
     </div>
-    <div class="inner">
-      <h1>{{ $t('profile.advertsTitle') }}</h1>
-      <div class="list">
-        <ul>
-          <li v-for="advert in this.member.adverts" :key="advert.id" style="list-style-type:none">
-            <AnimalAdvert :advert="advert"/>
-          </li>
-        </ul>
+    <div class="bgProfile">
+      <div class="inner">
+        <h1>{{ $t('profile.advertsTitle') }}</h1>
+        <div class="list">
+          <ul>
+            <li v-for="advert in this.member.adverts" :key="advert.id" style="list-style-type:none">
+              <AnimalAdvert :advert="advert"/>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-
   </section>
 </template>
 
@@ -39,27 +40,7 @@ export default {
   data() {
     return {
       error: null,
-      member: {
-        firstname: "Alec",
-        name: "Berney",
-        email: "beral@sevjnet.ch",
-        street: "Rue du Village 28",
-        NPA: "1347",
-        city: "Le Solliat",
-        phone: "078 837 77 18",
-        adverts: [
-          {
-            title: "Balou",
-            petAge: 16,
-            description: "Ceci est une annonce fictive teste présente en attendant l'api"
-          },
-          {
-            title: "Tiki",
-            petAge: 7,
-            description: "Ceci est une annonce fictive teste présente en attendant l'api"
-          },
-        ]
-      },
+      member: null,
     }
   },
   methods: {
@@ -71,9 +52,9 @@ export default {
       });
     }
   },
-  mounted() {
+  beforeMount() {
     this.getActualMember();
-  }
+  },
 }
 </script>
 

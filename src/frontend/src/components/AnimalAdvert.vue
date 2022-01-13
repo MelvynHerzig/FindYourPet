@@ -107,7 +107,7 @@ img {
   overflow: auto;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1000px) {
   .advert {
     width: 82%;
     height: 100%;

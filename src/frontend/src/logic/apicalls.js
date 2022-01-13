@@ -125,6 +125,7 @@ export async function login(credentials) {
     return axios.post(`${process.env.VUE_APP_ROOT_API}/auth/login`, credentials)
         .then(result => {
             cookies.set('token', result.data);
+            window.location.reload();
             return result;
         });
 }

@@ -47,12 +47,14 @@ export default {
         email: this.email,
         password: this.password,
       })
-          .then(() => {
-            this.$router.push('/')
-          })
-          .catch(error => {
-            this.error = manageErrors(error.message);
-          });
+      .then(() => {
+        //window.location.reload();
+        //this.$router.go('/profile');
+        this.$router.push('/profile');
+      })
+      .catch(error => {
+        this.error = manageErrors(error.message);
+      });
     },
     setEmail(value) {
       this.email = value;
