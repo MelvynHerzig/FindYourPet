@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { Advert, PetGender } from './entities/adverts.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilterDto } from './dto/filters.dto';
 import { SpeciesService } from '../species/species.service';
@@ -12,9 +11,12 @@ import {
   FILTER_INVALID_RADIUS,
 } from '../../error/error-message';
 import { MembersService } from '../members/members.service';
-import { AdvertDto } from './dto/advert.dto';
 import { ToTranslatedSpeciesDto } from '../species/dto/translated.species.dto';
 import { ToPublicMemberDto } from '../members/dto/members.dto';
+import { ExtractJwt } from 'passport-jwt';
+import { JwtService } from '@nestjs/jwt';
+import { Advert, PetGender } from './entities/adverts.entity';
+import { AdvertDto } from './dto/advert.dto';
 
 /**
  * Service to query adverts
@@ -28,6 +30,7 @@ export class AdvertsService {
     private readonly advertRepository: Repository<Advert>,
     private speciesService: SpeciesService,
     private membersService: MembersService,
+    private jwtService: JwtService,
   ) {}
 
   async createAdvert(advert: Advert): Promise<Advert> {
@@ -63,12 +66,15 @@ export class AdvertsService {
     });
   }
 
-  async filterAdvert(filters: FilterDto, pageNum: number): Promise<Advert[]> {
+  async filterAdvert(
+    filters: FilterDto,
+    pageNum: number,
+    email: string,
+  ): Promise<Advert[]> {
     this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
 
-    // TODO get user location that emited request
     const origin = await this.membersService.findLocationByPayload({
-      email: 'mel2@heig-vd.ch',
+      email,
     });
 
     // Prepare query
@@ -189,6 +195,16 @@ export class AdvertsService {
     if (!Number.isInteger(num) || num < min) {
       throw error;
     }
+  }
+
+  async verifyJwt(req): Promise<string> {
+    const jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+    try {
+      this.jwtService.verify(jwt);
+      return this.jwtService.decode(jwt)['email'];
+    } catch (error) {}
+
+    return undefined;
   }
 
   async ToAdvertDto(advert, lang: string, logged: boolean): Promise<AdvertDto> {

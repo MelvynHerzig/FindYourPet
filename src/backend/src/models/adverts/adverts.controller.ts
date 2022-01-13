@@ -17,16 +17,14 @@ import { AdvertsService } from './adverts.service';
 import { AuthGuard } from '@nestjs/passport';
 import { FilterDto } from './dto/filters.dto';
 import { DeleteResult, UpdateResult } from 'typeorm';
-import { AdvertDto } from './dto/advert.dto';
-import { ExtractJwt } from 'passport-jwt';
-import { isJWT } from 'class-validator';
-import { Advert } from './entities/adverts.entity';
 import {
   Action,
   CaslAbilityFactory,
 } from '../../security/casl/casl-ability.factory';
-import { CreateAdvertDto } from './dto/create.adverts.dto';
+import { AdvertDto } from './dto/advert.dto';
 import { UpdateAdvertDto } from './dto/update.adverts.dto';
+import { CreateAdvertDto } from './dto/create.adverts.dto';
+import { Advert } from './entities/adverts.entity';
 
 /**
  * Advert controller
@@ -46,12 +44,13 @@ export class AdvertsController {
     @Param('lang') lang: string,
     @Request() req,
   ): Promise<AdvertDto[]> {
+    const email = await this.advertService.verifyJwt(req);
+
     try {
-      const jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
       return this.advertService.ToAdvertsDto(
         await this.advertService.findPageAdvert(parseInt(pageNum, 10)),
         lang,
-        isJWT(jwt),
+        email !== undefined,
       );
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
@@ -64,11 +63,11 @@ export class AdvertsController {
     @Param('lang') lang: string,
     @Request() req,
   ): Promise<AdvertDto> {
-    const jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+    const email = await this.advertService.verifyJwt(req);
     return this.advertService.ToAdvertDto(
       await this.advertService.findOneAdvertById(parseInt(id)),
       lang,
-      isJWT(jwt),
+      email !== undefined,
     );
   }
 
@@ -90,11 +89,11 @@ export class AdvertsController {
     @Param('lang') lang: string,
     @Request() req,
   ): Promise<AdvertDto[]> {
-    const jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+    const email = await this.advertService.verifyJwt(req);
     return this.advertService.ToAdvertsDto(
       await this.advertService.findTop10RecentAdvert(),
       lang,
-      isJWT(jwt),
+      email !== undefined,
     );
   }
 
@@ -107,11 +106,15 @@ export class AdvertsController {
   ): Promise<AdvertDto[]> {
     try {
       await this.advertService.checkFilter(filterDto);
-      const jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+      const email = await this.advertService.verifyJwt(req);
       return this.advertService.ToAdvertsDto(
-        await this.advertService.filterAdvert(filterDto, parseInt(pageNum, 10)),
+        await this.advertService.filterAdvert(
+          filterDto,
+          parseInt(pageNum, 10),
+          email,
+        ),
         lang,
-        isJWT(jwt),
+        email !== undefined,
       );
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
@@ -127,7 +130,6 @@ export class AdvertsController {
     @Req() req,
   ): Promise<AdvertDto> {
     const ability = this.caslAbilityFactory.createForMember(req.user);
-    advert.memberId = req.user.id;
     if (ability.can(Action.Create, Advert)) {
       return this.advertService.ToAdvertDto(
         await this.advertService.createAdvert(
