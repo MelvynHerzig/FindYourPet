@@ -34,7 +34,8 @@ export class MembersService {
   }
 
   async findLocationByPayload({ email }: any): Promise<Point> {
-    return (await this.findByPayload(email)).location;
+    const member = await this.findByPayload(email);
+    return member === undefined ? undefined : member.location;
   }
 
   async findByLogin({ email, password }: LoginMemberDto): Promise<Member> {

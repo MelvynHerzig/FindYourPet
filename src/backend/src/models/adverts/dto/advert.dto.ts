@@ -6,4 +6,5 @@ import { PublicMemberDto } from '../../members/dto/public.members.dto';
 export class AdvertDto extends OmitType(Advert, ['memberId', 'speciesId']) {
   member: PublicMemberDto;
   species: TranslatedSpeciesDto;
+  distance: number;
 }

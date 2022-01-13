@@ -50,7 +50,7 @@ export class AdvertsController {
       return this.advertService.ToAdvertsDto(
         await this.advertService.findPageAdvert(parseInt(pageNum, 10)),
         lang,
-        email !== undefined,
+        email,
       );
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
@@ -67,7 +67,7 @@ export class AdvertsController {
     return this.advertService.ToAdvertDto(
       await this.advertService.findOneAdvertById(parseInt(id)),
       lang,
-      email !== undefined,
+      email,
     );
   }
 
@@ -76,11 +76,12 @@ export class AdvertsController {
   async findAllByUuid(
     @Param('uuid') uuid: string,
     @Param('lang') lang: string,
+    @Req() req,
   ): Promise<AdvertDto[]> {
     return this.advertService.ToAdvertsDto(
       await this.advertService.findAllAdvertByUuid(uuid),
       lang,
-      true,
+      req.user.email,
     );
   }
 
@@ -93,7 +94,7 @@ export class AdvertsController {
     return this.advertService.ToAdvertsDto(
       await this.advertService.findTop10RecentAdvert(),
       lang,
-      email !== undefined,
+      email,
     );
   }
 
@@ -114,7 +115,7 @@ export class AdvertsController {
           email,
         ),
         lang,
-        email !== undefined,
+        email,
       );
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
@@ -136,7 +137,7 @@ export class AdvertsController {
           this.advertService.ToAdvert(advert),
         ),
         undefined,
-        true,
+        req.user.email,
       );
     }
     throw new UnauthorizedException();

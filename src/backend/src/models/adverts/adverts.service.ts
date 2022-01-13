@@ -73,10 +73,6 @@ export class AdvertsService {
   ): Promise<Advert[]> {
     this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
 
-    const origin = await this.membersService.findLocationByPayload({
-      email,
-    });
-
     // Prepare query
     const query = this.advertRepository
       .createQueryBuilder('adverts')
@@ -103,7 +99,11 @@ export class AdvertsService {
     }
 
     // Filter by distance
-    if (filters.radius !== undefined) {
+    if (filters.radius !== undefined && email != undefined) {
+      const origin = await this.membersService.findLocationByPayload({
+        email,
+      });
+
       query
         .andWhere(
           'ST_DWithin(m.location, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(m.location)) ,:range)',
@@ -145,6 +145,27 @@ export class AdvertsService {
 
   async deleteAdvert(id: number): Promise<DeleteResult> {
     return this.advertRepository.delete(id);
+  }
+
+  async getDistanceOfAdvert(email: string, advert: Advert): Promise<number> {
+    if (advert.memberId !== undefined && email !== undefined) {
+      const adMember = await this.membersService.findOne({
+        id: advert.memberId,
+      });
+      const member = await this.membersService.findOne({
+        email,
+      });
+
+      const latitude1 = member.location.coordinates[0];
+      const longitude1 = member.location.coordinates[1];
+      const latitude2 = adMember.location.coordinates[0];
+      const longitude2 = adMember.location.coordinates[1];
+      return Math.sqrt(
+        Math.pow(latitude1 - latitude2, 2) +
+          Math.pow(longitude1 - longitude2, 2),
+      );
+    }
+    return undefined;
   }
 
   async checkFilter(filterDto: FilterDto) {
@@ -207,7 +228,7 @@ export class AdvertsService {
     return undefined;
   }
 
-  async ToAdvertDto(advert, lang: string, logged: boolean): Promise<AdvertDto> {
+  async ToAdvertDto(advert, lang: string, email: string): Promise<AdvertDto> {
     const {
       id,
       title,
@@ -232,21 +253,25 @@ export class AdvertsService {
         await this.speciesService.findOneSpeciesById(speciesId),
         lang,
       ),
-      member: logged
-        ? ToPublicMemberDto(await this.membersService.findOne({ id: memberId }))
-        : undefined,
+      member:
+        email !== undefined
+          ? ToPublicMemberDto(
+              await this.membersService.findOne({ id: memberId }),
+            )
+          : undefined,
+      distance: await this.getDistanceOfAdvert(email, advert),
     };
   }
 
   async ToAdvertsDto(
     adverts,
     lang: string,
-    logged: boolean,
+    email: string,
   ): Promise<AdvertDto[]> {
     const result: AdvertDto[] = [];
 
     for (const advert of adverts) {
-      result.push(await this.ToAdvertDto(advert, lang, logged));
+      result.push(await this.ToAdvertDto(advert, lang, email));
     }
     return result;
   }
