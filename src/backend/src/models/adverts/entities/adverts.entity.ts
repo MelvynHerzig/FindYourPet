@@ -1,6 +1,5 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { MembersEntity } from '../members/members.entity';
-import { SpeciesEntity } from '../species/species.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 /**
  * A pet can be either a male or a female.
@@ -14,7 +13,7 @@ export enum PetGender {
  * Entity to represents an adverts to trade pets.
  */
 @Entity('adverts')
-export class AdvertsEntity {
+export class Advert {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -24,8 +23,10 @@ export class AdvertsEntity {
   @Column()
   description: string;
 
-  @Column()
-  imagePath: string;
+  @Column({
+    nullable: true,
+  })
+  imageId: number;
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   lastModified: Date;
@@ -43,12 +44,6 @@ export class AdvertsEntity {
   @Column({ nullable: true })
   memberId: string;
 
-  @ManyToOne(() => MembersEntity, (member) => member.adverts)
-  member: MembersEntity;
-
   @Column({ nullable: true })
   speciesId: number;
-
-  @ManyToOne(() => SpeciesEntity, (species) => species.adverts)
-  species: SpeciesEntity;
 }

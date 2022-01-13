@@ -1,21 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { MembersEntity } from './members.entity';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Member } from './entities/members.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { from } from 'rxjs';
 import {
-  CreateMemberDto,
-  LoginMemberDto,
-  MemberDto,
-  toMemberDto,
-} from './dto/members.dto';
-import { MembersInterface } from './members.interface';
-import { Point } from 'geojson';
-import {
-  ERROR_USER_NOT_FOUND,
   ERROR_INVALID_CREDENTIALS,
   ERROR_USER_ALREADY_EXIST,
+  ERROR_USER_NOT_FOUND,
 } from '../../error/error-message';
+
+import { Point } from 'geojson';
+import { LoginMemberDto } from './dto/login.members.dto';
+
+// Need to use bcrypt like that, otherwise not working...
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcryptjs');
 
 /**
@@ -24,25 +21,23 @@ const bcrypt = require('bcryptjs');
 @Injectable()
 export class MembersService {
   constructor(
-    @InjectRepository(MembersEntity)
-    private readonly memberRepository: Repository<MembersEntity>,
+    @InjectRepository(Member)
+    private readonly memberRepository: Repository<Member>,
   ) {}
 
-  async findOne(options?: object): Promise<MemberDto> {
-    const member = await this.memberRepository.findOne(options);
-    return toMemberDto(member);
+  async findOne(options?: object): Promise<Member> {
+    return this.memberRepository.findOne(options);
   }
 
-  async findByPayload({ email }: any): Promise<MemberDto> {
+  async findByPayload({ email }: any): Promise<Member> {
     return await this.findOne({ where: { email } });
   }
 
   async findLocationByPayload({ email }: any): Promise<Point> {
-    const user = await this.memberRepository.findOne({ where: { email } });
-    return user.location;
+    return (await this.findByPayload(email)).location;
   }
 
-  async findByLogin({ email, password }: LoginMemberDto): Promise<MemberDto> {
+  async findByLogin({ email, password }: LoginMemberDto): Promise<Member> {
     const member = await this.memberRepository.findOne({ where: { email } });
 
     if (!member) {
@@ -52,50 +47,41 @@ export class MembersService {
     const doesPasswordMatch = bcrypt.compareSync(password, member.password);
 
     if (doesPasswordMatch) {
-      return toMemberDto(member);
+      return member;
     }
 
     throw new HttpException(ERROR_INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED);
   }
 
-  async create(memberDto: CreateMemberDto): Promise<MemberDto> {
-    const {
-      firstname,
-      name,
-      email,
-      password,
-      street,
-      NPA,
-      city,
-      phone,
-      location,
-    } = memberDto;
+  async create(members: Member): Promise<Member> {
+    const { email } = members;
 
     const memberInDb = await this.memberRepository.findOne({
       where: { email },
     });
-
     if (memberInDb) {
       throw new HttpException(ERROR_USER_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
     }
 
-    const member: MembersEntity = await this.memberRepository.create({
-      firstname,
-      name,
-      email,
-      password,
-      street,
-      NPA,
-      city,
-      phone,
-      location,
-    });
-
+    const member: Member = await this.memberRepository.create(members);
+    member.password = bcrypt.hashSync(member.password, 10);
+    member.isAdmin = false;
     await this.memberRepository.save(member);
-    return toMemberDto(member);
+
+    return member;
   }
 
-  updateMember(member: MembersInterface) {
-    return from(this.memberRepository.update(member.id, member));
+  async update(member: Member): Promise<UpdateResult> {
+    const realMember = await this.findByPayload({ email: member.email });
+
+    member.password = realMember.password;
+    member.isAdmin = realMember.isAdmin;
+    member.location = realMember.location;
+
+    return this.memberRepository.update(member.id, member);
+  }
+
+  async delete(memberId: string): Promise<DeleteResult> {
+    return this.memberRepository.delete(memberId);
   }
 }

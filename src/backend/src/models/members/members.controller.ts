@@ -4,28 +4,71 @@ import {
   Delete,
   Get,
   Param,
-  Post,
   Put,
+  Req,
+  UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { MembersService } from './members.service';
-import { MembersInterface } from './members.interface';
-import { MemberDto } from './dto/members.dto';
+import { UpdateMemberDto } from './dto/update.members.dto';
+import { DeleteResult, UpdateResult } from 'typeorm';
+import { AuthGuard } from '@nestjs/passport';
+import { MemberDto, ToMember, ToMemberDto } from './dto/members.dto';
+import {
+  Action,
+  CaslAbilityFactory,
+} from '../../security/casl/casl-ability.factory';
 
 /**
  * Member controller
  */
 @Controller('members')
 export class MembersController {
-  constructor(private memberService: MembersService) {}
+  constructor(
+    private memberService: MembersService,
+    private caslAbilityFactory: CaslAbilityFactory,
+  ) {}
 
-  @Get('/:id')
-  async findOne(@Param('id') id: string): Promise<MemberDto> {
-    return await this.memberService.findOne({ id: id });
+  /******************* GET    ************************/
+  @Get('email/:email')
+  @UseGuards(AuthGuard('jwt'))
+  async findOneByEmail(
+    @Param('email') email: string,
+    @Req() req,
+  ): Promise<MemberDto> {
+    const ability = this.caslAbilityFactory.createForMember(req.user);
+    const member = await this.memberService.findOne({ email: email });
+
+    if (ability.can(Action.Read, member)) return ToMemberDto(member);
+
+    throw new UnauthorizedException();
   }
 
+  /******************* PUT    ************************/
   @Put()
-  update(@Body() member: MembersInterface) {
-    return this.memberService.updateMember(member);
-  }
+  @UseGuards(AuthGuard('jwt'))
+  async update(
+    @Body() updatedMember: UpdateMemberDto,
+    @Req() req,
+  ): Promise<UpdateResult> {
+    const ability = this.caslAbilityFactory.createForMember(req.user);
+    const member = await this.memberService.findOne({ id: updatedMember.id });
 
+    if (ability.can(Action.Update, member)) {
+      return this.memberService.update(ToMember(member));
+    }
+    throw new UnauthorizedException();
+  }
+  /******************* DELETE ************************/
+  @Delete(':uuid')
+  @UseGuards(AuthGuard('jwt'))
+  async delete(@Param('uuid') uuid: string, @Req() req): Promise<DeleteResult> {
+    const ability = this.caslAbilityFactory.createForMember(req.user);
+    const member = await this.memberService.findOne({ id: uuid });
+
+    if (ability.can(Action.Delete, member)) {
+      return this.memberService.delete(uuid);
+    }
+    throw new UnauthorizedException();
+  }
 }

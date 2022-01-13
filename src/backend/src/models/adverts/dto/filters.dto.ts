@@ -1,4 +1,4 @@
-import { PetGender } from '../adverts.entity';
+import { PetGender } from '../entities/adverts.entity';
 
 export class FilterDto {
   // Filter by species
@@ -9,6 +9,7 @@ export class FilterDto {
 
   // Filter by age
   petMinAge: number;
+  petMaxAge: number;
 
   // Filter by distance (KM)
   radius: number;

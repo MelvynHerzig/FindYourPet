@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { SpeciesEntity } from './species.entity';
-import { SpeciesInterface } from './species.interface';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Species } from './entities/species.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { from, Observable } from 'rxjs';
-import { jsonStringFromSpecies } from './species.utils';
 import { FILTER_INVALID_SPECIES } from '../../error/error-message';
 
 /**
@@ -13,104 +10,31 @@ import { FILTER_INVALID_SPECIES } from '../../error/error-message';
 @Injectable()
 export class SpeciesService {
   constructor(
-    @InjectRepository(SpeciesEntity)
-    private readonly speciesRepository: Repository<SpeciesEntity>,
-  ) {
-    const dog = new SpeciesEntity();
-    dog.name = jsonStringFromSpecies('dog', 'chien', 'Hund', 'cane');
-    speciesRepository.save(dog).catch((err) => console.log(err));
+    @InjectRepository(Species)
+    private readonly speciesRepository: Repository<Species>,
+  ) {}
 
-    const cat = new SpeciesEntity();
-    cat.name = jsonStringFromSpecies('cat', 'chat', 'Katze', 'gatto');
-    speciesRepository.save(cat).catch((err) => console.log(err));
-
-    const bird = new SpeciesEntity();
-    bird.name = jsonStringFromSpecies('bird', 'oiseau', 'Vogel', 'ucello');
-    speciesRepository.save(bird).catch((err) => console.log(err));
-
-    const reptile = new SpeciesEntity();
-    reptile.name = jsonStringFromSpecies(
-      'reptile',
-      'reptile',
-      'Reptil',
-      'rettile',
-    );
-    speciesRepository.save(reptile).catch((err) => console.log(err));
-
-    const horse = new SpeciesEntity();
-    horse.name = jsonStringFromSpecies('horse', 'cheval', 'Pferd', 'cavallo');
-    speciesRepository.save(horse).catch((err) => console.log(err));
-
-    const fishJson = new SpeciesEntity();
-    fishJson.name = jsonStringFromSpecies('fish', 'poisson', 'Fisch', 'pesce');
-    speciesRepository.save(fishJson).catch((err) => console.log(err));
-
-    const rabbit = new SpeciesEntity();
-    rabbit.name = jsonStringFromSpecies('rabbit', 'lapin', 'Hase', 'coniglio');
-    speciesRepository.save(rabbit).catch((err) => console.log(err));
-
-    const poultry = new SpeciesEntity();
-    poultry.name = jsonStringFromSpecies(
-      'poultry',
-      'volaille',
-      'Geflügel',
-      'pollame',
-    );
-    speciesRepository.save(poultry).catch((err) => console.log(err));
-
-    const hamster = new SpeciesEntity();
-    hamster.name = jsonStringFromSpecies(
-      'hamster',
-      'hamster',
-      'Hamster',
-      'criceto',
-    );
-    speciesRepository.save(hamster).catch((err) => console.log(err));
-
-    const guineaPig = new SpeciesEntity();
-    guineaPig.name = jsonStringFromSpecies(
-      'guinea pig',
-      "cochon d'Inde",
-      'Meerschweinchen',
-      "porcellino d'India",
-    );
-    speciesRepository.save(guineaPig).catch((err) => console.log(err));
-
-    const ferret = new SpeciesEntity();
-    ferret.name = jsonStringFromSpecies(
-      'ferret',
-      'furet',
-      'Frettchen',
-      'furetto',
-    );
-    speciesRepository.save(ferret).catch((err) => console.log(err));
-
-    const other = new SpeciesEntity();
-    other.name = jsonStringFromSpecies('other', 'autre', 'Sonstiges', 'Altro');
-    speciesRepository.save(other).catch((err) => console.log(err));
+  async createSpecies(species: Species): Promise<Species> {
+    return this.speciesRepository.save(species);
   }
 
-  createSpecies(species: SpeciesInterface): Observable<SpeciesInterface> {
-    return from(this.speciesRepository.save(species));
-  }
-
-  findAllSpecies(): Promise<SpeciesInterface[]> {
+  async findAllSpecies(): Promise<Species[]> {
     return this.speciesRepository.find();
   }
 
-  async findOneSpeciesById(id: number): Promise<SpeciesInterface> {
-    return await this.speciesRepository.findOne(id);
+  async findOneSpeciesById(id: number): Promise<Species> {
+    return this.speciesRepository.findOne(id);
   }
 
-  updateSpecies(species: SpeciesInterface) {
-    return from(this.speciesRepository.update(species.id, species));
+  async updateSpecies(species: Species): Promise<UpdateResult> {
+    return this.speciesRepository.update(species.id, species);
   }
 
-  deleteSpecies(id: number) {
-    return from(this.speciesRepository.delete(id));
+  async deleteSpecies(id: number): Promise<DeleteResult> {
+    return this.speciesRepository.delete(id);
   }
 
-  async checkSpecies(id: number) {
+  async checkSpecies(id: number): Promise<boolean> {
     try {
       const species = await this.findOneSpeciesById(id);
 
@@ -120,5 +44,7 @@ export class SpeciesService {
     } catch (e) {
       throw FILTER_INVALID_SPECIES;
     }
+
+    return true;
   }
 }

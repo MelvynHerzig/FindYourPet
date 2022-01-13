@@ -1,20 +1,15 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity, Index,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { AdvertsEntity } from '../adverts/adverts.entity';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { Point } from 'geojson';
 
+// Doesn't work with import style..
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcryptjs');
 
 /**
  * Entity to represents a user of FindYourPet
  */
 @Entity('member')
-export class MembersEntity {
+export class Member {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -24,17 +19,15 @@ export class MembersEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    unique: true,
+  })
   email: string;
 
   @Column({
     length: 60,
   })
   password: string;
-
-  @BeforeInsert() hashPassword() {
-    this.password = bcrypt.hashSync(this.password, 10);
-  }
 
   @Column()
   street: string;
@@ -48,6 +41,9 @@ export class MembersEntity {
   @Column()
   phone: string;
 
+  @Column()
+  isAdmin: boolean;
+
   @Index({ spatial: true })
   @Column({
     type: 'geography',
@@ -56,7 +52,4 @@ export class MembersEntity {
     nullable: true,
   })
   location: Point;
-
-  @OneToMany(() => AdvertsEntity, (advert) => advert.member)
-  adverts: AdvertsEntity[];
 }

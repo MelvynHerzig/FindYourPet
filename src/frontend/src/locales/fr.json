@@ -46,6 +46,15 @@
     "invalidToken": "Jeton invalide utilisé",
     "invalidAddress": "L'adresse fournie est invalide"
   },
+  "errors": {
+    "langage": "Mauvaise langue utilisée pour la requête",
+    "passwordConfirmation": "La Confirmation de Mot de passe ne correspond pas au Mot de passe",
+    "creditentials": "Mot de passe et/ou l'adresse email est incorrecte",
+    "userAlreadyExist": "L'email existe déjà",
+    "userNotFound": "l'email n'a pas été trouvée",
+    "invalidToken": "Jeton invalide utilisé",
+    "invalidAddress": "L'adresse fournie est invalide"
+  },
   "account": {
     "email": "Adresse email",
     "password": "Mot de passe",

@@ -1,74 +1,69 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { AdvertsEntity, PetGender } from './adverts.entity';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Advert, PetGender } from './entities/adverts.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AdvertsInterface } from './adverts.interface';
-import { from, Observable } from 'rxjs';
 import { FilterDto } from './dto/filters.dto';
 import { SpeciesService } from '../species/species.service';
 import {
   FILTER_INVALID_GENDER,
   FILTER_INVALID_PAGE,
+  FILTER_INVALID_PET_MAX_AGE,
   FILTER_INVALID_PET_MIN_AGE,
   FILTER_INVALID_RADIUS,
 } from '../../error/error-message';
 import { MembersService } from '../members/members.service';
+import { AdvertDto } from './dto/advert.dto';
+import { ToTranslatedSpeciesDto } from '../species/dto/translated.species.dto';
+import { ToPublicMemberDto } from '../members/dto/members.dto';
 
 /**
  * Service to query adverts
  */
 @Injectable()
 export class AdvertsService {
-  pageSize = 34;
+  pageSize = 20;
 
   constructor(
-    @InjectRepository(AdvertsEntity)
-    private readonly advertRepository: Repository<AdvertsEntity>,
+    @InjectRepository(Advert)
+    private readonly advertRepository: Repository<Advert>,
     private speciesService: SpeciesService,
     private membersService: MembersService,
   ) {}
 
-  createAdvert(advert: AdvertsInterface): Observable<AdvertsInterface> {
-    return from(this.advertRepository.save(advert));
+  async createAdvert(advert: Advert): Promise<Advert> {
+    return this.advertRepository.save(advert);
   }
 
-  findPageAdvert(pageNum: number): Observable<AdvertsInterface[]> {
-    this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
+  async findPageAdvert(pageNum: number): Promise<Advert[]> {
+    await this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
 
-    return from(
-      this.advertRepository.find({
-        order: {
-          id: 'ASC',
-        },
-        skip: (pageNum - 1) * this.pageSize,
-        take: this.pageSize,
-      }),
-    );
+    return this.advertRepository.find({
+      order: {
+        id: 'ASC',
+      },
+      skip: (pageNum - 1) * this.pageSize,
+      take: this.pageSize,
+    });
   }
 
-  findOneAdvertById(id: number): Observable<AdvertsInterface> {
-    return from(this.advertRepository.findOne(id));
+  async findOneAdvertById(id: number): Promise<Advert> {
+    return this.advertRepository.findOne(id);
   }
 
-  findAllAdvertByUuid(uuid: string): Observable<AdvertsInterface[]> {
-    return from(this.advertRepository.find({ memberId: uuid }));
+  async findAllAdvertByUuid(uuid: string): Promise<Advert[]> {
+    return this.advertRepository.find({ memberId: uuid });
   }
 
-  findTop10RecentAdvert(): Observable<AdvertsInterface[]> {
-    return from(
-      this.advertRepository.find({
-        order: {
-          lastModified: 'DESC',
-        },
-        take: 10,
-      }),
-    );
+  async findTop10RecentAdvert(): Promise<Advert[]> {
+    return this.advertRepository.find({
+      order: {
+        lastModified: 'DESC',
+      },
+      take: 10,
+    });
   }
 
-  async filterAdvert(
-    filters: FilterDto,
-    pageNum: number,
-  ): Promise<AdvertsInterface[]> {
+  async filterAdvert(filters: FilterDto, pageNum: number): Promise<Advert[]> {
     this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
 
     // TODO get user location that emited request
@@ -94,6 +89,11 @@ export class AdvertsService {
     // Filter by age
     if (filters.petMinAge !== undefined) {
       query.andWhere(`adverts.petAge >= ${filters.petMinAge}`);
+    }
+
+    // Filter by age
+    if (filters.petMaxAge !== undefined) {
+      query.andWhere(`adverts.petAge <= ${filters.petMaxAge}`);
     }
 
     // Filter by distance
@@ -132,12 +132,13 @@ export class AdvertsService {
     return adverts;
   }
 
-  updateAdvert(advert: AdvertsInterface) {
-    return from(this.advertRepository.update(advert.id, advert));
+  async updateAdvert(advert: Advert): Promise<UpdateResult> {
+    advert.lastModified = new Date();
+    return this.advertRepository.update(advert.id, advert);
   }
 
-  deleteAdvert(id: number) {
-    return from(this.advertRepository.delete(id));
+  async deleteAdvert(id: number): Promise<DeleteResult> {
+    return this.advertRepository.delete(id);
   }
 
   async checkFilter(filterDto: FilterDto) {
@@ -161,6 +162,22 @@ export class AdvertsService {
       );
     }
 
+    if (filterDto.petMaxAge !== undefined) {
+      this.checkIfNumberIsSmallerThan(
+        filterDto.petMaxAge,
+        0,
+        FILTER_INVALID_PET_MAX_AGE,
+      );
+
+      if (filterDto.petMinAge !== undefined) {
+        this.checkIfNumberIsSmallerThan(
+          filterDto.petMaxAge,
+          filterDto.petMinAge,
+          FILTER_INVALID_PET_MAX_AGE,
+        );
+      }
+    }
+
     if (filterDto.gender !== undefined) {
       if (!Object.values(PetGender).includes(filterDto.gender)) {
         throw FILTER_INVALID_GENDER;
@@ -168,9 +185,94 @@ export class AdvertsService {
     }
   }
 
-  checkIfNumberIsSmallerThan(num: number, min: number, error: string) {
+  async checkIfNumberIsSmallerThan(num: number, min: number, error: string) {
     if (!Number.isInteger(num) || num < min) {
       throw error;
     }
+  }
+
+  async ToAdvertDto(advert, lang: string, logged: boolean): Promise<AdvertDto> {
+    const {
+      id,
+      title,
+      description,
+      imageId,
+      lastModified,
+      petAge,
+      petGender,
+      speciesId,
+      memberId,
+    } = advert;
+
+    return {
+      id,
+      title,
+      description,
+      imageId,
+      lastModified,
+      petAge,
+      petGender,
+      species: ToTranslatedSpeciesDto(
+        await this.speciesService.findOneSpeciesById(speciesId),
+        lang,
+      ),
+      member: logged
+        ? ToPublicMemberDto(await this.membersService.findOne({ id: memberId }))
+        : undefined,
+    };
+  }
+
+  async ToAdvertsDto(
+    adverts,
+    lang: string,
+    logged: boolean,
+  ): Promise<AdvertDto[]> {
+    const result: AdvertDto[] = [];
+
+    for (const advert of adverts) {
+      result.push(await this.ToAdvertDto(advert, lang, logged));
+    }
+    return result;
+  }
+
+  ToAdvert(advert): Advert {
+    const {
+      id,
+      title,
+      description,
+      imageId,
+      lastModified,
+      petAge,
+      petGender,
+      speciesId,
+      species,
+      memberId,
+      member,
+    } = advert;
+
+    const sId =
+      speciesId === undefined
+        ? species !== undefined
+          ? species.id
+          : undefined
+        : speciesId;
+    const mId =
+      memberId === undefined
+        ? member !== undefined
+          ? member.id
+          : undefined
+        : memberId;
+
+    return {
+      id,
+      title,
+      description,
+      imageId,
+      lastModified,
+      petAge,
+      petGender,
+      memberId: mId,
+      speciesId: sId,
+    };
   }
 }

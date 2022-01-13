@@ -6,13 +6,10 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { AuthService, LoginStatus, RegistrationsStatus } from './auth.service';
-import axios from 'axios';
-import { Point } from 'geojson';
+import { CreateMemberDto } from '../models/members/dto/create.members.dto';
+import { LoginMemberDto } from '../models/members/dto/login.members.dto';
+import { ToMember } from '../models/members/dto/members.dto';
 import { ERROR_PASSWORD_CONFIRMATION } from '../error/error-message';
-import {
-  CreateMemberDto,
-  LoginMemberDto,
-} from '../models/members/dto/members.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -28,9 +25,8 @@ export class AuthController {
         HttpStatus.BAD_REQUEST,
       );
     }
-
     const result: RegistrationsStatus = await this.authService.register(
-      createMemberDto,
+      ToMember(createMemberDto),
     );
     if (!result.success) {
       throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
@@ -40,8 +36,8 @@ export class AuthController {
 
   @Post('login')
   public async login(
-    @Body() loginUserDto: LoginMemberDto,
+    @Body() loginMemberDto: LoginMemberDto,
   ): Promise<LoginStatus> {
-    return await this.authService.login(loginUserDto);
+    return await this.authService.login(loginMemberDto);
   }
 }

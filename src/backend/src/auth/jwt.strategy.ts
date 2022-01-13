@@ -2,7 +2,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ERROR_INVALID_TOKEN } from "../error/error-message";
+import { ERROR_INVALID_TOKEN } from '../error/error-message';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
