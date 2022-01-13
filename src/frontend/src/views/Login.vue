@@ -48,8 +48,7 @@ export default {
         password: this.password,
       })
       .then(() => {
-        //window.location.reload();
-        //this.$router.go('/profile');
+        this.$store.commit('connect');
         this.$router.push('/profile');
       })
       .catch(error => {

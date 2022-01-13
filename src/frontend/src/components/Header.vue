@@ -8,7 +8,7 @@
         <button @click="$router.push('/')"> {{$t("header.home")}} </button>
         <button @click="$router.push('/adverts')"> {{$t("header.advert")}} </button>
       </div>
-      <div v-if="isConnected === true" class="account">
+      <div v-if="isConnected" class="account">
         <button @click="$router.push('/profile')"> {{$t("header.profile")}} </button>
         <button @click="$router.push('/adverts/create')"> {{$t("header.advertCreation")}} </button>
         <button @click="disconnectMember();"> {{$t("header.disconnect")}} </button>
@@ -34,14 +34,13 @@
 </template>
 
 <script>
-import {destroyMemberToken, memberIsConnected} from '@/logic/apicalls';
+import {destroyMemberToken} from '@/logic/apicalls';
 
 export default {
   name: 'locale-changer',
   data () {
     return {
       langs: ['fr', 'en', 'it', 'de'],
-      isConnected: memberIsConnected(),
     }
   },
   methods: {
@@ -56,12 +55,14 @@ export default {
     },
     disconnectMember() {
       destroyMemberToken();
-      this.isConnected = false;
+      this.$store.commit('disconnect');
       this.$router.push('/login');
     },
   },
-  beforeMount() {
-    this.isConnected = memberIsConnected();
+  computed: {
+    isConnected() {
+      return this.$store.getters.isConnected;
+    },
   },
 }
 </script>
