@@ -27,10 +27,11 @@ import { getAdvertById, getSpeciesByIdFromLang } from "../logic/apicalls";
 export default {
   name: "Advert",
   beforeMount() {
+    // TODO: gérer le cas du membre vide
     getAdvertById(this.$route.params.id).then(result => {
       this.advert = result.data;
-      this.getSpecies();
     });
+    this.getSpecies();
   },
   watch:{
     '$i18n.locale': function() {

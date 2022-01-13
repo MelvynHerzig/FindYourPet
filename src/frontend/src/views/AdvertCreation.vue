@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import {createAdvert, getAllSpeciesFromLang, getMemberConnectedId} from "../logic/apicalls";
-import { manageErrors } from "../logic/errors";
+import {addFile, createAdvert, getAllSpeciesFromLang} from "@/logic/apicalls";
+import { manageErrors } from "@/logic/errors";
 import ToastError from "../components/toasts/ToastError";
 
 export default {
@@ -93,21 +93,17 @@ export default {
         title: this.title,
         description: this.description,
         petAge: this.age,
-        imagePath: "/",
-        //memberId: getMemberConnectedId(), TODO
         petGender: this.selectedSex,
-        speciesId: this.selectedSpecies
-      }) .then(() => {
-            this.$router.push('/profile')
-          })
-          .catch(error => {
-            this.error = manageErrors(error.message);
-          });
-      
+        speciesId: this.selectedSpecies,
+      })
+      .then((result) => {
+        addFile(result.data.id); // TODO: ajouter image
+        this.$router.push('/profile')
+      })
+      .catch(error => {
+        this.error = manageErrors(error.message);
+      });
     },
-    getMemberConnected() {
-      return getMemberConnectedId;
-    }
   }
 }
 </script>
@@ -236,6 +232,5 @@ button:hover {
   cursor: pointer;
   background-color: var(--select-color);
 }
-
 
 </style>
