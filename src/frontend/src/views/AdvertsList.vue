@@ -101,7 +101,8 @@ export default {
       });
     },
     getAdverts(page) {
-      getPageAdverts(page).then(result => {
+      getPageAdverts(page, this.$root.$i18n.locale)
+      .then(result => {
         if(result !== null) {
           if(!this.filteredRequest) {
             this.adverts = this.adverts.concat(result.data);
@@ -117,7 +118,7 @@ export default {
       });
     },
     filter(page) {
-      getPageFilteredAdverts(page, {
+      getPageFilteredAdverts(page, this.$root.$i18n.locale, {
         speciesId: this.selectedSpecies,
         gender: this.selectedGender,
         petMinAge: this.minAge,
