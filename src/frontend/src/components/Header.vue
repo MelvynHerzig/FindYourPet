@@ -61,7 +61,6 @@ export default {
   mounted() {
     this.isConnected();
   }
-
 }
 </script>
 
