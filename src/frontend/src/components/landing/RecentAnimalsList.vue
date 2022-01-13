@@ -42,10 +42,6 @@ h1 {
 }
 
 .animalAdsList {
-<<<<<<< HEAD:src/frontend/src/components/landing/RecentAnimalsList.vue
-
-=======
->>>>>>> origin/develop:src/frontend/src/components/RecentAnimalsList.vue
   background: url("../../assets/images/pets.jpg");
   background-attachment:fixed;
   background-repeat: no-repeat;
