@@ -5,7 +5,7 @@
       <div class="info">
         <div class="short">
           <img src="..\..\public\images\kitty.jpg" alt="image">
-          <h2>{{species.name}}</h2>
+          <h2>{{advert.species.name}}</h2>  
           <h3>{{$t("ad_create." + advert.petGender)}}, {{advert.petAge}} {{$t("ad.years")}}</h3>
         </div>
         <div class="description">
@@ -22,34 +22,28 @@
 </template>
 
 <script>
-import { getAdvertById, getSpeciesByIdFromLang } from "../logic/apicalls";
+import {getAdvertById} from "../logic/apicalls";
 
 export default {
   name: "Advert",
   beforeMount() {
-    getAdvertById(this.$route.params.id).then(result => {
+    getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result => {
       this.advert = result.data;
-      this.getSpecies();
     });
   },
   watch:{
     '$i18n.locale': function() {
-      this.getSpecies();
+      getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result => {
+      this.advert = result.data;
+    });
     }
   },
   data: function () {
     return {
-      advert: {},
-      species: {}
+      advert: {}
     }
   },
-  methods: {
-    getSpecies(){
-      getSpeciesByIdFromLang(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
-          this.species = result.data;
-      });
-    }
-  },
+
 }
 </script>
 

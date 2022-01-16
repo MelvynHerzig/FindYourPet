@@ -15,8 +15,8 @@
     </div>
     <div class="modification" v-if="isOwner">
       <p>
-        <button @click="$router.push('/adverts')">Modify</button>
-        <button @click="$router.push('/adverts/create')"> Delete </button>
+        <button @click="$router.push('/adverts/${advert.id}/create')">Modify</button> 
+        <button>Delete</button>
       </p>
     </div>
   </div>
@@ -49,7 +49,8 @@ export default {
       getSpeciesByIdFromLang(this.advert.species.id, this.$root.$i18n.locale).then(result => {
           this.specie = result.data;
       });
-    },
+    }
+    
   },
   computed: {
     isOwner:  function(){
@@ -123,12 +124,13 @@ img {
 
 .modification {
   display: flex;
+  align-self: center;
 }
 
 button {
   display: inline-block;
   padding: 20px;
-  margin: 30px;
+  margin: 5px;
   letter-spacing: .15rem;
   transition: all .3s;
   position: relative;
@@ -142,7 +144,7 @@ button:hover {
   background-color: var(--select-color);
 } 
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1000px) {
   .advert {
     width: 82%;
     height: 100%;

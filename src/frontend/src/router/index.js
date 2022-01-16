@@ -43,6 +43,12 @@ const routes = [
     beforeEnter: requireAuth
   },
   {
+    path: '/adverts/:id/modify',
+    name: 'AdvertModification',
+    component: AdvertCreation,
+    beforeEnter: requireAuth
+  },
+  {
     path: '/profile',
     name: 'Profile',
     component: Profile,
