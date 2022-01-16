@@ -13,10 +13,10 @@
         {{ advert.description }}
       </p>
     </div>
-    <div class="modification">
+    <div class="modification" v-if="isOwner">
       <p>
-        <button @click="$router.push('/adverts')">{{$t("landing.see")}}</button>
-        <button @click="$router.push('/adverts/create')"> {{$t("landing.create")}} </button>
+        <button @click="$router.push('/adverts')">Modify</button>
+        <button @click="$router.push('/adverts/create')"> Delete </button>
       </p>
     </div>
   </div>
@@ -33,7 +33,6 @@ export default {
   },
   beforeMount() {
     this.getSpecies();
-    this.checkOwner();
   },
   watch:{
     '$i18n.locale': function() {
@@ -43,7 +42,6 @@ export default {
   data() {
     return {
       specie: {},
-      isOwner: false
     }
   },
   methods: {
@@ -52,10 +50,15 @@ export default {
           this.specie = result.data;
       });
     },
-    checkOwner(){
-      this.isOwner = this.advert.member.id === getMemberConnectedId();
-    }
   },
+  computed: {
+    isOwner:  function(){
+      if (getMemberConnectedId() != null){
+       return this.advert.member.id === getMemberConnectedId();
+      }
+      return false;
+    }
+  }
 }
 </script>
 
