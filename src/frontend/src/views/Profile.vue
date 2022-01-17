@@ -19,7 +19,7 @@
       <h1>{{ $t('profile.advertsTitle') }}</h1>
       <div class="list">
         <ul>
-          <li v-for="advert in this.member.adverts" :key="advert.id" style="list-style-type:none">
+          <li v-for="advert in this.adverts" :key="advert.id" style="list-style-type:none">
             <AnimalAdvert :advert="advert"/>
           </li>
         </ul>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import {getMemberByEmail, getMemberConnectedEmail } from "../logic/apicalls";
+import {getMemberByEmail, getMemberConnectedEmail, getAdvertsByMember} from "../logic/apicalls";
 import AnimalAdvert from "../components/AnimalAdvert";
 
 export default {
@@ -39,35 +39,22 @@ export default {
   data() {
     return {
       error: null,
-      member: {
-        firstname: "Alec",
-        name: "Berney",
-        email: "beral@sevjnet.ch",
-        street: "Rue du Village 28",
-        NPA: "1347",
-        city: "Le Solliat",
-        phone: "078 837 77 18",
-        adverts: [
-          {
-            title: "Balou",
-            petAge: 16,
-            species:{id:1},
-            description: "Ceci est une annonce fictive teste présente en attendant l'api"
-          },
-          {
-            title: "Tiki",
-            petAge: 7,
-            species:{id:1},
-            description: "Ceci est une annonce fictive teste présente en attendant l'api"
-          },
-        ]
-      },
+      member: {},
+      adverts: [],
     }
   },
   methods: {
     getActualMember() {
       getMemberByEmail(getMemberConnectedEmail()).then(result => {
         this.member = result.data;
+        this.getMembersAdverts() 
+      }).catch(error => {
+        this.error = error;
+      });
+    },
+    getMembersAdverts() {
+      getAdvertsByMember(this.member.id,this.$root.$i18n.locale).then(result => {
+        this.adverts = result.data;
       }).catch(error => {
         this.error = error;
       });

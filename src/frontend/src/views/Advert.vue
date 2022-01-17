@@ -16,18 +16,24 @@
       </div>
       <div v-if="isConnected">
       <h2> {{$t("ad.contact")}} </h2>
-      <div class = "contact">
-        <h3> {{advert.member.firstname}} {{advert.member.name}} </h3>
-        <h3> {{advert.member.email}}  </h3>
-        <h3> {{advert.member.phone}} </h3>
+        <div class = "contact">
+          <h3> {{advert.member.firstname}} {{advert.member.name}} </h3>
+          <h3> {{advert.member.email}}  </h3>
+          <h3> {{advert.member.phone}} </h3>
+        </div>
       </div>
+      <div class="modification" v-if="isOwner">
+        <p>
+          <button @click="$router.push(`/adverts/${advert.id}/modify`)">Modify</button> 
+          <button>Delete</button>
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {getAdvertById, memberIsConnected} from "../logic/apicalls";
+import {getAdvertById, getMemberConnectedId, memberIsConnected} from "../logic/apicalls";
 
 export default {
   name: "Advert",
@@ -46,6 +52,12 @@ export default {
   computed:{
     isConnected:  function(){
      return memberIsConnected();
+    },
+    isOwner:  function(){
+      if (getMemberConnectedId() != null){
+       return this.advert.member.id === getMemberConnectedId();
+      }
+      return false
     }
   },
   data: function () {
@@ -127,4 +139,21 @@ img{
   border-radius: 50px;
 
 }
+
+button {
+  display: inline-block;
+  padding: 20px;
+  margin: 5px;
+  letter-spacing: .15rem;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  border-color:var(--header-color);
+}
+
+button:hover {
+  cursor:pointer;
+  background-color: var(--select-color);
+} 
 </style>

@@ -15,7 +15,7 @@
     </div>
     <div class="modification" v-if="isOwner">
       <p>
-        <button @click="$router.push('/adverts/${advert.id}/create')">Modify</button> 
+        <button @click="$router.push('/adverts/${advert.id}/modify')">Modify</button> 
         <button>Delete</button>
       </p>
     </div>
