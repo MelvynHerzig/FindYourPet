@@ -41,6 +41,7 @@ export default {
     getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result => {
       this.advert = result.data;
     });
+    this.getSpecies();
   },
   watch:{
     '$i18n.locale': function() {

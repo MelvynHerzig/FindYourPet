@@ -52,6 +52,7 @@
 <script>
 import {createAdvert, updateAdvert, getAdvertById, getAllSpeciesFromLang, getMemberConnectedId  } from "../logic/apicalls";
 import { manageErrors } from "../logic/errors";
+
 import ToastError from "../components/toasts/ToastError";
 
 export default {
@@ -111,8 +112,6 @@ export default {
         title: this.title,
         description: this.description,
         petAge: this.age,
-        imagePath: "/",
-        //memberId: getMemberConnectedId(), TODO
         petGender: this.selectedSex,
         speciesId: this.selectedSpecies
       }) .then(() => {
@@ -139,9 +138,6 @@ export default {
           });
       }
     },
-    getMemberConnected() {
-      return getMemberConnectedId;
-    }
   }
 }
 </script>
@@ -270,6 +266,5 @@ button:hover {
   cursor: pointer;
   background-color: var(--select-color);
 }
-
 
 </style>

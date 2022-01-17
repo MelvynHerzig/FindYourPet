@@ -117,7 +117,7 @@ export default {
       });
     },
     filter(page) {
-      getPageFilteredAdverts(page, {
+      getPageFilteredAdverts(page, this.$root.$i18n.locale, {
         speciesId: this.selectedSpecies,
         gender: this.selectedGender,
         petMinAge: this.minAge,

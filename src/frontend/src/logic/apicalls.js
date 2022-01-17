@@ -51,11 +51,15 @@ export async function getAllSpeciesFromLang(lang) {
 }
 
 export async function getSpeciesByIdFromLang(id, lang) {
-    // TODO: rajouter /id une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/species/${lang}/id/${id}`);
 }
 
 /***************** Adverts ********************/
+
+
+export async function getMemberAdverts(id, lang) {
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/members/${getMemberConnectedId()}`);
+}
 
 export async function createAdvert(advertInformations) {
     return axios.post(`${process.env.VUE_APP_ROOT_API}/adverts`, advertInformations)
@@ -114,17 +118,8 @@ export async function getAdvertById(id, lang) {
 export async function getAdvertsByMember(memberId, lang) {
     // TODO: rajouter /:lang une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/members/${memberId}`);
-}
 
 /***************** Authentification ********************/
-
-export async function login(credentials) {
-    return axios.post(`${process.env.VUE_APP_ROOT_API}/auth/login`, credentials)
-        .then(result => {
-            cookies.set('token', result.data);
-            return result;
-        });
-}
 
 export async function register(userInformations) {
     return axios.post(`${process.env.VUE_APP_ROOT_API}/auth/register`, userInformations)
@@ -136,7 +131,32 @@ export async function register(userInformations) {
             }
         })
         .catch(error => {
-            this.error = manageErrors(error.message);
+            return manageErrors(error.message);
+        });
+>>>>>>> develop
+}
+
+export async function login(credentials) {
+    return axios.post(`${process.env.VUE_APP_ROOT_API}/auth/login`, credentials)
+        .then(result => {
+            cookies.set('token', result.data);
+            return result;
+        });
+}
+
+/***************** Files ********************/
+
+export async function getFileById(idFile) {
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/files/${idFile}`);
+}
+
+export async function addFile(idAdvert, file) {
+    return axios.post(`${process.env.VUE_APP_ROOT_API}/files/${idAdvert}`, file)
+        .then(result => {
+            console.log(result);
+        })
+        .catch(error => {
+            return manageErrors(error.message);
         });
 }
 
