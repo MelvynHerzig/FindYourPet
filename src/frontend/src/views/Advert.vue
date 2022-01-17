@@ -14,15 +14,20 @@
           </p>
         </div>
       </div>
-      <div class="contact">
+      <div v-if="isConnected">
       <h2> {{$t("ad.contact")}} </h2>
+      <div class = "contact">
+        <h3> {{advert.member.firstname}} {{advert.member.name}} </h3>
+        <h3> {{advert.member.email}}  </h3>
+        <h3> {{advert.member.phone}} </h3>
+      </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {getAdvertById} from "../logic/apicalls";
+import {getAdvertById, memberIsConnected} from "../logic/apicalls";
 
 export default {
   name: "Advert",
@@ -36,6 +41,11 @@ export default {
       getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result => {
       this.advert = result.data;
     });
+    }
+  },
+  computed:{
+    isConnected:  function(){
+     return memberIsConnected();
     }
   },
   data: function () {
@@ -99,7 +109,7 @@ button{
   margin: 10px;
 }
 
-.description {
+.description, .contact{
   flex: 3;
   margin: 10px;
   padding: 10px;
