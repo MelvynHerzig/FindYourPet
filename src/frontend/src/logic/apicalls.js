@@ -77,6 +77,20 @@ export async function updateAdvert(advertInformations) {
         });
 }
 
+export async function deleteAdvert(id) {
+    if(confirm('are you sure?')){
+        return axios.delete(`${process.env.VUE_APP_ROOT_API}/adverts/${id}`)
+            .then(result => {
+                console.log(result.data);
+            })
+            .catch(error => {
+                this.error = error;
+            });
+    }else{
+        return null;
+    }
+}
+
 export async function getPageAdverts(pageNum, lang) {
     // TODO: rajouter /:lang une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/page/${pageNum}`);

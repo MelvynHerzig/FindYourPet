@@ -15,8 +15,8 @@
     </div>
     <div class="modification" v-if="isOwner">
       <p>
-        <button @click="$router.push('/adverts/${advert.id}/modify')">Modify</button> 
-        <button>Delete</button>
+        <button @click="modifyButtonClicked">Modify</button> 
+        <button @click="deleteButtonClicked">Delete</button>
       </p>
     </div>
   </div>
@@ -24,7 +24,7 @@
 
 <script>
 
-import { getMemberConnectedId, getSpeciesByIdFromLang } from '../logic/apicalls'
+import { deleteAdvert, getMemberConnectedId, getSpeciesByIdFromLang } from '../logic/apicalls'
 
 export default {
   name: "AnimalAdvert",
@@ -49,8 +49,18 @@ export default {
       getSpeciesByIdFromLang(this.advert.species.id, this.$root.$i18n.locale).then(result => {
           this.specie = result.data;
       });
+    },
+    modifyButtonClicked(event){
+      event.stopPropagation();
+      this.$router.push(`/adverts/${this.advert.id}/modify`)
+    },
+    deleteButtonClicked(event){
+      event.stopPropagation();
+      if(this.isOwner){
+        deleteAdvert(this.advert.id);
+        window.location.reload();
+      } 
     }
-    
   },
   computed: {
     isOwner:  function(){

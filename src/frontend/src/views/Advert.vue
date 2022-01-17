@@ -25,7 +25,7 @@
       <div class="modification" v-if="isOwner">
         <p>
           <button @click="$router.push(`/adverts/${advert.id}/modify`)">Modify</button> 
-          <button>Delete</button>
+          <button @click="deleteButtonClicked">Delete</button>
         </p>
       </div>
     </div>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import {getAdvertById, getMemberConnectedId, memberIsConnected} from "../logic/apicalls";
+import {getAdvertById, getMemberConnectedId, memberIsConnected, deleteAdvert} from "../logic/apicalls";
 
 export default {
   name: "Advert",
@@ -47,6 +47,14 @@ export default {
       getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result => {
       this.advert = result.data;
     });
+    }
+  },
+  methods : {
+    deleteButtonClicked(){
+      if(this.isOwner){
+        deleteAdvert(this.advert.id)
+        this.$router.push('/profile')
+      } 
     }
   },
   computed:{
