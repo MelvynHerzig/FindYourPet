@@ -118,7 +118,7 @@ export async function getAdvertById(id, lang) {
 export async function getAdvertsByMember(memberId, lang) {
     // TODO: rajouter /:lang une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/members/${memberId}`);
-
+}
 /***************** Authentification ********************/
 
 export async function register(userInformations) {
@@ -133,7 +133,6 @@ export async function register(userInformations) {
         .catch(error => {
             return manageErrors(error.message);
         });
->>>>>>> develop
 }
 
 export async function login(credentials) {
