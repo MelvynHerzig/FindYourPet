@@ -62,13 +62,7 @@ export async function getMemberAdverts(id, lang) {
 }
 
 export async function createAdvert(advertInformations) {
-    return axios.post(`${process.env.VUE_APP_ROOT_API}/adverts`, advertInformations)
-        .then(result => {
-            console.log(result.data);
-        })
-        .catch(error => {
-            this.error = error;
-        });
+    return axios.post(`${process.env.VUE_APP_ROOT_API}/adverts`, advertInformations);
 }
 
 export async function updateAdvert(advertInformations) {
@@ -150,7 +144,7 @@ export async function getFileById(idFile) {
 }
 
 export async function addFile(idAdvert, file) {
-    return axios.post(`${process.env.VUE_APP_ROOT_API}/files/${idAdvert}`, file)
+    return axios.post(`${process.env.VUE_APP_ROOT_API}/files/adverts/${idAdvert}`, file)
         .then(result => {
             console.log(result);
         })
