@@ -25,7 +25,6 @@ import { AdvertDto } from './dto/advert.dto';
 import { UpdateAdvertDto } from './dto/update.adverts.dto';
 import { CreateAdvertDto } from './dto/create.adverts.dto';
 import { Advert } from './entities/adverts.entity';
-import { ERROR_PASSWORD_CONFIRMATION } from '../../error/error-message';
 
 /**
  * Advert controller
