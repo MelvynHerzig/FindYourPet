@@ -31,8 +31,52 @@
   "header":{
     "home": "Home",
     "advert": "Annunci",
+    "advertCreation": "Creazione di annunci",
     "login": "Connetti",
-    "register": "Registrati"
+    "register": "Registrati",
+    "disconnect": "Scollegare",
+    "profile": "Profilo"
+  },
+  "errors": {
+    "langage": "Cattivo linguaggio usato per la richiesta",
+    "passwordConfirmation": "La conferma della password non corrisponde alla password",
+    "creditentials": "La password e/o l'e-mail non sono corrette",
+    "userAlreadyExist": "L'e-mail esiste già",
+    "userNotFound": "Email non trovata",
+    "invalidToken": "Token non valido utilizzato",
+    "invalidAddress": "Indirizzo non valido dato"
+  },
+  "account": {
+    "email": "E-mail",
+    "password": "Password",
+    "confirmPassword": "Conferma Password",
+    "firstName": "Cognome",
+    "name": "Nome",
+    "street": "Strada",
+    "city": "Città",
+    "npa": "NPA",
+    "phone": "Telefono"
+  },
+  "login":{
+    "title": "Connetti",
+    "button": "Per Accedere",
+    "fail": "Email o password incorretto"
+  },
+  "register": {
+    "title": "Registrati",
+    "button": "Registrati"
+  },
+  "advertsList": {
+    "minAge": "Età minima dell'animale domestico",
+    "maxAge": "Età massima dell'animale domestico",
+    "maxDistance": "Distanza massima della casa del proprietario dell'animale",
+    "filterButton": "Filtro",
+    "loadMore": "Carica altri annunci di animali domestici"
+  },
+  "profile": {
+    "profileInfos": "Informazioni sul profilo",
+    "advertsTitle": "I vostri annunci",
+    "modifyButton": "Modificare"
   },
   "animal_ad" : {
     "age": "età"
@@ -40,5 +84,15 @@
   "ad":{
     "contact": "Contatto",
     "years": "anni"
+  },
+  "ad_create":{
+    "title": "Titolo",
+    "age": "Eta",
+    "description": "Descrizione",
+    "species": "Specie",
+    "sex": "Sesso",
+    "button": "Mandare",
+    "male": "maschio",
+    "female":"femmina"
   }
 }

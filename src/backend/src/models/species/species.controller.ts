@@ -7,87 +7,140 @@ import {
   HttpStatus,
   Param,
   Post,
-  Put, UseGuards,
+  Put,
+  Req,
+  UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { SpeciesService } from './species.service';
-import { SpeciesInterface } from './species.interface';
-import { Observable } from 'rxjs';
 import { AuthGuard } from '@nestjs/passport';
-import { isSupportedLangAbr } from './species.utils';
-
+import { CreateSpeciesDto } from './dto/create.species.dto';
+import { Species } from './entities/species.entity';
+import { UpdateSpeciesDto } from './dto/update.species.dto.js';
+import { DeleteResult, UpdateResult } from 'typeorm';
+import { SpeciesDto, ToSpecies, ToSpeciesDto } from './dto/species.dto';
+import {
+  ToTranslatedSpeciesDto,
+  TranslatedSpeciesDto,
+} from './dto/translated.species.dto.js';
+import {
+  Action,
+  CaslAbilityFactory,
+} from '../../security/casl/casl-ability.factory';
 
 /**
  * Race controller
  */
 @Controller('species')
 export class SpeciesController {
-  constructor(private speciesService: SpeciesService) {}
+  constructor(
+    private speciesService: SpeciesService,
+    private caslAbilityFactory: CaslAbilityFactory,
+  ) {}
 
-  @Post()
-  create(@Body() species: SpeciesInterface): Observable<SpeciesInterface> {
-    return this.speciesService.createSpecies(species);
-  }
+  /******************* GET    ************************/
 
-  // For example http://localhost:3000/species/fr
-  // Answer [{ "id": 25, "name": "chien" }, { "id": 25, "name": "chat" }, ... ]
-  @Get('/:lang')
-  findAll(@Param('lang') lang: string): Observable<SpeciesInterface[]> {
-    if (!isSupportedLangAbr(lang)) {
-      throw new HttpException(
-        { status: HttpStatus.NOT_FOUND, error: 'Bad language' },
-        HttpStatus.NOT_FOUND,
+  @Get()
+  async findAll(): Promise<SpeciesDto[]> {
+    try {
+      return (await this.speciesService.findAllSpecies()).map((sp) =>
+        ToSpeciesDto(sp),
       );
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
-
-    // Getting species and keeping only desired language
-    const species = this.speciesService.findAllSpecies();
-    species.subscribe({
-      next(sp) {
-        sp.map((sp) => (sp.name = JSON.parse(sp.name)[lang]));
-      },
-      error(err) {
-        console.error('something wrong occurred: ' + err);
-      },
-    });
-
-    return species;
   }
 
-  // For example http://localhost:3000/species/fr/1
-  // Answer { "id": 25, "name": "chien" }
-  @Get('/:lang/:id')
-  findOne(
+  @Get(':lang')
+  async findAllTranslated(
+    @Param('lang') lang: string,
+  ): Promise<TranslatedSpeciesDto[]> {
+    try {
+      return (await this.speciesService.findAllSpecies()).map((sp) =>
+        ToTranslatedSpeciesDto(sp, lang),
+      );
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get('id/:id')
+  async findOne(@Param('id') id: string): Promise<SpeciesDto> {
+    try {
+      return ToSpeciesDto(
+        await this.speciesService.findOneSpeciesById(parseInt(id)),
+      );
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get(':lang/id/:id')
+  async findOneTranslated(
     @Param('lang') lang: string,
     @Param('id') id: string,
-  ): Observable<SpeciesInterface> {
-    if (!isSupportedLangAbr(lang)) {
-      throw new HttpException(
-        { status: HttpStatus.NOT_FOUND, error: 'Bad language' },
-        HttpStatus.NOT_FOUND,
+  ): Promise<TranslatedSpeciesDto> {
+    try {
+      return ToTranslatedSpeciesDto(
+        await this.speciesService.findOneSpeciesById(parseInt(id)),
+        lang,
       );
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
-
-    const species = this.speciesService.findOneSpeciesById(parseInt(id));
-    species.subscribe({
-      next(sp) {
-        sp.name = JSON.parse(sp.name)[lang];
-      },
-      error(err) {
-        console.error('something wrong occurred: ' + err);
-      },
-    });
-
-    return species;
   }
 
+  /******************* POST   ************************/
+  @Post()
+  @UseGuards(AuthGuard('jwt'))
+  async create(
+    @Body() species: CreateSpeciesDto,
+    @Req() req,
+  ): Promise<SpeciesDto> {
+    try {
+      const ability = this.caslAbilityFactory.createForMember(req.user);
+
+      if (ability.can(Action.Create, Species)) {
+        return ToSpeciesDto(
+          await this.speciesService.createSpecies(
+            ToSpecies({ ...species, id: undefined }),
+          ),
+        );
+      }
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
+    throw new UnauthorizedException();
+  }
+
+  /******************* PUT    ************************/
   @Put()
-  update(@Body() species: SpeciesInterface) {
-    return this.speciesService.updateSpecies(species);
+  @UseGuards(AuthGuard('jwt'))
+  update(@Body() species: UpdateSpeciesDto, @Req() req): Promise<UpdateResult> {
+    try {
+      const ability = this.caslAbilityFactory.createForMember(req.user);
+
+      if (ability.can(Action.Update, Species)) {
+        return this.speciesService.updateSpecies(ToSpecies(species));
+      }
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
+    throw new UnauthorizedException();
   }
 
+  /******************* DELETE ************************/
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
-  deleteOne(@Param('id') id: string) {
-    return this.speciesService.deleteSpecies(parseInt(id));
+  deleteOne(@Param('id') id: string, @Req() req): Promise<DeleteResult> {
+    try {
+      const ability = this.caslAbilityFactory.createForMember(req.user);
+      if (ability.can(Action.Delete, Species)) {
+        return this.speciesService.deleteSpecies(parseInt(id));
+      }
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
+    throw new UnauthorizedException();
   }
 }

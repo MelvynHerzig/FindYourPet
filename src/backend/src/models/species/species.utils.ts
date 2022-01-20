@@ -1,19 +1,18 @@
+import { Species } from './entities/species.entity';
+import { SpeciesDto } from './dto/species.dto';
 
 /**
  * Make a json string containing different languages
- * @param en English translation
- * @param fr French translation
- * @param de German translation
- * @param it Italian translation
+ * @param species SpeciesDto that contain all traduction
  * @return something like { "en" : "dog", "fr" : "chat", "de" : "Katze", "it" : "gatto"}
  */
-function jsonStringFromSpecies(
-  en: string,
-  fr: string,
-  de: string,
-  it: string,
-): string {
-  return JSON.stringify({ en: en, fr: fr, de: de, it: it });
+function jsonStringFromSpecies(species: SpeciesDto): string {
+  return JSON.stringify({
+    en: species.en,
+    fr: species.fr,
+    de: species.de,
+    it: species.it,
+  });
 }
 
 /**
@@ -28,4 +27,8 @@ function isSupportedLangAbr(abr: string): boolean {
   return true;
 }
 
-export { jsonStringFromSpecies, isSupportedLangAbr };
+function getSpeciesName(species: Species): string {
+  return JSON.parse(species.name);
+}
+
+export { jsonStringFromSpecies, isSupportedLangAbr, getSpeciesName };

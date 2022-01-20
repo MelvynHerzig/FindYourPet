@@ -2,7 +2,10 @@ import { createRouter, createWebHistory} from 'vue-router'
 import LandingPage from '../views/LandingPage.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import Ad from '../views/Ad.vue'
+import Advert from '../views/Advert.vue'
+import AdvertCreation from '../views/AdvertCreation.vue';
+import Profile from "../views/Profile";
+import {memberIsConnected} from "@/logic/apicalls";
 
 const routes = [
   {
@@ -11,33 +14,59 @@ const routes = [
     component: LandingPage
   },
   {
-    path: '/annonces',
-    name: 'Annonces',
+    path: '/adverts',
+    name: 'Adverts',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import('../views/AnimalsList.vue')
+    component: () => import('../views/AdvertsList.vue')
   },
   {
     path: '/login',
     name: 'Login',
-    component: Register
+    component: Login
   },
   {
     path: '/register',
     name: 'Register',
-    component: Login
+    component: Register
   },
   {
     path: '/adverts/:id',
-    name: 'Ad',
-    component: Ad
-  }
+    name: 'Advert',
+    component: Advert
+  },
+  {
+    path: '/adverts/create',
+    name: 'AdvertCreation',
+    component: AdvertCreation,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/adverts/:id/modify',
+    name: 'AdvertModification',
+    component: AdvertCreation,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: Profile,
+    beforeEnter: requireAuth
+  },
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes
 })
 
 export default router
+
+function requireAuth(to, from, next) {
+  if(!memberIsConnected()) {
+    next({ name: 'Login' });
+  } else {
+    next();
+  }
+}

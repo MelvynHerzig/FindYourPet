@@ -31,8 +31,53 @@
   "header": {
     "home": "Home",
     "advert": "Advertisements",
+    "advertCreation": "Advert Creation",
     "login": "Login",
     "register": "Register"
+  },
+  "errors": {
+    "langage": "Bad langage used for the request",
+    "passwordConfirmation": "Password Confirmation does not match Password",
+    "credentials": "Password or/and Email are incorrect",
+    "userAlreadyExist": "Email already exists",
+    "userNotFound": "Email not found",
+    "invalidToken": "Invalid token used",
+    "invalidAddress": "Invalid Address given"
+  },
+  "account": {
+    "email": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Password Confirmation",
+    "firstName": "First Name",
+    "name": "Name",
+    "street": "Street",
+    "city": "City / Town",
+    "npa": "NPA",
+    "phone": "Phone Number"
+  },
+  "login":{
+    "title": "Login",
+    "button": "Login",
+    "fail": "Your email or password is incorrect"
+  },
+  "register": {
+    "title": "Register",
+    "button": "Register",
+    "register": "Register",
+    "disconnect": "Disconnect",
+    "profile": "Profile"
+  },
+  "advertsList": {
+    "minAge": "Minimum age of pet",
+    "maxAge": "Maximum age of pet",
+    "maxDistance": "Maximum distance of the pet owner's house",
+    "filterButton": "Filter",
+    "loadMore": "Load more pet adverts"
+  },
+  "profile": {
+    "profileInfos": "Profile Informations",
+    "advertsTitle": "Your adverts",
+    "modifyButton": "Modify"
   },
   "animal_ad" : {
     "age": "age"
@@ -40,5 +85,16 @@
   "ad":{
     "contact": "Contact",
     "years": "years"
+  },
+  "ad_create":{
+    "title": "Title",
+    "age": "Age",
+    "description": "Description",
+    "species": "Species",
+    "sex": "Gender",
+    "button": "Submit",
+    "male": "male",
+    "female":"female"
+    
   }
 }

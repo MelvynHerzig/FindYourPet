@@ -29,10 +29,55 @@
     "contact":"Kontakt:"
   },
   "header":{
-    "home": "Zu Hause",
+    "home": "Home",
     "advert": "Werbung",
+    "advertCreation": "Erstellung von Anzeigen",
     "login": "Verbinden",
-    "register": "Registrieren"
+    "register": "Anmeldung"
+  },
+  "errors": {
+    "langage": "Falsche Sprache für die Anfrage",
+    "passwordConfirmation": "Passwortbestätigung stimmt nicht mit dem Passwort überein",
+    "creditentials": "Passwort oder/und E-Mail sind falsch",
+    "userAlreadyExist": "E-Mail existiert bereits",
+    "userNotFound": "Email wurde nicht gefunden",
+    "invalidToken": "Ungültiges Token verwendet",
+    "invalidAddress": "Ungültige Adresse angegeben"
+  },
+  "account": {
+    "email": "E-Mail-Addresse",
+    "password": "Passwort",
+    "confirmPassword": "Passwort Bestätigung",
+    "firstName": "Vorname",
+    "name": "Name",
+    "street": "Strasse",
+    "city": "Stadt / Dorf",
+    "npa": "NPA",
+    "phone": "Telefon"
+  },
+  "login":{
+    "title": "Verbindung",
+    "button": "Einloggen",
+    "fail": "E-Mail oder Passwort ist falsch"
+  },
+  "register": {
+    "title": "Anmeldung",
+    "button": "Jetzt Anmelden",
+    "register": "Anmeldung",
+    "disconnect": "Trennen",
+    "profile": "Profil"
+  },
+  "advertsList": {
+    "minAge": "Mindestalter des Haustiers",
+    "maxAge": "Höchstalter des Haustiers",
+    "maxDistance": "Maximale Entfernung zum Haus des Tierhalters",
+    "filterButton": "Filter",
+    "loadMore": "Mehr Haustier-Anzeigen laden"
+  },
+  "profile": {
+    "profileInfos": "Profil Informationen",
+    "advertsTitle": "Ihre Inserate",
+    "modifyButton": "Ändern"
   },
   "animal_ad" : {
     "age": "Alter"
@@ -40,5 +85,15 @@
   "ad":{
     "contact": "Kontact",
     "years": "Jahre"
+  },
+  "ad_create":{
+    "title": "Title",
+    "age": "agieren",
+    "description": "descr",
+    "species": "Espessen",
+    "sex": "sex",
+    "button": "submitten",
+    "male": "male",
+    "female":"female"
   }
 }
