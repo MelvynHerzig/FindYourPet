@@ -4,7 +4,7 @@
       <ProfileInfos :member="member" />
     </div>
     <div class="bgProfile">
-      <ProfileAdverts :member="adverts" />
+      <ProfileAdverts :adverts="adverts" />
     </div>
   </section>
 </template>
