@@ -5,7 +5,7 @@ import Register from '../views/Register.vue'
 import Advert from '../views/Advert.vue'
 import AdvertCreation from '../views/AdvertCreation.vue';
 import Profile from "../views/Profile";
-import {memberIsConnected} from "../logic/apicalls";
+import {memberIsConnected} from "@/logic/apicalls";
 
 const routes = [
   {

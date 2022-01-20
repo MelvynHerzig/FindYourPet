@@ -152,7 +152,7 @@ button {
 button:hover {
   cursor:pointer;
   background-color: var(--select-color);
-} 
+}
 
 @media screen and (max-width: 1000px) {
   .advert {

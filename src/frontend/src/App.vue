@@ -4,9 +4,9 @@
         integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
         crossorigin="anonymous">
   <div class="main-div">
-    <Header/>  
+    <Header />
     <router-view class="content"/>
-    <Footer/>
+    <Footer />
   </div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
   components: {
     Header,
     Footer,
-  }
+  },
 }
 </script>
 

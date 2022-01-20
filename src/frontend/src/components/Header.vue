@@ -5,17 +5,17 @@
     </a>
     <div class="link" id="links">
       <div class="nav">
-        <button @click="$router.push('/'); displayMenu()"> {{$t("header.home")}} </button>
-        <button @click="$router.push('/adverts');  displayMenu()"> {{$t("header.advert")}} </button>
+        <button @click="$router.push('/')"> {{$t("header.home")}} </button>
+        <button @click="$router.push('/adverts')"> {{$t("header.advert")}} </button>
       </div>
-      <div v-if="isConnected() === true" class="account">
-        <button @click="$router.push('/profile');  displayMenu()"> {{$t("header.profile")}} </button>
-        <button @click="$router.push('/adverts/create');  displayMenu()"> {{$t("header.advertCreation")}} </button>
-        <button @click="disconnectMember(); displayMenu()"> {{$t("header.disconnect")}} </button>
+      <div v-if="isConnected" class="account">
+        <button @click="$router.push('/profile')"> {{$t("header.profile")}} </button>
+        <button @click="$router.push('/adverts/create')"> {{$t("header.advertCreation")}} </button>
+        <button @click="disconnectMember();"> {{$t("header.disconnect")}} </button>
       </div>
       <div v-else class="account">
-        <button @click="$router.push('/login');  displayMenu()"> {{$t("header.login")}} </button>
-        <button @click="$router.push('/register');  displayMenu()"> {{$t("header.register")}} </button>
+        <button @click="$router.push('/login')"> {{$t("header.login")}} </button>
+        <button @click="$router.push('/register')"> {{$t("header.register")}} </button>
       </div>
     </div>
     <div>
@@ -34,12 +34,14 @@
 </template>
 
 <script>
-import { memberIsConnected, destroyMemberToken } from '../logic/apicalls';
+import {destroyMemberToken} from '@/logic/apicalls';
 
 export default {
   name: 'locale-changer',
   data () {
-    return { langs: ['fr', 'en', 'it', 'de'] }
+    return {
+      langs: ['fr', 'en', 'it', 'de'],
+    }
   },
   methods: {
     displayMenu() {
@@ -51,40 +53,21 @@ export default {
         link.style.display = "flex";
       }
     },
-    isConnected() {
-      return memberIsConnected();
-    },
     disconnectMember() {
       destroyMemberToken();
-    }
+      this.$store.commit('disconnect');
+      this.$router.push('/login');
+    },
   },
-  mounted() {
-    this.isConnected();
-  }
+  computed: {
+    isConnected() {
+      return this.$store.getters.isConnected;
+    },
+  },
 }
 </script>
 
 <style scoped>
-
-button {
-  height: 100%;
-  padding: 20px;
-  font-size: 24px;
-  border: none;
-  background-color: var(--header-color);
-  transition: all .3s;
-  color: white;
-}
-
-.account button {
-  color: darkgrey;
-  font-size: 18px;
-}
-
-button:hover {
-  cursor:pointer;
-  background-color: var(--header-selection-color);
-}
 
 .header {
   overflow: hidden;
@@ -102,7 +85,7 @@ button:hover {
 }
 
 .link {
-  display: none;
+  display: flex;
   flex-direction: row;
 }
 
@@ -132,12 +115,17 @@ button:hover {
   flex-direction: row;
 }
 
+.account button {
+  color: darkgrey;
+  font-size: 18px;
+}
+
 .locale {
   background-color: var(--header-color);
   display: block;
   position: absolute;
   right: 5px;
-  top: 40px;
+  top: 20px;
 }
 
 .locale select {
@@ -149,15 +137,25 @@ button:hover {
 }
 
 .hamburger-icon {
-  color: white;
-  background: var(--header-color);
-  display: block;
-  position: absolute;
-  right: 30px;
-  top: 10px;
+  display: none;
 }
 
-@media screen and (max-width: 600px) {
+button {
+  height: 100%;
+  padding: 20px;
+  font-size: 24px;
+  border: none;
+  background-color: var(--header-color);
+  transition: all .3s;
+  color: white;
+}
+
+button:hover {
+  cursor:pointer;
+  background-color: var(--header-selection-color);
+}
+
+@media screen and (max-width: 1100px) {
   .link {
     display: none;
     flex-direction: column;
@@ -171,6 +169,23 @@ button:hover {
   .account {
     display: flex;
     flex-direction: column;
+  }
+
+  .locale {
+    background-color: var(--header-color);
+    display: block;
+    position: absolute;
+    right: 5px;
+    top: 40px;
+  }
+
+  .hamburger-icon {
+    color: white;
+    background: var(--header-color);
+    display: block;
+    position: absolute;
+    right: 30px;
+    top: 10px;
   }
 }
 

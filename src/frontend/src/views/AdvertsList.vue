@@ -22,8 +22,8 @@
             class="input"
         />
         <select class="dropdown" v-model="selectedSpecies">
-          <option disabled hidden value="">{{$t("ad_create.species")}}</option>
-          <option v-for="specie in species" :key="specie.id" v-bind:value="specie.id">
+          <option class="options" disabled hidden value="">{{$t("ad_create.species")}}</option>
+          <option class="options" v-for="specie in species" :key="specie.id" v-bind:value="specie.id">
             {{ specie.name }}
           </option>
         </select>
@@ -231,7 +231,6 @@ button:hover {
 .dropdown {
   justify-content: center;
   margin-bottom: 20px;
-  font-family: Georgia, 'Times New Roman', Times, serif;
   border-radius: 5px;
   width: 100%;
   height: 42px;
@@ -240,6 +239,10 @@ button:hover {
 .dropdown:focus,
 .dropdown:hover {
   border: 1px solid var(--footer-color);
+}
+
+.options {
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 .page {
