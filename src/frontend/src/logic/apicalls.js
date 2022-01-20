@@ -96,27 +96,22 @@ export async function deleteAdvert(id) {
 }
 
 export async function getPageAdverts(pageNum, lang) {
-    // TODO: rajouter /:lang une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/page/${pageNum}`);
 }
 
 export async function getPageFilteredAdverts(pageNum, filters) {
-    // TODO: rajouter /:lang une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/filters/page/${pageNum}`, filters);
 }
 
 export async function getRecentAdverts(lang) {
-    // TODO: rajouter /:lang une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/recent`);
 }
 
 export async function getAdvertById(id, lang) {
-    // TODO: rajouter /:lang une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/id/${id}`);
 }
 
 export async function getAdvertsByMember(memberId, lang) {
-    // TODO: rajouter /:lang une fois PR de refactor backend faite
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/members/${memberId}`);
 }
 /***************** Authentification ********************/

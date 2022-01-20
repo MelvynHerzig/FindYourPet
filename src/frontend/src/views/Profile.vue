@@ -4,13 +4,13 @@
       <ProfileInfos :member="member" />
     </div>
     <div class="bgProfile">
-      <ProfileAdverts :member="member.adverts" />
+      <ProfileAdverts :member="adverts" />
     </div>
   </section>
 </template>
 
 <script>
-import {getMemberByEmail, getMemberConnectedEmail } from "@/logic/apicalls";
+import {getMemberByEmail, getMemberConnectedEmail, getAdvertsByMember} from "@/logic/apicalls";
 import ProfileInfos from "@/components/profile/ProfileInfos";
 import ProfileAdverts from "@/components/profile/ProfileAdverts";
 
@@ -21,6 +21,7 @@ export default {
     return {
       error: null,
       member: null,
+      adverts: []
     }
   },
   methods: {
