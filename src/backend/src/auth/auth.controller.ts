@@ -29,9 +29,9 @@ export class AuthController {
       );
     }
     const passwordValidation =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
-    if (passwordValidation.test(createMemberDto.password)) {
+    if (!passwordValidation.test(createMemberDto.password)) {
       throw new HttpException(ERROR_INVALID_PASSWORD, HttpStatus.BAD_REQUEST);
     }
     const result: RegistrationsStatus = await this.authService.register(
