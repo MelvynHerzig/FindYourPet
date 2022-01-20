@@ -5,7 +5,7 @@
       <div class="info">
         <div class="short">
           <img src="..\..\public\images\kitty.jpg" alt="image">
-          <h2>{{species.name}}</h2>
+          <h2>{{advert.species.name}}</h2>  
           <h3>{{$t("ad_create." + advert.petGender)}}, {{advert.petAge}} {{$t("ad.years")}}</h3>
         </div>
         <div class="description">
@@ -14,43 +14,67 @@
           </p>
         </div>
       </div>
-      <div class="contact">
+      <div v-if="isConnected">
       <h2> {{$t("ad.contact")}} </h2>
+        <div class = "contact">
+          <h3> {{advert.member.firstname}} {{advert.member.name}} </h3>
+          <h3> {{advert.member.email}}  </h3>
+          <h3> {{advert.member.phone}} </h3>
+        </div>
+      </div>
+      <div class="modification" v-if="isOwner">
+        <p>
+          <button @click="$router.push(`/adverts/${advert.id}/modify`)">Modify</button> 
+          <button @click="deleteButtonClicked">Delete</button>
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getAdvertById, getSpeciesByIdFromLang } from "../logic/apicalls";
+import {getAdvertById, getMemberConnectedId, memberIsConnected, deleteAdvert} from "../logic/apicalls";
 
 export default {
   name: "Advert",
   beforeMount() {
-    // TODO: gérer le cas du membre vide
-    getAdvertById(this.$route.params.id).then(result => {
+    getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result => {
       this.advert = result.data;
     });
     this.getSpecies();
   },
   watch:{
     '$i18n.locale': function() {
-      this.getSpecies();
+      getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result => {
+      this.advert = result.data;
+    });
+    }
+  },
+  methods : {
+    deleteButtonClicked(){
+      if(this.isOwner){
+        deleteAdvert(this.advert.id)
+        this.$router.push('/profile')
+      } 
+    }
+  },
+  computed:{
+    isConnected:  function(){
+     return memberIsConnected();
+    },
+    isOwner:  function(){
+      if (getMemberConnectedId() != null){
+       return this.advert.member.id === getMemberConnectedId();
+      }
+      return false
     }
   },
   data: function () {
     return {
-      advert: {},
-      species: {}
+      advert: {}
     }
   },
-  methods: {
-    getSpecies(){
-      getSpeciesByIdFromLang(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
-          this.species = result.data;
-      });
-    }
-  },
+
 }
 </script>
 
@@ -106,7 +130,7 @@ button{
   margin: 10px;
 }
 
-.description {
+.description, .contact{
   flex: 3;
   margin: 10px;
   padding: 10px;
@@ -124,4 +148,21 @@ img{
   border-radius: 50px;
 
 }
+
+button {
+  display: inline-block;
+  padding: 20px;
+  margin: 5px;
+  letter-spacing: .15rem;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  border-color:var(--header-color);
+}
+
+button:hover {
+  cursor:pointer;
+  background-color: var(--select-color);
+} 
 </style>

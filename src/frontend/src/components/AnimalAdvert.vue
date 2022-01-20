@@ -13,12 +13,18 @@
         {{ advert.description }}
       </p>
     </div>
+    <div class="modification" v-if="isOwner">
+      <p>
+        <button @click="modifyButtonClicked">Modify</button> 
+        <button @click="deleteButtonClicked">Delete</button>
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
 
-import { getSpeciesByIdFromLang } from '../logic/apicalls'
+import { deleteAdvert, getMemberConnectedId, getSpeciesByIdFromLang } from '../logic/apicalls'
 
 export default {
   name: "AnimalAdvert",
@@ -40,11 +46,30 @@ export default {
   },
   methods: {
     getSpecies(){
-      getSpeciesByIdFromLang(this.advert.speciesId, this.$root.$i18n.locale).then(result => {
+      getSpeciesByIdFromLang(this.advert.species.id, this.$root.$i18n.locale).then(result => {
           this.specie = result.data;
       });
+    },
+    modifyButtonClicked(event){
+      event.stopPropagation();
+      this.$router.push(`/adverts/${this.advert.id}/modify`)
+    },
+    deleteButtonClicked(event){
+      event.stopPropagation();
+      if(this.isOwner){
+        deleteAdvert(this.advert.id);
+        window.location.reload();
+      } 
     }
   },
+  computed: {
+    isOwner:  function(){
+      if (getMemberConnectedId() != null){
+       return this.advert.member.id === getMemberConnectedId();
+      }
+      return false;
+    }
+  }
 }
 </script>
 
@@ -107,7 +132,29 @@ img {
   overflow: auto;
 }
 
-@media screen and (max-width: 600px) {
+.modification {
+  display: flex;
+  align-self: center;
+}
+
+button {
+  display: inline-block;
+  padding: 20px;
+  margin: 5px;
+  letter-spacing: .15rem;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  border-color:var(--header-color);
+}
+
+button:hover {
+  cursor:pointer;
+  background-color: var(--select-color);
+} 
+
+@media screen and (max-width: 1000px) {
   .advert {
     width: 82%;
     height: 100%;
@@ -133,6 +180,7 @@ img {
     align-items: center;
     padding-left: 20px;
   }
+  
 }
 
 </style>
