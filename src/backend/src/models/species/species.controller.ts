@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -40,25 +42,37 @@ export class SpeciesController {
 
   @Get()
   async findAll(): Promise<SpeciesDto[]> {
-    return (await this.speciesService.findAllSpecies()).map((sp) =>
-      ToSpeciesDto(sp),
-    );
+    try {
+      return (await this.speciesService.findAllSpecies()).map((sp) =>
+        ToSpeciesDto(sp),
+      );
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get(':lang')
   async findAllTranslated(
     @Param('lang') lang: string,
   ): Promise<TranslatedSpeciesDto[]> {
-    return (await this.speciesService.findAllSpecies()).map((sp) =>
-      ToTranslatedSpeciesDto(sp, lang),
-    );
+    try {
+      return (await this.speciesService.findAllSpecies()).map((sp) =>
+        ToTranslatedSpeciesDto(sp, lang),
+      );
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get('id/:id')
   async findOne(@Param('id') id: string): Promise<SpeciesDto> {
-    return ToSpeciesDto(
-      await this.speciesService.findOneSpeciesById(parseInt(id)),
-    );
+    try {
+      return ToSpeciesDto(
+        await this.speciesService.findOneSpeciesById(parseInt(id)),
+      );
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get(':lang/id/:id')
@@ -66,10 +80,14 @@ export class SpeciesController {
     @Param('lang') lang: string,
     @Param('id') id: string,
   ): Promise<TranslatedSpeciesDto> {
-    return ToTranslatedSpeciesDto(
-      await this.speciesService.findOneSpeciesById(parseInt(id)),
-      lang,
-    );
+    try {
+      return ToTranslatedSpeciesDto(
+        await this.speciesService.findOneSpeciesById(parseInt(id)),
+        lang,
+      );
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
   }
 
   /******************* POST   ************************/
@@ -79,14 +97,18 @@ export class SpeciesController {
     @Body() species: CreateSpeciesDto,
     @Req() req,
   ): Promise<SpeciesDto> {
-    const ability = this.caslAbilityFactory.createForMember(req.user);
+    try {
+      const ability = this.caslAbilityFactory.createForMember(req.user);
 
-    if (ability.can(Action.Create, Species)) {
-      return ToSpeciesDto(
-        await this.speciesService.createSpecies(
-          ToSpecies({ ...species, id: undefined }),
-        ),
-      );
+      if (ability.can(Action.Create, Species)) {
+        return ToSpeciesDto(
+          await this.speciesService.createSpecies(
+            ToSpecies({ ...species, id: undefined }),
+          ),
+        );
+      }
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
     throw new UnauthorizedException();
   }
@@ -95,10 +117,14 @@ export class SpeciesController {
   @Put()
   @UseGuards(AuthGuard('jwt'))
   update(@Body() species: UpdateSpeciesDto, @Req() req): Promise<UpdateResult> {
-    const ability = this.caslAbilityFactory.createForMember(req.user);
+    try {
+      const ability = this.caslAbilityFactory.createForMember(req.user);
 
-    if (ability.can(Action.Update, Species)) {
-      return this.speciesService.updateSpecies(ToSpecies(species));
+      if (ability.can(Action.Update, Species)) {
+        return this.speciesService.updateSpecies(ToSpecies(species));
+      }
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
     throw new UnauthorizedException();
   }
@@ -107,9 +133,13 @@ export class SpeciesController {
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
   deleteOne(@Param('id') id: string, @Req() req): Promise<DeleteResult> {
-    const ability = this.caslAbilityFactory.createForMember(req.user);
-    if (ability.can(Action.Delete, Species)) {
-      return this.speciesService.deleteSpecies(parseInt(id));
+    try {
+      const ability = this.caslAbilityFactory.createForMember(req.user);
+      if (ability.can(Action.Delete, Species)) {
+        return this.speciesService.deleteSpecies(parseInt(id));
+      }
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
     throw new UnauthorizedException();
   }

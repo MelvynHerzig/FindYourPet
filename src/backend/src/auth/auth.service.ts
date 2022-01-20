@@ -29,29 +29,7 @@ export class AuthService {
       message: 'member registered',
     };
     try {
-      // Getting geolocation
-      const addr = `${member.street} ${member.NPA} ${member.city}`;
-
-      const response = await axios
-        .get(
-          `https://api3.geo.admin.ch/rest/services/api/SearchServer?searchText=${addr}&type=locations`,
-        )
-        .then((resp) => {
-          return resp.data.results;
-        });
-
-      if (response.length === 0) {
-        throw new HttpException(
-          'No matching result for street NPA city.',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-
-      // Preparing location
-      member.location = {
-        type: 'Point',
-        coordinates: [response[0].attrs.lon, response[0].attrs.lat],
-      };
+      await this.membersService.setMemberLocation(member);
 
       await this.membersService.create(member);
     } catch (err) {

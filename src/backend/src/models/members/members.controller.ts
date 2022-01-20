@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Put,
   Req,
@@ -36,11 +38,14 @@ export class MembersController {
     @Param('email') email: string,
     @Req() req,
   ): Promise<MemberDto> {
-    const ability = this.caslAbilityFactory.createForMember(req.user);
-    const member = await this.memberService.findOne({ email: email });
+    try {
+      const ability = this.caslAbilityFactory.createForMember(req.user);
+      const member = await this.memberService.findOne({ email: email });
 
-    if (ability.can(Action.Read, member)) return ToMemberDto(member);
-
+      if (ability.can(Action.Read, member)) return ToMemberDto(member);
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
     throw new UnauthorizedException();
   }
 
@@ -51,11 +56,15 @@ export class MembersController {
     @Body() updatedMember: UpdateMemberDto,
     @Req() req,
   ): Promise<UpdateResult> {
-    const ability = this.caslAbilityFactory.createForMember(req.user);
-    const member = await this.memberService.findOne({ id: updatedMember.id });
+    try {
+      const ability = this.caslAbilityFactory.createForMember(req.user);
+      const member = await this.memberService.findOne({ id: updatedMember.id });
 
-    if (ability.can(Action.Update, member)) {
-      return this.memberService.update(ToMember(member));
+      if (ability.can(Action.Update, member)) {
+        return this.memberService.update(ToMember(member));
+      }
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
     throw new UnauthorizedException();
   }
@@ -63,11 +72,15 @@ export class MembersController {
   @Delete(':uuid')
   @UseGuards(AuthGuard('jwt'))
   async delete(@Param('uuid') uuid: string, @Req() req): Promise<DeleteResult> {
-    const ability = this.caslAbilityFactory.createForMember(req.user);
-    const member = await this.memberService.findOne({ id: uuid });
+    try {
+      const ability = this.caslAbilityFactory.createForMember(req.user);
+      const member = await this.memberService.findOne({ id: uuid });
 
-    if (ability.can(Action.Delete, member)) {
-      return this.memberService.delete(uuid);
+      if (ability.can(Action.Delete, member)) {
+        return this.memberService.delete(uuid);
+      }
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
     throw new UnauthorizedException();
   }

@@ -10,6 +10,7 @@ import {
 
 import { Point } from 'geojson';
 import { LoginMemberDto } from './dto/login.members.dto';
+import axios from 'axios';
 
 // Need to use bcrypt like that, otherwise not working...
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -34,7 +35,8 @@ export class MembersService {
   }
 
   async findLocationByPayload({ email }: any): Promise<Point> {
-    return (await this.findByPayload(email)).location;
+    const member = await this.findByPayload(email);
+    return member === undefined ? undefined : member.location;
   }
 
   async findByLogin({ email, password }: LoginMemberDto): Promise<Member> {
@@ -78,10 +80,40 @@ export class MembersService {
     member.isAdmin = realMember.isAdmin;
     member.location = realMember.location;
 
+    if (member.street != realMember.street) {
+      await this.setMemberLocation(member);
+    }
+
     return this.memberRepository.update(member.id, member);
   }
 
   async delete(memberId: string): Promise<DeleteResult> {
     return this.memberRepository.delete(memberId);
+  }
+
+  async setMemberLocation(member: Member) {
+    // Getting geolocation
+    const addr = `${member.street} ${member.NPA} ${member.city}`;
+
+    const response = await axios
+      .get(`https://api3.geo.admin.ch/rest/services/api/SearchServer`, {
+        params: { searchText: addr, type: 'locations' },
+      })
+      .then((resp) => {
+        return resp.data.results;
+      });
+
+    if (response.length === 0) {
+      throw new HttpException(
+        'No matching result for street NPA city.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // Preparing location
+    member.location = {
+      type: 'Point',
+      coordinates: [response[0].attrs.lon, response[0].attrs.lat],
+    };
   }
 }

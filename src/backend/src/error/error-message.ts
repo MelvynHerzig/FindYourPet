@@ -4,6 +4,7 @@ export const ERROR_LANGUAGE = 'error language';
 /** Credentials **/
 export const ERROR_PASSWORD_CONFIRMATION = 'error password not match';
 export const ERROR_INVALID_CREDENTIALS = 'error invalid credentials';
+export const ERROR_INVALID_PASSWORD = 'error invalid password';
 
 /** Users **/
 export const ERROR_USER_ALREADY_EXIST = 'error user already exist';
@@ -11,6 +12,9 @@ export const ERROR_USER_NOT_FOUND = 'error user not found';
 
 /** Token **/
 export const ERROR_INVALID_TOKEN = 'error invalid token';
+
+/** Species **/
+export const ERROR_INVALID_SPECIES = 'error invalid species';
 
 /** Filters **/
 export const FILTER_INVALID_SPECIES = 'Unknown species id';
