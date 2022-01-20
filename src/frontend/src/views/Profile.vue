@@ -27,6 +27,14 @@ export default {
     getActualMember() {
       getMemberByEmail(getMemberConnectedEmail()).then(result => {
         this.member = result.data;
+        this.getMembersAdverts() 
+      }).catch(error => {
+        this.error = error;
+      });
+    },
+    getMembersAdverts() {
+      getAdvertsByMember(this.member.id,this.$root.$i18n.locale).then(result => {
+        this.adverts = result.data;
       }).catch(error => {
         this.error = error;
       });

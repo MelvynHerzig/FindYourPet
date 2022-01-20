@@ -50,13 +50,30 @@
 </template>
 
 <script>
-import {addFile, createAdvert, getAllSpeciesFromLang} from "@/logic/apicalls";
-import { manageErrors } from "@/logic/errors";
+import {createAdvert, updateAdvert, getAdvertById, getAllSpeciesFromLang, getMemberConnectedId  } from "../logic/apicalls";
+import { manageErrors } from "../logic/errors";
+
 import ToastError from "../components/toasts/ToastError";
 
 export default {
   name: "AdvertCreation",
   components: {ToastError},
+  beforeMount(){
+    if(this.$route.params.id != null){
+      getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result =>{
+          if(result.data.member.id == getMemberConnectedId()){
+          this.id = result.data.id; 
+          this.selectedSpecies = result.data.species.id
+          this.selectedSex = result.data.petGender
+          this.age = result.data.petAge
+          this.description = result.data.description
+          this.title = result.data.title;
+        } else{
+          this.$router.push("/profile")
+        }
+      });
+    }
+  },
   mounted() {
     this.getSpecies();
   },
@@ -67,6 +84,7 @@ export default {
   },
   data() {
     return {
+      id: null,
       error: null,
       species: [],
       selectedSpecies: "",
@@ -89,20 +107,36 @@ export default {
       this.url= URL.createObjectURL(this.image)
     },
     submit() {
+      if(this.id == null){
       createAdvert({
         title: this.title,
         description: this.description,
         petAge: this.age,
         petGender: this.selectedSex,
-        speciesId: this.selectedSpecies,
-      })
-      .then((result) => {
-        addFile(result.data.id); // TODO: ajouter image
-        this.$router.push('/profile')
-      })
-      .catch(error => {
-        this.error = manageErrors(error.message);
-      });
+        speciesId: this.selectedSpecies
+      }) .then(() => {
+            this.$router.push('/profile')
+          })
+          .catch(error => {
+            this.error = manageErrors(error.message);
+          });
+      }
+      else{ 
+        updateAdvert({
+        id: this.id,
+        title: this.title,
+        description: this.description,
+        petAge: this.age,
+        //memberId: getMemberConnectedId(), TODO
+        petGender: this.selectedSex,
+        speciesId: this.selectedSpecies
+      }) .then(() => {
+            this.$router.push('/profile')
+          })
+          .catch(error => {
+            this.error = manageErrors(error.message);
+          });
+      }
     },
   }
 }

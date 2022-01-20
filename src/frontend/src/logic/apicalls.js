@@ -56,23 +56,9 @@ export async function getSpeciesByIdFromLang(id, lang) {
 
 /***************** Adverts ********************/
 
-export async function getPageAdverts(pageNum, lang) {
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/page/${pageNum}`);
-}
-
-export async function getAdvertById(id, lang) {
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/id/${id}`);
-}
 
 export async function getMemberAdverts(id, lang) {
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/members/${getMemberConnectedId()}`);
-}
-
-export async function getRecentAdverts(lang) {
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/recent`);
-}
-export async function getPageFilteredAdverts(pageNum, lang, filters) {
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/filters/page/${pageNum}`, filters);
 }
 
 export async function createAdvert(advertInformations) {
@@ -95,16 +81,44 @@ export async function updateAdvert(advertInformations) {
         });
 }
 
-export async function deleteAdvert(idAdvert) {
-    return axios.delete(`${process.env.VUE_APP_ROOT_API}/adverts/${idAdvert}`)
-        .then(result => {
-            console.log(result.data);
-        })
-        .catch(error => {
-            this.error = error;
-        });
+export async function deleteAdvert(id) {
+    if(confirm('are you sure?')){
+        return axios.delete(`${process.env.VUE_APP_ROOT_API}/adverts/${id}`)
+            .then(result => {
+                console.log(result.data);
+            })
+            .catch(error => {
+                this.error = error;
+            });
+    }else{
+        return null;
+    }
 }
 
+export async function getPageAdverts(pageNum, lang) {
+    // TODO: rajouter /:lang une fois PR de refactor backend faite
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/page/${pageNum}`);
+}
+
+export async function getPageFilteredAdverts(pageNum, filters) {
+    // TODO: rajouter /:lang une fois PR de refactor backend faite
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/filters/page/${pageNum}`, filters);
+}
+
+export async function getRecentAdverts(lang) {
+    // TODO: rajouter /:lang une fois PR de refactor backend faite
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/recent`);
+}
+
+export async function getAdvertById(id, lang) {
+    // TODO: rajouter /:lang une fois PR de refactor backend faite
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/id/${id}`);
+}
+
+export async function getAdvertsByMember(memberId, lang) {
+    // TODO: rajouter /:lang une fois PR de refactor backend faite
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/members/${memberId}`);
+}
 /***************** Authentification ********************/
 
 export async function register(userInformations) {
