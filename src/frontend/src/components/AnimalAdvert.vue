@@ -132,6 +132,28 @@ img {
   overflow: auto;
 }
 
+.modification {
+  display: flex;
+  align-self: center;
+}
+
+button {
+  display: inline-block;
+  padding: 20px;
+  margin: 5px;
+  letter-spacing: .15rem;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  border-color:var(--header-color);
+}
+
+button:hover {
+  cursor:pointer;
+  background-color: var(--select-color);
+}
+
 @media screen and (max-width: 1000px) {
   .advert {
     width: 82%;
