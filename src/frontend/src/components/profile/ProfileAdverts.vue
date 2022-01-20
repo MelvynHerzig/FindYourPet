@@ -18,7 +18,7 @@ export default {
   name: "ProfileAdverts",
   components: {AnimalAdvert},
   props: {
-    adverts: null
+    adverts: []
   }
 }
 </script>
