@@ -33,9 +33,9 @@ export class AuthService {
       const addr = `${member.street} ${member.NPA} ${member.city}`;
 
       const response = await axios
-        .get(
-          `https://api3.geo.admin.ch/rest/services/api/SearchServer?searchText=${addr}&type=locations`,
-        )
+        .get(`https://api3.geo.admin.ch/rest/services/api/SearchServer`, {
+          params: { searchText: addr, type: 'locations' },
+        })
         .then((resp) => {
           return resp.data.results;
         });

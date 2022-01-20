@@ -160,10 +160,11 @@ export class AdvertsService {
       const longitude1 = member.location.coordinates[1];
       const latitude2 = adMember.location.coordinates[0];
       const longitude2 = adMember.location.coordinates[1];
-      return Math.sqrt(
+      const distance = Math.sqrt(
         Math.pow(latitude1 - latitude2, 2) +
           Math.pow(longitude1 - longitude2, 2),
       );
+      return distance < 1 ? 1 : distance;
     }
     return undefined;
   }

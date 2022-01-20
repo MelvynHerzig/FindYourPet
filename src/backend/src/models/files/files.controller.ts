@@ -1,6 +1,8 @@
 import {
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Req,
@@ -39,16 +41,23 @@ export class FilesController {
     @UploadedFile() file: Express.Multer.File,
     @Req() req,
   ) {
-    const ability = this.caslAbilityFactory.createForMember(req.user);
-    if (
-      ability.can(Action.Update, await this.advertService.findOneAdvertById(id))
-    ) {
-      return await this.fileService.updateImage(id, {
-        id: undefined,
-        filename: file.filename,
-        mimetype: file.mimetype,
-        path: file.path,
-      });
+    try {
+      const ability = this.caslAbilityFactory.createForMember(req.user);
+      if (
+        ability.can(
+          Action.Update,
+          await this.advertService.findOneAdvertById(id),
+        )
+      ) {
+        return await this.fileService.updateImage(id, {
+          id: undefined,
+          filename: file.filename,
+          mimetype: file.mimetype,
+          path: file.path,
+        });
+      }
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
 
     throw new UnauthorizedException();
@@ -59,14 +68,18 @@ export class FilesController {
     @Param('id') id: number,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const file = await this.fileService.getImage(id);
+    try {
+      const file = await this.fileService.getImage(id);
 
-    const stream = createReadStream(join(process.cwd(), file.path));
+      const stream = createReadStream(join(process.cwd(), file.path));
 
-    response.set({
-      'Content-Disposition': `inline; filename="${file.filename}"`,
-      'Content-Type': file.mimetype,
-    });
-    return new StreamableFile(stream);
+      response.set({
+        'Content-Disposition': `inline; filename="${file.filename}"`,
+        'Content-Type': file.mimetype,
+      });
+      return new StreamableFile(stream);
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
   }
 }

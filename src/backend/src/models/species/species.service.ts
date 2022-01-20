@@ -1,8 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Species } from './entities/species.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FILTER_INVALID_SPECIES } from '../../error/error-message';
+import {
+  ERROR_INVALID_SPECIES,
+  FILTER_INVALID_SPECIES,
+} from '../../error/error-message';
 
 /**
  * Service to query species
@@ -23,7 +26,12 @@ export class SpeciesService {
   }
 
   async findOneSpeciesById(id: number): Promise<Species> {
-    return this.speciesRepository.findOne(id);
+    const species = this.speciesRepository.findOne(id);
+
+    if (!species) {
+      throw new HttpException(ERROR_INVALID_SPECIES, HttpStatus.BAD_REQUEST);
+    }
+    return species;
   }
 
   async updateSpecies(species: Species): Promise<UpdateResult> {
@@ -31,7 +39,11 @@ export class SpeciesService {
   }
 
   async deleteSpecies(id: number): Promise<DeleteResult> {
-    return this.speciesRepository.delete(id);
+    try {
+      return this.speciesRepository.delete(id);
+    } catch (e) {
+      throw new HttpException(ERROR_INVALID_SPECIES, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async checkSpecies(id: number): Promise<boolean> {

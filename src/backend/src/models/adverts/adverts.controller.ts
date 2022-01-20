@@ -25,6 +25,7 @@ import { AdvertDto } from './dto/advert.dto';
 import { UpdateAdvertDto } from './dto/update.adverts.dto';
 import { CreateAdvertDto } from './dto/create.adverts.dto';
 import { Advert } from './entities/adverts.entity';
+import { ERROR_PASSWORD_CONFIRMATION } from '../../error/error-message';
 
 /**
  * Advert controller
@@ -90,12 +91,16 @@ export class AdvertsController {
     @Param('lang') lang: string,
     @Request() req,
   ): Promise<AdvertDto[]> {
-    const email = await this.advertService.verifyJwt(req);
-    return this.advertService.ToAdvertsDto(
-      await this.advertService.findTop10RecentAdvert(),
-      lang,
-      email,
-    );
+    try {
+      const email = await this.advertService.verifyJwt(req);
+      return this.advertService.ToAdvertsDto(
+        await this.advertService.findTop10RecentAdvert(),
+        lang,
+        email,
+      );
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get(':lang/filters/page/:pageNum')
@@ -130,15 +135,19 @@ export class AdvertsController {
     @Body() advert: CreateAdvertDto,
     @Req() req,
   ): Promise<AdvertDto> {
-    const ability = this.caslAbilityFactory.createForMember(req.user);
-    if (ability.can(Action.Create, Advert)) {
-      return this.advertService.ToAdvertDto(
-        await this.advertService.createAdvert(
-          this.advertService.ToAdvert(advert),
-        ),
-        undefined,
-        req.user.email,
-      );
+    try {
+      const ability = this.caslAbilityFactory.createForMember(req.user);
+      if (ability.can(Action.Create, Advert)) {
+        return this.advertService.ToAdvertDto(
+          await this.advertService.createAdvert(
+            this.advertService.ToAdvert(advert),
+          ),
+          undefined,
+          req.user.email,
+        );
+      }
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
     throw new UnauthorizedException();
   }
@@ -150,13 +159,19 @@ export class AdvertsController {
     @Body() updatedAdvert: UpdateAdvertDto,
     @Req() req,
   ): Promise<UpdateResult> {
-    const ability = this.caslAbilityFactory.createForMember(req.user);
-    const advert = await this.advertService.findOneAdvertById(updatedAdvert.id);
-    if (ability.can(Action.Update, advert)) {
-      updatedAdvert.memberId = advert.memberId;
-      return await this.advertService.updateAdvert(
-        this.advertService.ToAdvert(updatedAdvert),
+    try {
+      const ability = this.caslAbilityFactory.createForMember(req.user);
+      const advert = await this.advertService.findOneAdvertById(
+        updatedAdvert.id,
       );
+      if (ability.can(Action.Update, advert)) {
+        updatedAdvert.memberId = advert.memberId;
+        return await this.advertService.updateAdvert(
+          this.advertService.ToAdvert(updatedAdvert),
+        );
+      }
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
     throw new UnauthorizedException();
   }
@@ -165,13 +180,19 @@ export class AdvertsController {
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
   async deleteOne(@Param('id') id: number, @Req() req): Promise<DeleteResult> {
-    console.log(req.user);
-    const ability = this.caslAbilityFactory.createForMember(req.user);
+    try {
+      const ability = this.caslAbilityFactory.createForMember(req.user);
 
-    if (
-      ability.can(Action.Delete, await this.advertService.findOneAdvertById(id))
-    ) {
-      return this.advertService.deleteAdvert(id);
+      if (
+        ability.can(
+          Action.Delete,
+          await this.advertService.findOneAdvertById(id),
+        )
+      ) {
+        return this.advertService.deleteAdvert(id);
+      }
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
     throw new UnauthorizedException();
   }
