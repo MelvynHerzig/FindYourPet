@@ -4,7 +4,7 @@
     <FormInput
         @valueInput="sendEvent"
         :defaultValue="defaultValue"
-        :type="'number'"
+        :type="'text'"
         :name="name"
         :placeholder="placeholder"
         :required="true"
