@@ -9,7 +9,7 @@
       <p><i class="icon fas fa-map-marker-alt"></i>  {{ member.NPA }}</p>
       <p><i class="icon fas fa-map-marker-alt"></i>  {{ member.city }}</p>
       <p><i class="icon fas fa-phone"></i>  {{ member.phone }}</p>
-      <button type="submit">{{ $t('profile.modifyButton') }}</button>
+      <button @click="$router.push(`/members/${member.email}/modify`)">{{ $t('profile.modifyButton') }}</button>
     </div>
   </div>
 </template>

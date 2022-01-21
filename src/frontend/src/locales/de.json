@@ -79,6 +79,10 @@
     "advertsTitle": "Ihre Inserate",
     "modifyButton": "Ändern"
   },
+  "memberUpdate": {
+    "title": "Änderung des Profils",
+    "button": "Ändern Sie"
+  },
   "animal_ad" : {
     "age": "Alter"
   },

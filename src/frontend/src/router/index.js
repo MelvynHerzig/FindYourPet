@@ -1,11 +1,11 @@
-import { createRouter, createWebHistory} from 'vue-router'
-import LandingPage from '../views/LandingPage.vue'
-import Login from '../views/Login.vue'
-import Register from '../views/Register.vue'
-import Advert from '../views/Advert.vue'
-import AdvertCreation from '../views/AdvertCreation.vue';
+import { createRouter, createWebHistory} from 'vue-router';
+import { memberIsConnected } from "@/logic/apicalls";
+import LandingPage from '../views/LandingPage.vue';
+import Login from '../views/Login.vue';
+import ProfileEdit from '../views/ProfileEdit.vue';
+import Advert from '../views/Advert.vue';
+import AdvertEdit from '../views/AdvertEdit.vue';
 import Profile from "../views/Profile";
-import {memberIsConnected} from "@/logic/apicalls";
 
 const routes = [
   {
@@ -29,7 +29,7 @@ const routes = [
   {
     path: '/register',
     name: 'Register',
-    component: Register
+    component: ProfileEdit
   },
   {
     path: '/adverts/:id',
@@ -39,19 +39,25 @@ const routes = [
   {
     path: '/adverts/create',
     name: 'AdvertCreation',
-    component: AdvertCreation,
+    component: AdvertEdit,
     beforeEnter: requireAuth
   },
   {
     path: '/adverts/:id/modify',
     name: 'AdvertModification',
-    component: AdvertCreation,
+    component: AdvertEdit,
     beforeEnter: requireAuth
   },
   {
     path: '/profile',
     name: 'Profile',
     component: Profile,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/members/:email/modify',
+    name: 'MemberModification',
+    component: ProfileEdit,
     beforeEnter: requireAuth
   },
 ]

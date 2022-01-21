@@ -78,6 +78,10 @@
     "advertsTitle": "I vostri annunci",
     "modifyButton": "Modificare"
   },
+  "memberUpdate": {
+    "title": "Modifica del profilo",
+    "button": "Modificare"
+  },
   "animal_ad" : {
     "age": "età"
   },

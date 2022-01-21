@@ -1,27 +1,33 @@
 <template>
   <div class="bg">
     <div class="register">
-      <h1>{{ $t("register.title") }}</h1>
-      <form v-on:submit.prevent="register">
+      <h1 v-if="id">{{ $t("memberUpdate.title") }}</h1>
+      <h1 v-else>{{ $t("register.title") }}</h1>
+      <form v-on:submit.prevent="submit">
         <NameInput
             @valueInput="setFirstName"
             :name="'firstName'"
+            :default-value="firstName"
             :placeholder="$t('account.firstName')"
         />
         <NameInput
             @valueInput="setName"
             :name="'name'"
+            :default-value="name"
             :placeholder="$t('account.name')"
         />
         <EmailInput
             @valueInput="setEmail"
+            :default-value="email"
         />
         <PasswordInput
+            v-if="id"
             @valueInput="setPassword"
             :name="'password'"
             :placeholder="$t('account.password')"
         />
         <PasswordInput
+            v-if="id"
             @valueInput="setConfirmPassword"
             :name="'confirmPassword'"
             :placeholder="$t('account.confirmPassword')"
@@ -30,18 +36,21 @@
             @valueInput="setStreet"
             :name="'street'"
             :type="'text'"
+            :default-value="address.street"
             :placeholder="$t('account.street')"
         />
         <LocationInput
             @valueInput="setNPA"
             :name="'npa'"
             :type="'number'"
+            :default-value="address.npa"
             :placeholder="$t('account.npa')"
         />
         <LocationInput
             @valueInput="setCity"
             :name="'city'"
             :type="'text'"
+            :default-value="address.city"
             :placeholder="$t('account.city')"
         />
         <select v-if="addressToSelect" v-model="address" class="addressSelection">
@@ -55,9 +64,11 @@
         <PhoneInput
             @valueInput="setPhone"
             :name="'phone'"
+            :default-value="phone"
             :placeholder="$t('account.phone')"
         />
-        <button type="submit">{{ $t("register.button") }}</button>
+        <button v-if="id" type="submit">{{ $t("memberUpdate.button") }}</button>
+        <button v-else type="submit">{{ $t("register.button") }}</button>
       </form>
       <ToastError
           v-if="error"
@@ -75,17 +86,23 @@ import NameInput from "../components/inputs/NameInput";
 import LocationInput from "../components/inputs/LocationInput";
 import PhoneInput from "../components/inputs/PhoneInput";
 import ToastError from "@/components/toasts/ToastError";
-import { register, getSwissAdress } from "@/logic/apicalls";
+import {
+  register,
+  getSwissAdress,
+  getMemberByEmail,
+  getMemberConnectedEmail,
+  updateMemberByEmail, getMemberConnectedId
+} from "@/logic/apicalls";
 import { manageErrors } from "@/logic/errors";
 import { ERROR_INVALID_ADDRESS } from "../logic/error-message.ts";
 
 export default {
-  name: "Register",
+  name: "ProfileEdit",
   components: { NameInput, EmailInput, PasswordInput, LocationInput, PhoneInput, ToastError },
   data() {
     return {
       error: null,
-      invalidMessage: null,
+      id: null,
       firstName: "",
       name: "",
       email: "",
@@ -96,23 +113,63 @@ export default {
         npa: null,
         city: null,
       },
-      phone: 0,
+      phone: "",
       addressToSelect: null,
     }
   },
   methods: {
-    async register() {
-      this.invalidMessage = await register({
-        firstname: this.firstName,
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        confirmPassword: this.confirmPassword,
-        street: this.address.street,
-        NPA: this.address.npa,
-        city: this.address.city,
-        phone: this.phone,
-      });
+    async submit() {
+
+      /*const passwordValidation =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
+
+      const validPassword = passwordValidation.test(createMemberDto.password);
+      if (!validPassword) {
+        throw new HttpException(ERROR_INVALID_PASSWORD, HttpStatus.BAD_REQUEST);
+      }*/
+
+      if(this.id == null) {
+        register({
+          firstname: this.firstName,
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          confirmPassword: this.confirmPassword,
+          street: this.address.street,
+          NPA: this.address.npa,
+          city: this.address.city,
+          phone: this.phone,
+        }).then(result => {
+          if (result.data.success) {
+            this.$router.push('/login');
+          } else {
+            this.error = result.data.message;
+          }
+        })
+        .catch(error => {
+          this.error = manageErrors(error.message);
+        });
+      } else {
+        updateMemberByEmail({
+          id: getMemberConnectedId(),
+          firstname: this.firstName,
+          name: this.name,
+          email: this.email,
+          street: this.address.street,
+          NPA: this.address.npa,
+          city: this.address.city,
+          phone: this.phone,
+        }).then(result => {
+          if (result.data.success) {
+            this.$router.push('/profile');
+          } else {
+            this.error = result.data.message;
+          }
+        })
+        .catch(error => {
+          this.error = manageErrors(error.message);
+        });
+      }
     },
     async verifyAddress() {
       let foundAddress = await getSwissAdress(this.addressToString(this.address));
@@ -173,12 +230,28 @@ export default {
       let city = tokensbis.slice(1).toString().replace(',', ' ').replace('</b>', '').trim();
       return {
         street: tokens[0].trim(),
-        npa: npa,
+        npa: parseInt(npa),
         city: city,
       }
     },
     addressToString(address) {
       return `${address.street} ${address.npa} ${address.city}`;
+    }
+  },
+  beforeMount() {
+    if(this.$route.params.email != null) {
+      getMemberByEmail(this.$route.params.email).then(result =>  {
+        if(result.data.email === getMemberConnectedEmail()) {
+          this.id = result.data.id;
+          this.firstName = result.data.firstname;
+          this.name = result.data.name;
+          this.email = result.data.email;
+          this.address.street = result.data.street;
+          this.address.npa = result.data.NPA;
+          this.address.city = result.data.city;
+          this.phone = result.data.phone;
+        }
+      });
     }
   },
 }
