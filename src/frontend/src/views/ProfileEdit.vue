@@ -4,55 +4,87 @@
       <h1 v-if="id">{{ $t("memberUpdate.title") }}</h1>
       <h1 v-else>{{ $t("register.title") }}</h1>
       <form v-on:submit.prevent="submit">
-        <NameInput
-            @valueInput="setFirstName"
-            :name="'firstName'"
-            :default-value="firstName"
-            :placeholder="$t('account.firstName')"
-        />
-        <NameInput
-            @valueInput="setName"
-            :name="'name'"
-            :default-value="name"
-            :placeholder="$t('account.name')"
-        />
-        <EmailInput
-            @valueInput="setEmail"
-            :default-value="email"
-        />
+        <div class="field">
+          <i class="icon fas fa-user"></i>
+          <input
+              v-model="firstName"
+              type="text"
+              name="firstName"
+              :placeholder="$t('account.firstName')"
+              required="required"
+              class="input"
+          />
+        </div>
+        <div class="field">
+          <i class="icon fas fa-user"></i>
+          <input
+              v-model="name"
+              type="text"
+              name="name"
+              :placeholder="$t('account.name')"
+              required="required"
+              class="input"
+          />
+        </div>
+        <div class="field">
+          <i class="icon fas fa-envelope"></i>
+          <input
+              v-model="email"
+              type="email"
+              name="email"
+              :placeholder="$t('account.email')"
+              required="required"
+              class="input"
+          />
+        </div>
         <PasswordInput
-            v-if="id"
+            v-if="!id"
             @valueInput="setPassword"
             :name="'password'"
             :placeholder="$t('account.password')"
         />
         <PasswordInput
-            v-if="id"
+            v-if="!id"
             @valueInput="setConfirmPassword"
             :name="'confirmPassword'"
             :placeholder="$t('account.confirmPassword')"
         />
-        <LocationInput
-            @valueInput="setStreet"
-            :name="'street'"
-            :type="'text'"
-            :default-value="address.street"
-            :placeholder="$t('account.street')"
-        />
-        <LocationInput
-            @valueInput="setNPA"
-            :name="'npa'"
-            :type="'number'"
-            :default-value="address.npa"
-            :placeholder="$t('account.npa')"
-        />
-        <LocationInput
-            @valueInput="setCity"
-            :name="'city'"
-            :type="'text'"
-            :default-value="address.city"
-            :placeholder="$t('account.city')"
-        />
+        <div class="field">
+          <i class="icon fas fa-map-marker-alt"></i>
+          <input
+              @valueInput="checkLocationInfosIfFilled"
+              v-model="address.street"
+              type="text"
+              name="street"
+              :placeholder="$t('account.street')"
+              required="required"
+              class="input"
+          />
+        </div>
+        <div class="field">
+          <i class="icon fas fa-map-marker-alt"></i>
+          <input
+              @valueInput="checkLocationInfosIfFilled"
+              v-model="address.npa"
+              type="number"
+              name="npa"
+              :placeholder="$t('account.npa')"
+              required="required"
+              class="input"
+          />
+        </div>
+        <div class="field">
+          <i class="icon fas fa-map-marker-alt"></i>
+          <input
+              @valueInput="checkLocationInfosIfFilled"
+              v-model="address.city"
+              type="text"
+              name="city"
+              :placeholder="$t('account.city')"
+              required="required"
+              class="input"
+          />
+        </div>
         <select v-if="addressToSelect" v-model="address" class="addressSelection">
           <option v-for="addr in this.addressToSelect"
                   :key="addr.address"
@@ -61,12 +93,17 @@
             {{ this.addressToString(addr.address) }}
           </option>
         </select>
-        <PhoneInput
-            @valueInput="setPhone"
-            :name="'phone'"
-            :default-value="phone"
-            :placeholder="$t('account.phone')"
-        />
+        <div class="field">
+          <i class="icon fas fa-phone"></i>
+          <input
+              v-model="phone"
+              type="text"
+              name="phone"
+              :placeholder="$t('account.phone')"
+              required="required"
+              class="input"
+          />
+        </div>
         <button v-if="id" type="submit">{{ $t("memberUpdate.button") }}</button>
         <button v-else type="submit">{{ $t("register.button") }}</button>
       </form>
@@ -80,11 +117,7 @@
 </template>
 
 <script>
-import EmailInput from "../components/inputs/EmailInput";
 import PasswordInput from "../components/inputs/PasswordInput";
-import NameInput from "../components/inputs/NameInput";
-import LocationInput from "../components/inputs/LocationInput";
-import PhoneInput from "../components/inputs/PhoneInput";
 import ToastError from "@/components/toasts/ToastError";
 import {
   register,
@@ -98,7 +131,7 @@ import { ERROR_INVALID_ADDRESS } from "../logic/error-message.ts";
 
 export default {
   name: "ProfileEdit",
-  components: { NameInput, EmailInput, PasswordInput, LocationInput, PhoneInput, ToastError },
+  components: { PasswordInput, ToastError },
   data() {
     return {
       error: null,
@@ -193,7 +226,7 @@ export default {
         this.verifyAddress()
       }
     },
-    setFirstName(value) {
+    /*setFirstName(value) {
       this.firstName = value;
     },
     setName(value) {
@@ -201,14 +234,14 @@ export default {
     },
     setEmail(value) {
       this.email = value;
-    },
+    },*/
     setPassword(value) {
       this.password = value;
     },
     setConfirmPassword(value) {
       this.confirmPassword = value;
     },
-    setStreet(value) {
+    /*setStreet(value) {
       this.address.street = value;
       this.checkLocationInfosIfFilled();
     },
@@ -222,7 +255,7 @@ export default {
     },
     setPhone(value) {
       this.phone = value;
-    },
+    },*/
     parseAddress(addressInString) {
       let tokens = addressInString.split('<b>');
       let tokensbis = tokens[1].split(' ');
@@ -287,6 +320,35 @@ h1 {
   text-align: center;
   border: solid;
   border-color: var(--transparent-border-color);
+}
+
+.field {
+  position: relative;
+}
+
+.icon {
+  position: absolute;
+  top: 13px;
+  left: 20px;
+  color: grey;
+}
+
+input {
+  width: 100%;
+  height: 42px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  font-size: 14px;
+  padding: 0 20px 0 50px;
+  outline: none;
+}
+
+input:active,
+input:focus,
+input:hover {
+  border: 1px solid var(--footer-color);
 }
 
 button {
