@@ -1,43 +1,49 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { Point } from 'geojson';
-
-// Doesn't work with import style..
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const bcrypt = require('bcryptjs');
+import { IsEmail, IsNotEmpty, IsPostalCode } from 'class-validator';
 
 /**
  * Entity to represents a user of FindYourPet
  */
 @Entity('member')
 export class Member {
+  @IsNotEmpty()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @IsNotEmpty()
   @Column()
   firstname: string;
 
+  @IsNotEmpty()
   @Column()
   name: string;
 
+  @IsEmail()
   @Column({
     unique: true,
   })
   email: string;
 
+  @IsNotEmpty()
   @Column({
     length: 60,
   })
   password: string;
 
+  @IsNotEmpty()
   @Column()
   street: string;
 
+  @IsPostalCode()
   @Column()
   NPA: number;
 
+  @IsNotEmpty()
   @Column()
   city: string;
 
+  @IsNotEmpty()
   @Column()
   phone: string;
 

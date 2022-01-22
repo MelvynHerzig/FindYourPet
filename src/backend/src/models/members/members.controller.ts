@@ -20,6 +20,7 @@ import {
   Action,
   CaslAbilityFactory,
 } from '../../security/casl/casl-ability.factory';
+import { HttpResponse } from '../response';
 
 /**
  * Member controller
@@ -55,7 +56,7 @@ export class MembersController {
   async update(
     @Body() updatedMember: UpdateMemberDto,
     @Req() req,
-  ): Promise<UpdateResult> {
+  ): Promise<HttpResponse> {
     try {
       const ability = this.caslAbilityFactory.createForMember(req.user);
       const member = await this.memberService.findOne({ id: updatedMember.id });
@@ -71,7 +72,7 @@ export class MembersController {
   /******************* DELETE ************************/
   @Delete(':uuid')
   @UseGuards(AuthGuard('jwt'))
-  async delete(@Param('uuid') uuid: string, @Req() req): Promise<DeleteResult> {
+  async delete(@Param('uuid') uuid: string, @Req() req): Promise<HttpResponse> {
     try {
       const ability = this.caslAbilityFactory.createForMember(req.user);
       const member = await this.memberService.findOne({ id: uuid });

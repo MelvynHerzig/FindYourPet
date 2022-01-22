@@ -25,6 +25,7 @@ import { AdvertDto } from './dto/advert.dto';
 import { UpdateAdvertDto } from './dto/update.adverts.dto';
 import { CreateAdvertDto } from './dto/create.adverts.dto';
 import { Advert } from './entities/adverts.entity';
+import { HttpResponse } from '../response';
 
 /**
  * Advert controller
@@ -149,7 +150,7 @@ export class AdvertsController {
     } catch (e) {
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
-    throw new UnauthorizedException();
+    throw new HttpException('test', HttpStatus.UNAUTHORIZED);
   }
 
   /*******************  PUT   ************************/
@@ -158,7 +159,7 @@ export class AdvertsController {
   async update(
     @Body() updatedAdvert: UpdateAdvertDto,
     @Req() req,
-  ): Promise<UpdateResult> {
+  ): Promise<HttpResponse> {
     try {
       const ability = this.caslAbilityFactory.createForMember(req.user);
       const advert = await this.advertService.findOneAdvertById(
@@ -179,7 +180,7 @@ export class AdvertsController {
   /******************* DELETE ************************/
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
-  async deleteOne(@Param('id') id: number, @Req() req): Promise<DeleteResult> {
+  async deleteOne(@Param('id') id: number, @Req() req): Promise<HttpResponse> {
     try {
       const ability = this.caslAbilityFactory.createForMember(req.user);
 
