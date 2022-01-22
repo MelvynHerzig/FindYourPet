@@ -75,7 +75,9 @@
     "maxAge": "Age maximum de l'animal de compagnie",
     "maxDistance": "Distance maximum vous séparant de la maison du propriétaire de l'animal de compagnie",
     "filterButton": "Filtrer",
-    "loadMore": "Charger plus d'annonces d'animal de compagnie"
+    "loadMore": "Charger plus d'annonces d'animal de compagnie",
+    "title": "Annonces:",
+    "titleFiltered": "Annonces filtrées:"
   },
   "profile": {
     "profileInfos": "Informations du Profil",

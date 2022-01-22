@@ -92,7 +92,7 @@ button{
 }
 
 .advert{
-  background: url("../assets/images/test.jpg");
+  background: url("../assets/images/fish.jpg");
   background-attachment:fixed;
   background-position: center;
   background-repeat: no-repeat;

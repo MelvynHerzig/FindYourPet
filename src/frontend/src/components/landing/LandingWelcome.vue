@@ -39,7 +39,7 @@ button:hover {
 }
 
 .welcome {
-  background: url("../../assets/images/test.jpg");
+  background: url("../../assets/images/cat1.jpg");
   background-attachment:fixed;
   background-position: center;
   background-repeat: no-repeat;
