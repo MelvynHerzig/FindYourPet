@@ -36,13 +36,17 @@
     "register": "Register"
   },
   "errors": {
-    "langage": "Bad langage used for the request",
+    "language": "Bad langage used for the request",
     "passwordConfirmation": "Password Confirmation does not match Password",
     "credentials": "Password or/and Email are incorrect",
     "userAlreadyExist": "Email already exists",
     "userNotFound": "Email not found",
     "invalidToken": "Invalid token used",
-    "invalidAddress": "Invalid Address given"
+    "invalidAddress": "Invalid Address given",
+    "empty": "cannot be empty",
+    "emailNotCorrect": "Email must follow format example: example(at)example.example",
+    "phoneNotCorrect": "Phone have an incorrect format",
+    "passwordNotCorrect": "Password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character"
   },
   "account": {
     "email": "Email Address",

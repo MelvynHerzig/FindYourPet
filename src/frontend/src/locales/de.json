@@ -36,13 +36,17 @@
     "register": "Anmeldung"
   },
   "errors": {
-    "langage": "Falsche Sprache für die Anfrage",
+    "language": "Falsche Sprache für die Anfrage",
     "passwordConfirmation": "Passwortbestätigung stimmt nicht mit dem Passwort überein",
     "creditentials": "Passwort oder/und E-Mail sind falsch",
     "userAlreadyExist": "E-Mail existiert bereits",
     "userNotFound": "Email wurde nicht gefunden",
     "invalidToken": "Ungültiges Token verwendet",
-    "invalidAddress": "Ungültige Adresse angegeben"
+    "invalidAddress": "Ungültige Adresse angegeben",
+    "empty": "kann nicht leer sein",
+    "emailNotCorrect": "Die E-Mail muss das folgende Format haben: beispiel(at)beispiel.beispiel",
+    "phoneNotCorrect": "Telefon hat ein falsches Format",
+    "passwordNotCorrect": "Das Passwort muss mindestens 1 Großbuchstaben, 1 Kleinbuchstaben, 1 Zahl und 1 Sonderzeichen enthalten"
   },
   "account": {
     "email": "E-Mail-Addresse",

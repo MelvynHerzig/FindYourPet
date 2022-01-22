@@ -3,7 +3,7 @@ import * as errorMessages from "./error-message.ts";
 export function manageErrors(errorMessage) {
     switch (errorMessage) {
         case errorMessages.ERROR_LANGUAGE:
-            return this.$t("error.langage");
+            return this.$t("error.language");
         case errorMessages.ERROR_PASSWORD_CONFIRMATION:
             return this.$t("error.passwordConfirmation");
         case errorMessages.ERROR_INVALID_CREDENTIALS:

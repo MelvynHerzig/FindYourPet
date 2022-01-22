@@ -38,13 +38,17 @@
     "profile": "Profilo"
   },
   "errors": {
-    "langage": "Cattivo linguaggio usato per la richiesta",
+    "language": "Cattivo linguaggio usato per la richiesta",
     "passwordConfirmation": "La conferma della password non corrisponde alla password",
     "creditentials": "La password e/o l'e-mail non sono corrette",
     "userAlreadyExist": "L'e-mail esiste già",
     "userNotFound": "Email non trovata",
     "invalidToken": "Token non valido utilizzato",
-    "invalidAddress": "Indirizzo non valido dato"
+    "invalidAddress": "Indirizzo non valido dato",
+    "empty": "non può essere vuoto",
+    "emailNotCorrect": "L'e-mail deve seguire il formato dell'esempio: esempio(at)esempio.esempio",
+    "phoneNotCorrect": "Il telefono ha un formato errato",
+    "passwordNotCorrect": "La password deve contenere almeno 1 maiuscola, 1 minuscola, 1 numero e 1 carattere speciale"
   },
   "account": {
     "email": "E-mail",

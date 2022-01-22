@@ -206,10 +206,10 @@ export default {
       }
 
       if(this.password === "") {
-        return `${this.$t('account.password')} cannot be empty`;
+        return `${this.$t('account.password')} ${this.$t('errors.empty')}`;
       }
       if(this.confirmPassword === "") {
-        return `${this.$t('account.confirmPassword')} cannot be empty`;
+        return `${this.$t('account.confirmPassword')} ${this.$t('errors.empty')}`;
       }
 
       message = this.verifyPassword();
@@ -218,7 +218,7 @@ export default {
       }
 
       if(this.password !== this.confirmPassword) {
-        return `${this.$t('account.password')} and ${this.$t('account.confirmPassword')} must be equal`;
+        return this.$t('errors.passwordConfirmation');
       }
     },
     verifyModifyInfos() {
@@ -258,7 +258,7 @@ export default {
         field = this.$t('account.phone');
       }
       if(field != null) {
-        return `${field} cannot be empty`;
+        return `${field} ${this.$t('errors.empty')}`;
       } else {
         return null;
       }
@@ -267,7 +267,7 @@ export default {
       const Validation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/gm;
       const valid = Validation.test(this.email);
       if (!valid) {
-        return `${this.$t('account.email')} must follow format example: example@example.example`;
+        return this.$t('errors.emailNotCorrect');
       } else {
         return null;
       }
@@ -276,7 +276,7 @@ export default {
       const Validation = /^([0][1-9][0-9](\s|)[0-9][0-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9])$|^(([0][0]|\+)[1-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9])$/gm;
       const valid = Validation.test(this.phone);
       if (!valid) {
-        return `${this.$t('account.phone')} have an incorrect format`;
+        return this.$t('errors.phoneNotCorrect');
       } else {
         return null;
       }
@@ -285,7 +285,7 @@ export default {
       const Validation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
       const valid = Validation.test(this.password);
       if (!valid) {
-        return `${this.$t('account.password')} must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character`;
+        return this.$t('errors.passwordNotCorrect');
       } else {
         return null;
       }
