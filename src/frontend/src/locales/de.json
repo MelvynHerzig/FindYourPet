@@ -33,7 +33,9 @@
     "advert": "Werbung",
     "advertCreation": "Erstellung von Anzeigen",
     "login": "Verbinden",
-    "register": "Anmeldung"
+    "register": "Anmeldung",
+    "disconnect": "Sich abmelden",
+    "profile": "Profil"
   },
   "errors": {
     "language": "Falsche Sprache für die Anfrage",
@@ -76,7 +78,9 @@
     "maxAge": "Höchstalter des Haustiers",
     "maxDistance": "Maximale Entfernung zum Haus des Tierhalters",
     "filterButton": "Filter",
-    "loadMore": "Mehr Haustier-Anzeigen laden"
+    "loadMore": "Mehr Haustier-Anzeigen laden",
+    "title": "Anzeigen:",
+    "titleFiltered": "Anzeigen gefiltert:"
   },
   "profile": {
     "profileInfos": "Profil Informationen",

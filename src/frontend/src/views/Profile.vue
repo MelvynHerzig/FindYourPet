@@ -67,7 +67,7 @@ export default {
 }
 
 .bgProfile {
-  background: url("../assets/images/pets.jpg") no-repeat fixed center;
+  background: url("../assets/images/parrot.jpg") no-repeat fixed center;
   background-size: contain;
   width: 100%;
   height: 100%;

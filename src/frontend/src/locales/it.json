@@ -75,7 +75,9 @@
     "maxAge": "Età massima dell'animale domestico",
     "maxDistance": "Distanza massima della casa del proprietario dell'animale",
     "filterButton": "Filtro",
-    "loadMore": "Carica altri annunci di animali domestici"
+    "loadMore": "Carica altri annunci di animali domestici",
+    "title": "Annunci:",
+    "titleFiltered": "Annunci filtrati:"
   },
   "profile": {
     "profileInfos": "Informazioni sul profilo",

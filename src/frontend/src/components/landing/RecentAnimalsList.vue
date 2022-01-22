@@ -42,7 +42,7 @@ h1 {
 }
 
 .animalAdsList {
-  background: url("../../assets/images/pets.jpg");
+  background: url("../../assets/images/cat2.jpg");
   background-attachment:fixed;
   background-repeat: no-repeat;
   background-size: cover;

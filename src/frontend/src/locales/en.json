@@ -33,7 +33,9 @@
     "advert": "Advertisements",
     "advertCreation": "Advert Creation",
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "disconnect": "Disconnect",
+    "profile": "Profile"
   },
   "errors": {
     "language": "Bad langage used for the request",
@@ -76,7 +78,9 @@
     "maxAge": "Maximum age of pet",
     "maxDistance": "Maximum distance of the pet owner's house",
     "filterButton": "Filter",
-    "loadMore": "Load more pet adverts"
+    "loadMore": "Load more pet adverts",
+    "title": "Adverts:",
+    "titleFiltered": "Adverts filtered:"
   },
   "profile": {
     "profileInfos": "Profile Informations",
