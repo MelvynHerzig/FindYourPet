@@ -43,7 +43,7 @@
       <div class="list">
         <ul>
           <li v-for="advert in this.adverts" :key="advert.id" style="list-style-type:none">
-            <AnimalAdvert :advert="advert"/>
+            <AdvertPreview :advert="advert"/>
           </li>
         </ul>
       </div>
@@ -64,16 +64,16 @@
 </template>
 
 <script>
-import {getPageAdverts, getPageFilteredAdverts, getAllSpeciesFromLang, memberIsConnected} from "../logic/apicalls";
-import { manageErrors } from "../logic/errors"
+import { getPageAdverts, getPageFilteredAdverts, getAllSpeciesFromLang, memberIsConnected } from "@/logic/apicalls";
+import { manageErrors } from "@/logic/errors"
 import ToastError from "../components/toasts/ToastError";
-import AnimalAdvert from "../components/AnimalAdvert";
+import AdvertPreview from "../components/AdvertPreview";
 import MinimumInput from "../components/inputs/MinimumInput";
 import MaximumInput from "../components/inputs/MaximumInput";
 
 export default {
   name: "AdvertsList",
-  components: {MaximumInput, MinimumInput, AnimalAdvert, ToastError},
+  components: {MaximumInput, MinimumInput, AdvertPreview, ToastError},
   beforeMount() {
     this.getAdverts(this.actualPage);
     this.getSpecies();

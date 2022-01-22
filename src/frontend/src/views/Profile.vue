@@ -2,9 +2,19 @@
   <section v-if="member" class="main">
     <div class="bgProfile">
       <ProfileInfos :member="member" />
+      <ToastError
+          v-if="profileError"
+          :text="profileError"
+          class="toast"
+      />
     </div>
     <div class="bgProfile">
       <ProfileAdverts :adverts="adverts" />
+      <ToastInfo
+          v-if="advertsError"
+          :text="advertsError"
+          class="toast"
+      />
     </div>
   </section>
 </template>
@@ -13,13 +23,16 @@
 import {getMemberByEmail, getMemberConnectedEmail, getAdvertsByMember} from "@/logic/apicalls";
 import ProfileInfos from "@/components/profile/ProfileInfos";
 import ProfileAdverts from "@/components/profile/ProfileAdverts";
+import ToastInfo from "@/components/toasts/ToastInfo";
+import ToastError from "@/components/toasts/ToastError";
 
 export default {
   name: "Profile",
-  components: {ProfileAdverts, ProfileInfos},
+  components: {ToastError, ProfileAdverts, ProfileInfos, ToastInfo},
   data() {
     return {
-      error: null,
+      profileError: null,
+      advertsError: null,
       member: null,
       adverts: []
     }
@@ -30,14 +43,14 @@ export default {
         this.member = result.data;
         this.getMembersAdverts() 
       }).catch(error => {
-        this.error = error;
+        this.profileError = error;
       });
     },
     getMembersAdverts() {
       getAdvertsByMember(this.member.id,this.$root.$i18n.locale).then(result => {
         this.adverts = result.data;
       }).catch(error => {
-        this.error = error;
+        this.advertsError = error;
       });
     }
   },
@@ -61,6 +74,11 @@ export default {
   padding-bottom: 3em;
   margin: auto;
   display: flex;
+  flex-direction: column;
+}
+
+.toast {
+  align-self: center;
 }
 
 </style>
