@@ -13,22 +13,25 @@
 <script>
 export default {
   name: "FormInput",
-  props: {
-    type: String,
-    name: String,
-    defaultValue: String,
-    placeholder: String,
-    required: Boolean,
-  },
+  props: [
+    'type',
+    'name',
+    'defaultValue',
+    'placeholder',
+    'required'
+  ],
   data() {
     return {
-      inputValue: this.defaultValue,
+      inputValue: null,
     }
   },
   methods: {
     handle() {
       this.$emit('valueInput', this.inputValue);
     }
+  },
+  beforeMount() {
+    this.inputValue = this.defaultValue;
   }
 }
 </script>

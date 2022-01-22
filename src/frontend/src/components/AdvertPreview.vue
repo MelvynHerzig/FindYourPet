@@ -27,7 +27,7 @@
 import { deleteAdvert, getMemberConnectedId, getSpeciesByIdFromLang } from '../logic/apicalls'
 
 export default {
-  name: "AnimalAdvert",
+  name: "AdvertPreview",
   props: {
     advert: {}
   },

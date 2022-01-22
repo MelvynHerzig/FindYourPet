@@ -4,7 +4,7 @@
     <div class="list">
       <ul>
         <li v-for="advert in this.adverts" :key="advert.id" style="list-style-type:none">
-          <AnimalAdvert :advert="advert"/>
+          <AdvertPreview :advert="advert"/>
         </li>
       </ul>
     </div>
@@ -12,11 +12,11 @@
 </template>
 
 <script>
-import AnimalAdvert from "@/components/AnimalAdvert";
+import AdvertPreview from "@/components/AdvertPreview";
 
 export default {
   name: "ProfileAdverts",
-  components: {AnimalAdvert},
+  components: {AdvertPreview},
   props: {
     adverts: []
   }
