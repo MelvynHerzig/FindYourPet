@@ -23,8 +23,6 @@ export class FilesService {
 
   async updateImage(advertId: number, file: File): Promise<File> {
     try {
-      console.log(advertId);
-      console.log(file);
       const newFile = await this.filesRepository.create(file);
       await this.filesRepository.save(newFile);
 
