@@ -9,7 +9,7 @@
       />
     </div>
     <div class="bgProfile">
-      <ProfileAdverts :member="adverts" />
+      <ProfileAdverts :adverts="adverts" />
       <ToastInfo
           v-if="advertsError"
           :text="advertsError"
