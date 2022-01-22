@@ -13,7 +13,6 @@ import {
 } from '@nestjs/common';
 import { MembersService } from './members.service';
 import { UpdateMemberDto } from './dto/update.members.dto';
-import { DeleteResult, UpdateResult } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
 import { MemberDto, ToMember, ToMemberDto } from './dto/members.dto';
 import {
@@ -21,10 +20,20 @@ import {
   CaslAbilityFactory,
 } from '../../security/casl/casl-ability.factory';
 import { HttpResponse } from '../response';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 /**
  * Member controller
  */
+@ApiTags('members')
 @Controller('members')
 export class MembersController {
   constructor(
@@ -33,6 +42,23 @@ export class MembersController {
   ) {}
 
   /******************* GET    ************************/
+  @ApiParam({
+    name: 'email',
+    description: 'Email of the user to retrieve',
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Specified user is returned',
+    type: MemberDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'The email is invalid',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Jwt is missing or action is not granted',
+  })
+  @ApiBearerAuth()
   @Get('email/:email')
   @UseGuards(AuthGuard('jwt'))
   async findOneByEmail(
@@ -51,6 +77,23 @@ export class MembersController {
   }
 
   /******************* PUT    ************************/
+  @ApiBody({
+    description: 'Information about the member to update',
+    required: true,
+    type: UpdateMemberDto,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Informations about the update',
+    type: HttpResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'The body is invalid',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Jwt is missing or action is not granted',
+  })
+  @ApiBearerAuth()
   @Put()
   @UseGuards(AuthGuard('jwt'))
   async update(
@@ -70,6 +113,23 @@ export class MembersController {
     throw new UnauthorizedException();
   }
   /******************* DELETE ************************/
+  @ApiParam({
+    name: 'uuid',
+    description: 'UUID of the user to delete',
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Status about the deletion',
+    type: MemberDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'The uuid is invalid',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Jwt is missing or action is not granted',
+  })
+  @ApiBearerAuth()
   @Delete(':uuid')
   @UseGuards(AuthGuard('jwt'))
   async delete(@Param('uuid') uuid: string, @Req() req): Promise<HttpResponse> {

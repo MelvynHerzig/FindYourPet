@@ -25,6 +25,7 @@ import {
   RESPONSE_ADVERT_DELETED,
   RESPONSE_ADVERT_UPDATED,
 } from '../response';
+import { Member } from '../members/entities/members.entity';
 
 /**
  * Service to query adverts
@@ -89,7 +90,7 @@ export class AdvertsService {
   async filterAdvert(
     filters: FilterDto,
     pageNum: number,
-    email: string,
+    member: Member,
   ): Promise<Advert[]> {
     this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
 
@@ -119,18 +120,14 @@ export class AdvertsService {
     }
 
     // Filter by distance
-    if (filters.radius !== undefined && email != undefined) {
-      const origin = await this.membersService.findLocationByPayload({
-        email,
-      });
-
+    if (filters.radius !== undefined && member != undefined) {
       query
         .andWhere(
           'ST_DWithin(m.location, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(m.location)) ,:range)',
         )
         .setParameters({
           // stringify GeoJSON
-          origin: JSON.stringify(origin),
+          origin: JSON.stringify(member.location),
           range: filters.radius * 1000, //KM conversion
         });
     }
@@ -189,13 +186,10 @@ export class AdvertsService {
     }
   }
 
-  async getDistanceOfAdvert(email: string, advert: Advert): Promise<number> {
-    if (advert.memberId !== undefined && email !== undefined) {
+  async getDistanceOfAdvert(member: Member, advert: Advert): Promise<number> {
+    if (advert.memberId !== undefined && member !== undefined) {
       const adMember = await this.membersService.findOne({
         id: advert.memberId,
-      });
-      const member = await this.membersService.findOne({
-        email,
       });
 
       const latitude1 = member.location.coordinates[0];
@@ -261,17 +255,21 @@ export class AdvertsService {
     }
   }
 
-  async verifyJwt(req): Promise<string> {
+  async verifyJwt(req): Promise<Member> {
     const jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
     try {
       this.jwtService.verify(jwt);
-      return this.jwtService.decode(jwt)['email'];
+      const email = this.jwtService.decode(jwt)['email'];
+      const member = await this.membersService.findOne({
+        email: email,
+      });
+      return member;
     } catch (error) {}
 
     return undefined;
   }
 
-  async ToAdvertDto(advert, lang: string, email: string): Promise<AdvertDto> {
+  async ToAdvertDto(advert, lang: string, member: Member): Promise<AdvertDto> {
     const {
       id,
       title,
@@ -297,24 +295,24 @@ export class AdvertsService {
         lang,
       ),
       member:
-        email !== undefined
+        member !== undefined
           ? ToPublicMemberDto(
               await this.membersService.findOne({ id: memberId }),
             )
           : undefined,
-      distance: await this.getDistanceOfAdvert(email, advert),
+      distance: await this.getDistanceOfAdvert(member, advert),
     };
   }
 
   async ToAdvertsDto(
     adverts,
     lang: string,
-    email: string,
+    member: Member,
   ): Promise<AdvertDto[]> {
     const result: AdvertDto[] = [];
 
     for (const advert of adverts) {
-      result.push(await this.ToAdvertDto(advert, lang, email));
+      result.push(await this.ToAdvertDto(advert, lang, member));
     }
     return result;
   }
