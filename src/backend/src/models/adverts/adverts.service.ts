@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilterDto } from './dto/filters.dto';
 import { SpeciesService } from '../species/species.service';
 import {
+  ERROR_ADVERT_NOT_CREATED,
+  ERROR_ADVERT_NOT_FOUND,
+  ERROR_USER_NOT_FOUND,
   FILTER_INVALID_GENDER,
   FILTER_INVALID_PAGE,
   FILTER_INVALID_PET_MAX_AGE,
@@ -17,6 +20,11 @@ import { ExtractJwt } from 'passport-jwt';
 import { JwtService } from '@nestjs/jwt';
 import { Advert, PetGender } from './entities/adverts.entity';
 import { AdvertDto } from './dto/advert.dto';
+import {
+  HttpResponse,
+  RESPONSE_ADVERT_DELETED,
+  RESPONSE_ADVERT_UPDATED,
+} from '../response';
 
 /**
  * Service to query adverts
@@ -34,7 +42,11 @@ export class AdvertsService {
   ) {}
 
   async createAdvert(advert: Advert): Promise<Advert> {
-    return this.advertRepository.save(advert);
+    try {
+      return this.advertRepository.save(advert);
+    } catch (e) {
+      throw new HttpException(ERROR_ADVERT_NOT_CREATED, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async findPageAdvert(pageNum: number): Promise<Advert[]> {
@@ -50,11 +62,19 @@ export class AdvertsService {
   }
 
   async findOneAdvertById(id: number): Promise<Advert> {
-    return this.advertRepository.findOne(id);
+    try {
+      return this.advertRepository.findOne(id);
+    } catch (e) {
+      throw new HttpException(ERROR_ADVERT_NOT_FOUND, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async findAllAdvertByUuid(uuid: string): Promise<Advert[]> {
-    return this.advertRepository.find({ memberId: uuid });
+    try {
+      return this.advertRepository.find({ memberId: uuid });
+    } catch (e) {
+      throw new HttpException(ERROR_USER_NOT_FOUND, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async findTop10RecentAdvert(): Promise<Advert[]> {
@@ -138,13 +158,35 @@ export class AdvertsService {
     return adverts;
   }
 
-  async updateAdvert(advert: Advert): Promise<UpdateResult> {
-    advert.lastModified = new Date();
-    return this.advertRepository.update(advert.id, advert);
+  async updateAdvert(advert: Advert): Promise<HttpResponse> {
+    try {
+      advert.lastModified = new Date();
+      await this.advertRepository.update(advert.id, advert);
+      return {
+        success: true,
+        message: RESPONSE_ADVERT_UPDATED,
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e,
+      };
+    }
   }
 
-  async deleteAdvert(id: number): Promise<DeleteResult> {
-    return this.advertRepository.delete(id);
+  async deleteAdvert(id: number): Promise<HttpResponse> {
+    try {
+      await this.advertRepository.delete(id);
+      return {
+        success: true,
+        message: RESPONSE_ADVERT_DELETED,
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e,
+      };
+    }
   }
 
   async getDistanceOfAdvert(email: string, advert: Advert): Promise<number> {

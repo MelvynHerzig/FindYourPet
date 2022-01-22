@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Exclude } from 'class-transformer';
+import { IsNotEmpty, IsPositive } from 'class-validator';
 
 /**
  * A pet can be either a male or a female.
@@ -14,12 +14,15 @@ export enum PetGender {
  */
 @Entity('adverts')
 export class Advert {
+  @IsNotEmpty()
   @PrimaryGeneratedColumn()
   id: number;
 
+  @IsNotEmpty()
   @Column()
   title: string;
 
+  @IsNotEmpty()
   @Column()
   description: string;
 
@@ -31,9 +34,11 @@ export class Advert {
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   lastModified: Date;
 
+  @IsPositive()
   @Column()
   petAge: number;
 
+  @IsNotEmpty()
   @Column({
     type: 'enum',
     enum: PetGender,
@@ -44,6 +49,7 @@ export class Advert {
   @Column({ nullable: true })
   memberId: string;
 
+  @IsNotEmpty()
   @Column({ nullable: true })
   speciesId: number;
 }

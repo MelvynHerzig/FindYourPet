@@ -3,6 +3,7 @@ import { OmitType } from '@nestjs/mapped-types';
 import { UpdateMemberDto } from './update.members.dto';
 import { BeforeInsert, Column } from 'typeorm';
 import { PublicMemberDto } from './public.members.dto';
+import { isEmail } from 'class-validator';
 
 export class MemberDto extends OmitType(Member, [
   'password',
