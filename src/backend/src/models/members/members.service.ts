@@ -4,6 +4,10 @@ import { Member } from './entities/members.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   ERROR_INVALID_CREDENTIALS,
+  ERROR_INVALID_EMAIL_FORMAT,
+  ERROR_INVALID_PASSWORD,
+  ERROR_INVALID_PHONE_FORMAT,
+  ERROR_PASSWORD_CONFIRMATION,
   ERROR_USER_ALREADY_EXIST,
   ERROR_USER_NOT_FOUND,
 } from '../../error/error-message';
@@ -74,7 +78,9 @@ export class MembersService {
   }
 
   async update(member: Member): Promise<UpdateResult> {
-    const realMember = await this.findByPayload({ email: member.email });
+    this.verifiyInput(member, false);
+
+    const realMember = await this.findOne({ id: member.id });
 
     member.password = realMember.password;
     member.isAdmin = realMember.isAdmin;
@@ -115,5 +121,41 @@ export class MembersService {
       type: 'Point',
       coordinates: [response[0].attrs.lon, response[0].attrs.lat],
     };
+  }
+
+  verifiyInput(member, verifiyPassword: boolean) {
+    const passwordValidation =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
+
+    const emailValidation =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/gm;
+    const swissPhoneValidation =
+      /^([0][1-9][0-9](\s|)[0-9][0-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9])$|^(([0][0]|\+)[1-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9])$/gm;
+    if (verifiyPassword) {
+      if (member.password !== member.confirmPassword) {
+        throw new HttpException(
+          ERROR_PASSWORD_CONFIRMATION,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      if (!passwordValidation.test(member.password)) {
+        throw new HttpException(ERROR_INVALID_PASSWORD, HttpStatus.BAD_REQUEST);
+      }
+    }
+
+    if (!emailValidation.test(member.email)) {
+      throw new HttpException(
+        ERROR_INVALID_EMAIL_FORMAT,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (!swissPhoneValidation.test(member.phone)) {
+      throw new HttpException(
+        ERROR_INVALID_PHONE_FORMAT,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }
