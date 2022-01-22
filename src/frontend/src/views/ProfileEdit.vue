@@ -52,7 +52,7 @@
         <div class="field">
           <i class="icon fas fa-map-marker-alt"></i>
           <input
-              @valueInput="checkLocationInfosIfFilled"
+              @input="checkLocationInfosIfFilled"
               v-model="address.street"
               type="text"
               name="street"
@@ -64,7 +64,7 @@
         <div class="field">
           <i class="icon fas fa-map-marker-alt"></i>
           <input
-              @valueInput="checkLocationInfosIfFilled"
+              @input="checkLocationInfosIfFilled"
               v-model="address.npa"
               type="number"
               name="npa"
@@ -76,7 +76,7 @@
         <div class="field">
           <i class="icon fas fa-map-marker-alt"></i>
           <input
-              @valueInput="checkLocationInfosIfFilled"
+              @input="checkLocationInfosIfFilled"
               v-model="address.city"
               type="text"
               name="city"
@@ -124,7 +124,7 @@ import {
   getSwissAdress,
   getMemberByEmail,
   getMemberConnectedEmail,
-  updateMemberByEmail, getMemberConnectedId
+  updateMemberByEmail
 } from "@/logic/apicalls";
 import { manageErrors } from "@/logic/errors";
 import { ERROR_INVALID_ADDRESS } from "../logic/error-message.ts";
@@ -152,16 +152,11 @@ export default {
   },
   methods: {
     async submit() {
-
-      /*const passwordValidation =
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
-
-      const validPassword = passwordValidation.test(createMemberDto.password);
-      if (!validPassword) {
-        throw new HttpException(ERROR_INVALID_PASSWORD, HttpStatus.BAD_REQUEST);
-      }*/
-
       if(this.id == null) {
+        this.error = this.verifyRegisterInfos();
+        if(this.error != null) {
+          return;
+        }
         register({
           firstname: this.firstName,
           name: this.name,
@@ -183,8 +178,12 @@ export default {
           this.error = manageErrors(error.message);
         });
       } else {
+        this.error = this.verifyModifyInfos();
+        if(this.error != null) {
+          return;
+        }
         updateMemberByEmail({
-          id: getMemberConnectedId(),
+          id: this.id,
           firstname: this.firstName,
           name: this.name,
           email: this.email,
@@ -192,16 +191,103 @@ export default {
           NPA: this.address.npa,
           city: this.address.city,
           phone: this.phone,
-        }).then(result => {
-          if (result.data.success) {
-            this.$router.push('/profile');
-          } else {
-            this.error = result.data.message;
-          }
+        }).then( () => {
+          this.$router.push('/profile');
         })
         .catch(error => {
           this.error = manageErrors(error.message);
         });
+      }
+    },
+    verifyRegisterInfos() {
+      let message = this.verifyModifyInfos();
+      if(message != null) {
+        return message;
+      }
+
+      if(this.password === "") {
+        return `${this.$t('account.password')} cannot be empty`;
+      }
+      if(this.confirmPassword === "") {
+        return `${this.$t('account.confirmPassword')} cannot be empty`;
+      }
+
+      message = this.verifyPassword();
+      if(message != null) {
+        return message;
+      }
+
+      if(this.password !== this.confirmPassword) {
+        return `${this.$t('account.password')} and ${this.$t('account.confirmPassword')} must be equal`;
+      }
+    },
+    verifyModifyInfos() {
+      let message = null;
+
+      message = this.verifyEmptyFields();
+      if(message != null) {
+        return message;
+      }
+
+      message = this.verifyEmail();
+      if(message != null) {
+        return message;
+      }
+
+      this.verifyAddress();
+
+      message = this.verifyPhone();
+      if(message != null) {
+        return message;
+      }
+
+      return message;
+    },
+    verifyEmptyFields() {
+      let field = null;
+      if(this.firstName === "") {
+        field = this.$t('account.firstName');
+      }
+      if(this.name === "") {
+        field = this.$t('account.name');
+      }
+      if(this.email === "") {
+        field = this.$t('account.email');
+      }
+      if(this.phone === "") {
+        field = this.$t('account.phone');
+      }
+      if(field != null) {
+        return `${field} cannot be empty`;
+      } else {
+        return null;
+      }
+    },
+    verifyEmail() {
+      const Validation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/gm;
+      const valid = Validation.test(this.email);
+      if (!valid) {
+        return `${this.$t('account.email')} must follow format example: example@example.example`;
+      } else {
+        return null;
+      }
+    },
+    verifyPhone() {
+      const Validation = /^([0][1-9][0-9](\s|)[0-9][0-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9])$|^(([0][0]|\+)[1-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9])$/gm;
+      const valid = Validation.test(this.phone);
+      if (!valid) {
+        return `${this.$t('account.phone')} have an incorrect format`;
+      } else {
+        return null;
+      }
+    },
+    verifyPassword() {
+      const Validation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
+      const valid = Validation.test(this.password);
+      if (!valid) {
+        return `${this.$t('account.password')} must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character`;
+      } else {
+        return null;
       }
     },
     async verifyAddress() {
@@ -226,36 +312,12 @@ export default {
         this.verifyAddress()
       }
     },
-    /*setFirstName(value) {
-      this.firstName = value;
-    },
-    setName(value) {
-      this.name = value;
-    },
-    setEmail(value) {
-      this.email = value;
-    },*/
     setPassword(value) {
       this.password = value;
     },
     setConfirmPassword(value) {
       this.confirmPassword = value;
     },
-    /*setStreet(value) {
-      this.address.street = value;
-      this.checkLocationInfosIfFilled();
-    },
-    setNPA(value) {
-      this.address.npa = value;
-      this.checkLocationInfosIfFilled();
-    },
-    setCity(value) {
-      this.address.city = value;
-      this.checkLocationInfosIfFilled();
-    },
-    setPhone(value) {
-      this.phone = value;
-    },*/
     parseAddress(addressInString) {
       let tokens = addressInString.split('<b>');
       let tokensbis = tokens[1].split(' ');
