@@ -156,7 +156,7 @@ button{
 }
 
 .ad-edit{
-  background: url("../assets/images/test.jpg");
+  background: url("../assets/images/mouse.jpg");
   background-attachment:fixed;
   background-position: center;
   background-repeat: no-repeat;

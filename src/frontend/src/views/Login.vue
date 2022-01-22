@@ -43,6 +43,10 @@ export default {
   },
   methods: {
     login() {
+      this.error = this.verifyInfos();
+      if(this.error != null) {
+        return;
+      }
       login({
         email: this.email,
         password: this.password,
@@ -61,6 +65,46 @@ export default {
     setPassowrd(value) {
       this.password = value;
     },
+    verifyInfos() {
+      let message = null;
+
+      if(this.email === "") {
+        return `${this.$t('account.email')} ${this.$t('errors.empty')}`;
+      }
+      if(this.password === "") {
+        return `${this.$t('account.password')} ${this.$t('errors.empty')}`;
+      }
+
+      message = this.verifyEmail();
+      if(message != null) {
+        return message;
+      }
+
+      message = this.verifyPassword();
+      if(message != null) {
+        return message;
+      }
+
+      return message;
+    },
+    verifyPassword() {
+      const Validation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
+      const valid = Validation.test(this.password);
+      if (!valid) {
+        return this.$t('errors.passwordNotCorrect');
+      } else {
+        return null;
+      }
+    },
+    verifyEmail() {
+      const Validation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/gm;
+      const valid = Validation.test(this.email);
+      if (!valid) {
+        return this.$t('errors.emailNotCorrect');
+      } else {
+        return null;
+      }
+    },
   },
 }
 </script>
@@ -68,7 +112,7 @@ export default {
 <style scoped>
 
 .bg {
-  background: url("../assets/images/dogs.jpg") no-repeat fixed center;
+  background: url("../assets/images/bunny.jpg") no-repeat fixed center;
   background-size: contain;
   width: 100%;
   height: 100%;
