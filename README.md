@@ -21,7 +21,7 @@ Les 2 technologies importantes pour l'installation du projet sont npm et node.
 | npm | 6.14.15 |
 | node | 14.17.6 |
 | nest js | 8.0.0 |
-| docker |  |
+| docker | 4.3.2 |
 
 Vous pouvez aussi vous référez à la page du [wiki correspondant](https://github.com/FindYourPet-ch/FindYourPet/wiki/Choix-technologiques).
 
