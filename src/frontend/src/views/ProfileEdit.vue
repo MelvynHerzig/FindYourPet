@@ -220,6 +220,8 @@ export default {
       if(this.password !== this.confirmPassword) {
         return this.$t('errors.passwordConfirmation');
       }
+      
+      return message;
     },
     verifyModifyInfos() {
       let message = null;
