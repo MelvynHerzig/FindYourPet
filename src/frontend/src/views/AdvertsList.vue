@@ -1,6 +1,6 @@
 <template>
   <div class="animalsList">
-    <div class="filters" id="filters">
+    <section class="filters" id="filters">
       <form v-on:submit.prevent="filter">
         <MinimumInput
             @valueInput="setMinAge"
@@ -38,42 +38,46 @@
         </select>
         <button type="submit">{{ $t('advertsList.filterButton') }}</button>
       </form>
-    </div>
-    <div class="inner">
-      <div class="list">
-        <ul>
-          <li v-for="advert in this.adverts" :key="advert.id" style="list-style-type:none">
-            <AnimalAdvert :advert="advert"/>
-          </li>
-        </ul>
+    </section>
+    <section class="bg">
+      <div class="inner">
+        <h1 v-if="filteredRequest">{{$t("advertsList.titleFiltered")}}</h1>
+        <h1 v-else>{{$t("advertsList.title")}}</h1>
+        <div class="list">
+          <ul>
+            <li v-for="advert in this.adverts" :key="advert.id" style="list-style-type:none">
+              <AdvertPreview :advert="advert"/>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <div class="page">
-      <a v-if="smthToLoad===true" href="#" @click="getPage(actualPage+1)">
-        <i class="fas fa-spinner"></i>
-        {{ $t('advertsList.loadMore') }}
-      </a>
-      <a href="#filters"><i class="fas fa-arrow-up fa-2x"></i></a>
-    </div>
-    <ToastError
-        v-if="error"
-        :text="error"
-        class="toast"
-    />
+      <ToastError
+          v-if="error"
+          :text="error"
+          class="toast"
+      />
+      <div class="page">
+        <a v-if="smthToLoad===true" href="#" @click="getPage(actualPage+1)">
+          <i class="fas fa-spinner"></i>
+          {{ $t('advertsList.loadMore') }}
+        </a>
+        <a href="#filters"><i class="fas fa-arrow-up fa-2x"></i></a>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
-import {getPageAdverts, getPageFilteredAdverts, getAllSpeciesFromLang, memberIsConnected} from "../logic/apicalls";
-import { manageErrors } from "../logic/errors"
+import { getPageAdverts, getPageFilteredAdverts, getAllSpeciesFromLang, memberIsConnected } from "@/logic/apicalls";
+import { manageErrors } from "@/logic/errors"
 import ToastError from "../components/toasts/ToastError";
-import AnimalAdvert from "../components/AnimalAdvert";
+import AdvertPreview from "../components/AdvertPreview";
 import MinimumInput from "../components/inputs/MinimumInput";
 import MaximumInput from "../components/inputs/MaximumInput";
 
 export default {
   name: "AdvertsList",
-  components: {MaximumInput, MinimumInput, AnimalAdvert, ToastError},
+  components: {MaximumInput, MinimumInput, AdvertPreview, ToastError},
   beforeMount() {
     this.getAdverts(this.actualPage);
     this.getSpecies();
@@ -101,7 +105,7 @@ export default {
       });
     },
     getAdverts(page) {
-      getPageAdverts(page,this.$root.$i18n.locale).then(result => {
+      getPageAdverts(page, this.$root.$i18n.locale).then(result => {
         if(result !== null) {
           if(!this.filteredRequest) {
             this.adverts = this.adverts.concat(result.data);
@@ -200,6 +204,18 @@ export default {
   align-items: center;
 }
 
+.bg {
+  background: url("../assets/images/dog.jpg") no-repeat fixed center;
+  background-size: contain;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  padding-top: 3em;
+  padding-bottom: 3em;
+  display: flex;
+  flex-direction: column;
+}
+
 .inner {
   background: var(--transparent-background-color);
   padding: 20px;
@@ -209,6 +225,11 @@ export default {
   border-radius: 10px;
   border: solid;
   border-color: var(--transparent-border-color);
+}
+
+.inner h1 {
+  display: flex;
+  justify-content: center;
 }
 
 button {
@@ -255,6 +276,7 @@ button:hover {
   margin-bottom: 3em;
 }
 
+h1,
 p {
   color: black;
 }

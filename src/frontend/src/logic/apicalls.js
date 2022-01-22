@@ -62,23 +62,11 @@ export async function getMemberAdverts(id, lang) {
 }
 
 export async function createAdvert(advertInformations) {
-    return axios.post(`${process.env.VUE_APP_ROOT_API}/adverts`, advertInformations)
-        .then(result => {
-            console.log(result.data);
-        })
-        .catch(error => {
-            this.error = error;
-        });
+    return axios.post(`${process.env.VUE_APP_ROOT_API}/adverts`, advertInformations);
 }
 
 export async function updateAdvert(advertInformations) {
-    return axios.put(`${process.env.VUE_APP_ROOT_API}/adverts`, advertInformations)
-        .then(result => {
-            console.log(result.data);
-        })
-        .catch(error => {
-            this.error = error;
-        });
+    return axios.put(`${process.env.VUE_APP_ROOT_API}/adverts`, advertInformations);
 }
 
 export async function deleteAdvert(id) {
@@ -99,8 +87,8 @@ export async function getPageAdverts(pageNum, lang) {
     return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/page/${pageNum}`);
 }
 
-export async function getPageFilteredAdverts(pageNum, filters) {
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/filters/page/${pageNum}`, filters);
+export async function getPageFilteredAdverts(pageNum, lang, filters) {
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/filters/page/${pageNum}`, filters);
 }
 
 export async function getRecentAdverts(lang) {
@@ -117,17 +105,7 @@ export async function getAdvertsByMember(memberId, lang) {
 /***************** Authentification ********************/
 
 export async function register(userInformations) {
-    return axios.post(`${process.env.VUE_APP_ROOT_API}/auth/register`, userInformations)
-        .then(result => {
-            if (result.success) {
-                this.$router.push('/login');
-            } else {
-                return result.message;
-            }
-        })
-        .catch(error => {
-            return manageErrors(error.message);
-        });
+    return axios.post(`${process.env.VUE_APP_ROOT_API}/auth/register`, userInformations);
 }
 
 export async function login(credentials) {

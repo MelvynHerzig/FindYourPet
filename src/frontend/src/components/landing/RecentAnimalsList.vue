@@ -5,7 +5,7 @@
       <div class="list">
         <ul>
           <li v-for="advert in this.adverts.slice(0,3)" :key="advert.id" style="list-style-type:none">
-            <AnimalAdvert :advert="advert"/>
+            <AdvertPreview :advert="advert"/>
           </li>
         </ul>
       </div>
@@ -14,13 +14,13 @@
 </template>
 
 <script>
-import { getRecentAdverts } from "../../logic/apicalls";
+import { getRecentAdverts } from "@/logic/apicalls";
 
-import AnimalAdvert from "../AnimalAdvert";
+import AdvertPreview from "../AdvertPreview";
 
 export default {
   name: "RecentAnimalsList",
-  components: { AnimalAdvert },
+  components: { AdvertPreview },
   beforeMount() {
     getRecentAdverts(this.$root.$i18n.locale).then(result => {
       this.adverts = result.data;
@@ -42,7 +42,7 @@ h1 {
 }
 
 .animalAdsList {
-  background: url("../../assets/images/pets.jpg");
+  background: url("../../assets/images/cat2.jpg");
   background-attachment:fixed;
   background-repeat: no-repeat;
   background-size: cover;

@@ -1,16 +1,26 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Member } from './entities/members.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   ERROR_INVALID_CREDENTIALS,
+  ERROR_INVALID_EMAIL_FORMAT,
+  ERROR_INVALID_PASSWORD,
+  ERROR_INVALID_PHONE_FORMAT,
+  ERROR_PASSWORD_CONFIRMATION,
   ERROR_USER_ALREADY_EXIST,
   ERROR_USER_NOT_FOUND,
+  ERROR_INVALID_ADDRESS,
 } from '../../error/error-message';
 
 import { Point } from 'geojson';
 import { LoginMemberDto } from './dto/login.members.dto';
 import axios from 'axios';
+import {
+  HttpResponse,
+  RESPONSE_MEMBER_DELETED,
+  RESPONSE_MEMBER_UPDATED,
+} from '../response';
 
 // Need to use bcrypt like that, otherwise not working...
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -27,16 +37,28 @@ export class MembersService {
   ) {}
 
   async findOne(options?: object): Promise<Member> {
-    return this.memberRepository.findOne(options);
+    try {
+      return this.memberRepository.findOne(options);
+    } catch (e) {
+      throw new HttpException(ERROR_USER_NOT_FOUND, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async findByPayload({ email }: any): Promise<Member> {
-    return await this.findOne({ where: { email } });
+    try {
+      return await this.findOne({ where: { email } });
+    } catch (e) {
+      throw new HttpException(ERROR_USER_NOT_FOUND, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async findLocationByPayload({ email }: any): Promise<Point> {
-    const member = await this.findByPayload(email);
-    return member === undefined ? undefined : member.location;
+    try {
+      const member = await this.findByPayload(email);
+      return member === undefined ? undefined : member.location;
+    } catch (e) {
+      throw new HttpException(ERROR_USER_NOT_FOUND, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async findByLogin({ email, password }: LoginMemberDto): Promise<Member> {
@@ -73,22 +95,46 @@ export class MembersService {
     return member;
   }
 
-  async update(member: Member): Promise<UpdateResult> {
-    const realMember = await this.findByPayload({ email: member.email });
+  async update(member: Member): Promise<HttpResponse> {
+    try {
+      this.verifiyInput(member, false);
 
-    member.password = realMember.password;
-    member.isAdmin = realMember.isAdmin;
-    member.location = realMember.location;
+      const realMember = await this.findOne({ id: member.id });
 
-    if (member.street != realMember.street) {
-      await this.setMemberLocation(member);
+      member.password = realMember.password;
+      member.isAdmin = realMember.isAdmin;
+      member.location = realMember.location;
+
+      if (member.street != realMember.street) {
+        await this.setMemberLocation(member);
+      }
+
+      await this.memberRepository.update(member.id, member);
+      return {
+        success: true,
+        message: RESPONSE_MEMBER_UPDATED,
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e,
+      };
     }
-
-    return this.memberRepository.update(member.id, member);
   }
 
-  async delete(memberId: string): Promise<DeleteResult> {
-    return this.memberRepository.delete(memberId);
+  async delete(memberId: string): Promise<HttpResponse> {
+    try {
+      await this.memberRepository.delete(memberId);
+      return {
+        success: true,
+        message: RESPONSE_MEMBER_DELETED,
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e,
+      };
+    }
   }
 
   async setMemberLocation(member: Member) {
@@ -104,10 +150,7 @@ export class MembersService {
       });
 
     if (response.length === 0) {
-      throw new HttpException(
-        'No matching result for street NPA city.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(ERROR_INVALID_ADDRESS, HttpStatus.BAD_REQUEST);
     }
 
     // Preparing location
@@ -115,5 +158,41 @@ export class MembersService {
       type: 'Point',
       coordinates: [response[0].attrs.lon, response[0].attrs.lat],
     };
+  }
+
+  verifiyInput(member, verifiyPassword: boolean) {
+    const passwordValidation =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
+
+    const emailValidation =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/gm;
+    const swissPhoneValidation =
+      /^([0][1-9][0-9](\s|)[0-9][0-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9])$|^(([0][0]|\+)[1-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9])$/gm;
+    if (verifiyPassword) {
+      if (member.password !== member.confirmPassword) {
+        throw new HttpException(
+          ERROR_PASSWORD_CONFIRMATION,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      if (!passwordValidation.test(member.password)) {
+        throw new HttpException(ERROR_INVALID_PASSWORD, HttpStatus.BAD_REQUEST);
+      }
+    }
+
+    if (!emailValidation.test(member.email)) {
+      throw new HttpException(
+        ERROR_INVALID_EMAIL_FORMAT,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (!swissPhoneValidation.test(member.phone)) {
+      throw new HttpException(
+        ERROR_INVALID_PHONE_FORMAT,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

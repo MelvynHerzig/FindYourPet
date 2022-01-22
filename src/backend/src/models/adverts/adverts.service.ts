@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilterDto } from './dto/filters.dto';
 import { SpeciesService } from '../species/species.service';
 import {
+  ERROR_ADVERT_NOT_CREATED,
+  ERROR_ADVERT_NOT_FOUND,
+  ERROR_USER_NOT_FOUND,
   FILTER_INVALID_GENDER,
   FILTER_INVALID_PAGE,
   FILTER_INVALID_PET_MAX_AGE,
@@ -17,6 +20,12 @@ import { ExtractJwt } from 'passport-jwt';
 import { JwtService } from '@nestjs/jwt';
 import { Advert, PetGender } from './entities/adverts.entity';
 import { AdvertDto } from './dto/advert.dto';
+import {
+  HttpResponse,
+  RESPONSE_ADVERT_DELETED,
+  RESPONSE_ADVERT_UPDATED,
+} from '../response';
+import { Member } from '../members/entities/members.entity';
 
 /**
  * Service to query adverts
@@ -34,7 +43,11 @@ export class AdvertsService {
   ) {}
 
   async createAdvert(advert: Advert): Promise<Advert> {
-    return this.advertRepository.save(advert);
+    try {
+      return this.advertRepository.save(advert);
+    } catch (e) {
+      throw new HttpException(ERROR_ADVERT_NOT_CREATED, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async findPageAdvert(pageNum: number): Promise<Advert[]> {
@@ -50,11 +63,19 @@ export class AdvertsService {
   }
 
   async findOneAdvertById(id: number): Promise<Advert> {
-    return this.advertRepository.findOne(id);
+    try {
+      return this.advertRepository.findOne(id);
+    } catch (e) {
+      throw new HttpException(ERROR_ADVERT_NOT_FOUND, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async findAllAdvertByUuid(uuid: string): Promise<Advert[]> {
-    return this.advertRepository.find({ memberId: uuid });
+    try {
+      return this.advertRepository.find({ memberId: uuid });
+    } catch (e) {
+      throw new HttpException(ERROR_USER_NOT_FOUND, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async findTop10RecentAdvert(): Promise<Advert[]> {
@@ -69,7 +90,7 @@ export class AdvertsService {
   async filterAdvert(
     filters: FilterDto,
     pageNum: number,
-    email: string,
+    member: Member,
   ): Promise<Advert[]> {
     this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
 
@@ -99,18 +120,14 @@ export class AdvertsService {
     }
 
     // Filter by distance
-    if (filters.radius !== undefined && email != undefined) {
-      const origin = await this.membersService.findLocationByPayload({
-        email,
-      });
-
+    if (filters.radius !== undefined && member != undefined) {
       query
         .andWhere(
           'ST_DWithin(m.location, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(m.location)) ,:range)',
         )
         .setParameters({
           // stringify GeoJSON
-          origin: JSON.stringify(origin),
+          origin: JSON.stringify(member.location),
           range: filters.radius * 1000, //KM conversion
         });
     }
@@ -138,22 +155,41 @@ export class AdvertsService {
     return adverts;
   }
 
-  async updateAdvert(advert: Advert): Promise<UpdateResult> {
-    advert.lastModified = new Date();
-    return this.advertRepository.update(advert.id, advert);
+  async updateAdvert(advert: Advert): Promise<HttpResponse> {
+    try {
+      advert.lastModified = new Date();
+      await this.advertRepository.update(advert.id, advert);
+      return {
+        success: true,
+        message: RESPONSE_ADVERT_UPDATED,
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e,
+      };
+    }
   }
 
-  async deleteAdvert(id: number): Promise<DeleteResult> {
-    return this.advertRepository.delete(id);
+  async deleteAdvert(id: number): Promise<HttpResponse> {
+    try {
+      await this.advertRepository.delete(id);
+      return {
+        success: true,
+        message: RESPONSE_ADVERT_DELETED,
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e,
+      };
+    }
   }
 
-  async getDistanceOfAdvert(email: string, advert: Advert): Promise<number> {
-    if (advert.memberId !== undefined && email !== undefined) {
+  async getDistanceOfAdvert(member: Member, advert: Advert): Promise<number> {
+    if (advert.memberId !== undefined && member !== undefined) {
       const adMember = await this.membersService.findOne({
         id: advert.memberId,
-      });
-      const member = await this.membersService.findOne({
-        email,
       });
 
       const latitude1 = member.location.coordinates[0];
@@ -219,17 +255,21 @@ export class AdvertsService {
     }
   }
 
-  async verifyJwt(req): Promise<string> {
+  async verifyJwt(req): Promise<Member> {
     const jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
     try {
       this.jwtService.verify(jwt);
-      return this.jwtService.decode(jwt)['email'];
+      const email = this.jwtService.decode(jwt)['email'];
+      const member = await this.membersService.findOne({
+        email: email,
+      });
+      return member;
     } catch (error) {}
 
     return undefined;
   }
 
-  async ToAdvertDto(advert, lang: string, email: string): Promise<AdvertDto> {
+  async ToAdvertDto(advert, lang: string, member: Member): Promise<AdvertDto> {
     const {
       id,
       title,
@@ -255,24 +295,24 @@ export class AdvertsService {
         lang,
       ),
       member:
-        email !== undefined
+        member !== undefined
           ? ToPublicMemberDto(
               await this.membersService.findOne({ id: memberId }),
             )
           : undefined,
-      distance: await this.getDistanceOfAdvert(email, advert),
+      distance: await this.getDistanceOfAdvert(member, advert),
     };
   }
 
   async ToAdvertsDto(
     adverts,
     lang: string,
-    email: string,
+    member: Member,
   ): Promise<AdvertDto[]> {
     const result: AdvertDto[] = [];
 
     for (const advert of adverts) {
-      result.push(await this.ToAdvertDto(advert, lang, email));
+      result.push(await this.ToAdvertDto(advert, lang, member));
     }
     return result;
   }

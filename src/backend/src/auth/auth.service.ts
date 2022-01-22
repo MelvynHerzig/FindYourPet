@@ -3,18 +3,12 @@ import { MembersService } from '../models/members/members.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt.strategy';
 import { ERROR_INVALID_TOKEN } from '../error/error-message';
-import axios from 'axios';
 import { LoginMemberDto } from '../models/members/dto/login.members.dto';
 import { Member } from '../models/members/entities/members.entity';
-
-export interface RegistrationsStatus {
-  success: boolean;
-  message: string;
-}
-
-export interface LoginStatus {
-  email;
-}
+import { CreateMemberDto } from '../models/members/dto/create.members.dto';
+import { ToMember } from '../models/members/dto/members.dto';
+import { RegistrationsStatus } from './dto/registration.status.dto';
+import { LoginStatus } from './dto/login.status.dto';
 
 @Injectable()
 export class AuthService {
@@ -23,12 +17,18 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(member: Member): Promise<RegistrationsStatus> {
+  async register(
+    createMemberDto: CreateMemberDto,
+  ): Promise<RegistrationsStatus> {
     let status: RegistrationsStatus = {
       success: true,
       message: 'member registered',
     };
     try {
+      this.membersService.verifiyInput(createMemberDto, true);
+
+      const member = ToMember(createMemberDto);
+
       await this.membersService.setMemberLocation(member);
 
       await this.membersService.create(member);
@@ -37,6 +37,7 @@ export class AuthService {
         success: false,
         message: err,
       };
+      throw new HttpException(status, HttpStatus.BAD_REQUEST);
     }
     return status;
   }
@@ -49,7 +50,8 @@ export class AuthService {
     return {
       id: member.id,
       email: member.email,
-      ...token,
+      accessToken: token.accessToken,
+      expiresIn: token.expiresIn,
     };
   }
 

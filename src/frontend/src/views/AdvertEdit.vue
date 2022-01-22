@@ -56,12 +56,12 @@ import { manageErrors } from "../logic/errors";
 import ToastError from "../components/toasts/ToastError";
 
 export default {
-  name: "AdvertCreation",
+  name: "AdvertEdit",
   components: {ToastError},
   beforeMount(){
     if(this.$route.params.id != null){
       getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result =>{
-          if(result.data.member.id == getMemberConnectedId()){
+          if(result.data.member.id === getMemberConnectedId()){
           this.id = result.data.id; 
           this.selectedSpecies = result.data.species.id
           this.selectedSex = result.data.petGender
@@ -127,7 +127,6 @@ export default {
         title: this.title,
         description: this.description,
         petAge: this.age,
-        //memberId: getMemberConnectedId(), TODO
         petGender: this.selectedSex,
         speciesId: this.selectedSpecies
       }) .then(() => {
@@ -157,7 +156,7 @@ button{
 }
 
 .ad-edit{
-  background: url("../assets/images/test.jpg");
+  background: url("../assets/images/mouse.jpg");
   background-attachment:fixed;
   background-position: center;
   background-repeat: no-repeat;
