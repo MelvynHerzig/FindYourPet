@@ -7,15 +7,8 @@ import { LoginMemberDto } from '../models/members/dto/login.members.dto';
 import { Member } from '../models/members/entities/members.entity';
 import { CreateMemberDto } from '../models/members/dto/create.members.dto';
 import { ToMember } from '../models/members/dto/members.dto';
-
-export interface RegistrationsStatus {
-  success: boolean;
-  message: string;
-}
-
-export interface LoginStatus {
-  email;
-}
+import { RegistrationsStatus } from './dto/registration.status.dto';
+import { LoginStatus } from './dto/login.status.dto';
 
 @Injectable()
 export class AuthService {
@@ -57,7 +50,8 @@ export class AuthService {
     return {
       id: member.id,
       email: member.email,
-      ...token,
+      accessToken: token.accessToken,
+      expiresIn: token.expiresIn,
     };
   }
 

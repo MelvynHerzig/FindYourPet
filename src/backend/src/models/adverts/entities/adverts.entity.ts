@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsNotEmpty, IsPositive } from 'class-validator';
+import { IsInt, IsNotEmpty, IsPositive, Min } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 /**
  * A pet can be either a male or a female.
@@ -14,14 +15,29 @@ export enum PetGender {
  */
 @Entity('adverts')
 export class Advert {
+  @ApiProperty({
+    description: 'Id of the advert',
+    type: Number,
+    example: 1,
+  })
   @IsNotEmpty()
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty({
+    description: 'Title of the advert',
+    type: String,
+    example: 'Baby cat of 3 months',
+  })
   @IsNotEmpty()
   @Column()
   title: string;
 
+  @ApiProperty({
+    description: 'Description of the advert',
+    type: String,
+    example: 'The kitten is black with a white head',
+  })
   @IsNotEmpty()
   @Column()
   description: string;
@@ -34,10 +50,19 @@ export class Advert {
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   lastModified: Date;
 
-  @IsPositive()
+  @ApiProperty({
+    description: 'Age, as month, of the pet of the advert',
+    type: Number,
+    example: 3,
+  })
+  @Min(0)
   @Column()
   petAge: number;
 
+  @ApiProperty({
+    description: 'Gender of the pet of the advert',
+    enum: PetGender,
+  })
   @IsNotEmpty()
   @Column({
     type: 'enum',
@@ -49,6 +74,11 @@ export class Advert {
   @Column({ nullable: true })
   memberId: string;
 
+  @ApiProperty({
+    description: "Species'id of the pet",
+    type: Number,
+    example: 1,
+  })
   @IsNotEmpty()
   @Column({ nullable: true })
   speciesId: number;

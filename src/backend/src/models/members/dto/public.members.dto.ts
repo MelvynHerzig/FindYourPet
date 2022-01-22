@@ -1,4 +1,4 @@
-import { PickType } from '@nestjs/mapped-types';
+import { PickType } from '@nestjs/swagger';
 import { MemberDto } from './members.dto';
 
 export class PublicMemberDto extends PickType(MemberDto, [

@@ -5,6 +5,7 @@ export const ERROR_LANGUAGE = 'error language';
 export const ERROR_PASSWORD_CONFIRMATION = 'error password not match';
 export const ERROR_INVALID_CREDENTIALS = 'error invalid credentials';
 export const ERROR_INVALID_PASSWORD = 'error invalid password';
+export const ERROR_NOT_AUTHORIZED = 'error not authorized';
 
 /** Users **/
 export const ERROR_USER_ALREADY_EXIST = 'error user already exist';

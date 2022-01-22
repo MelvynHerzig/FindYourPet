@@ -5,14 +5,30 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { AuthService, LoginStatus, RegistrationsStatus } from './auth.service';
 import { CreateMemberDto } from '../models/members/dto/create.members.dto';
 import { LoginMemberDto } from '../models/members/dto/login.members.dto';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { RegistrationsStatus } from './dto/registration.status.dto';
+import { LoginStatus } from './dto/login.status.dto';
+import { AuthService } from './auth.service';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiCreatedResponse({
+    description: 'The member has been successfully created',
+    type: RegistrationsStatus,
+  })
+  @ApiBadRequestResponse({
+    description: 'One or more fields are not in a valid format',
+  })
   @Post('register')
   public async register(
     @Body() createMemberDto: CreateMemberDto,
@@ -26,6 +42,14 @@ export class AuthController {
     return result;
   }
 
+  @ApiResponse({
+    status: 201,
+    description: 'The login is sucessfull',
+    type: LoginStatus,
+  })
+  @ApiBadRequestResponse({
+    description: 'Credentials are invalid',
+  })
   @Post('login')
   public async login(
     @Body() loginMemberDto: LoginMemberDto,

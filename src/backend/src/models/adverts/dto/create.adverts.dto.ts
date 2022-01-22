@@ -1,6 +1,5 @@
-import { OmitType } from '@nestjs/mapped-types';
 import { UpdateAdvertDto } from './update.adverts.dto';
-import { IsEmail } from 'class-validator';
+import { OmitType } from '@nestjs/swagger';
 
 export class CreateAdvertDto extends OmitType(UpdateAdvertDto, [
   'id',

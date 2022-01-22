@@ -26,10 +26,22 @@ import { UpdateAdvertDto } from './dto/update.adverts.dto';
 import { CreateAdvertDto } from './dto/create.adverts.dto';
 import { Advert } from './entities/adverts.entity';
 import { HttpResponse } from '../response';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { ERROR_NOT_AUTHORIZED } from '../../error/error-message';
 
 /**
  * Advert controller
  */
+@ApiTags('adverts')
 @Controller('adverts')
 export class AdvertsController {
   constructor(
@@ -38,26 +50,65 @@ export class AdvertsController {
   ) {}
 
   /*******************  GET   ************************/
-
+  @ApiParam({
+    name: 'pageNum',
+    required: true,
+    description: 'No of the page to retrieve',
+  })
+  @ApiParam({
+    name: 'lang',
+    required: true,
+    description: 'Language in which translate the advert',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'List of the adverts of the specified page, translated in the specified language. Member property is shown only if logged',
+    type: [AdvertDto],
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'At least one parameter is invalid',
+  })
   @Get(':lang/page/:pageNum')
   async findPage(
     @Param('pageNum') pageNum: string,
     @Param('lang') lang: string,
     @Request() req,
   ): Promise<AdvertDto[]> {
-    const email = await this.advertService.verifyJwt(req);
+    const member = await this.advertService.verifyJwt(req);
 
     try {
       return this.advertService.ToAdvertsDto(
         await this.advertService.findPageAdvert(parseInt(pageNum, 10)),
         lang,
-        email,
+        member,
       );
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'Id of the advert to retrieve',
+  })
+  @ApiParam({
+    name: 'lang',
+    required: true,
+    description: 'Language in which translate the advert',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Advert corresponding to the id sent, translated in the specified language. Member property is shown only if logged',
+    type: AdvertDto,
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'At least one parameter is invalid',
+  })
   @Get(':lang/id/:id')
   async findOneById(
     @Param('id') id: string,
@@ -72,6 +123,26 @@ export class AdvertsController {
     );
   }
 
+  @ApiParam({
+    name: 'uuid',
+    required: true,
+    description: 'uuid of the member',
+  })
+  @ApiParam({
+    name: 'lang',
+    required: true,
+    description: 'Language in which translate the advert',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'List of the adverts of the specified user, translated in the specified language. Member property is shown only if logged',
+    type: [AdvertDto],
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'At least one parameter is invalid',
+  })
   @Get(':lang/members/:uuid')
   @UseGuards(AuthGuard('jwt'))
   async findAllByUuid(
@@ -86,6 +157,21 @@ export class AdvertsController {
     );
   }
 
+  @ApiParam({
+    name: 'lang',
+    required: true,
+    description: 'Language in which translate the advert',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'List of the top 10 recent adverts, translated in the specified language. Member property is shown only if logged',
+    type: [AdvertDto],
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'At least one parameter is invalid',
+  })
   @Get(':lang/recent')
   async findTopRecent(
     @Param('lang') lang: string,
@@ -103,6 +189,29 @@ export class AdvertsController {
     }
   }
 
+  @ApiParam({
+    name: 'pageNum',
+    required: true,
+    description: 'No of the page to retrieve',
+  })
+  @ApiParam({
+    name: 'lang',
+    required: true,
+    description: 'Language in which translate the advert',
+  })
+  @ApiBody({
+    type: FilterDto,
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'List of the adverts filtered of the specified page, translated in the specified language. Member property is shown only if logged',
+    type: [AdvertDto],
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'At least one parameter is invalid',
+  })
   @Get(':lang/filters/page/:pageNum')
   async findAllByFilter(
     @Body() filterDto: FilterDto,
@@ -112,15 +221,16 @@ export class AdvertsController {
   ): Promise<AdvertDto[]> {
     try {
       await this.advertService.checkFilter(filterDto);
-      const email = await this.advertService.verifyJwt(req);
+      const member = await this.advertService.verifyJwt(req);
+      console.log(member);
       return this.advertService.ToAdvertsDto(
         await this.advertService.filterAdvert(
           filterDto,
           parseInt(pageNum, 10),
-          email,
+          member,
         ),
         lang,
-        email,
+        member,
       );
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
@@ -128,7 +238,22 @@ export class AdvertsController {
   }
 
   /*******************  POST  ************************/
-
+  @ApiBody({
+    type: CreateAdvertDto,
+  })
+  @ApiCreatedResponse({
+    description: 'The newly created advert is returned',
+    type: AdvertDto,
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: "The content of the body doesn't match requirement",
+  })
+  @ApiUnauthorizedResponse({
+    status: 401,
+    description: 'JWT of logged user is missing',
+  })
+  @ApiBearerAuth()
   @Post()
   @UseGuards(AuthGuard('jwt'))
   async create(
@@ -144,16 +269,33 @@ export class AdvertsController {
             this.advertService.ToAdvert(advert),
           ),
           undefined,
-          req.user.email,
+          req.user,
         );
       }
     } catch (e) {
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
-    throw new HttpException('test', HttpStatus.UNAUTHORIZED);
+    throw new HttpException(ERROR_NOT_AUTHORIZED, HttpStatus.UNAUTHORIZED);
   }
 
   /*******************  PUT   ************************/
+  @ApiBody({
+    type: UpdateAdvertDto,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The status of the update',
+    type: HttpResponse,
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: "The content of the body doesn't match requirement",
+  })
+  @ApiUnauthorizedResponse({
+    status: 401,
+    description: 'JWT of logged user is missing',
+  })
+  @ApiBearerAuth()
   @Put()
   @UseGuards(AuthGuard('jwt'))
   async update(
@@ -174,10 +316,29 @@ export class AdvertsController {
     } catch (e) {
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
-    throw new UnauthorizedException();
+    throw new HttpException(ERROR_NOT_AUTHORIZED, HttpStatus.UNAUTHORIZED);
   }
 
   /******************* DELETE ************************/
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'Id of the advert to delete',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The status of the deletion',
+    type: HttpResponse,
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'The parameter is invalid',
+  })
+  @ApiUnauthorizedResponse({
+    status: 401,
+    description: 'JWT of logged user is missing',
+  })
+  @ApiBearerAuth()
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
   async deleteOne(@Param('id') id: number, @Req() req): Promise<HttpResponse> {
@@ -195,6 +356,6 @@ export class AdvertsController {
     } catch (e) {
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
-    throw new UnauthorizedException();
+    throw new HttpException(ERROR_NOT_AUTHORIZED, HttpStatus.UNAUTHORIZED);
   }
 }
