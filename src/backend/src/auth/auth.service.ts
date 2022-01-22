@@ -3,9 +3,10 @@ import { MembersService } from '../models/members/members.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt.strategy';
 import { ERROR_INVALID_TOKEN } from '../error/error-message';
-import axios from 'axios';
 import { LoginMemberDto } from '../models/members/dto/login.members.dto';
 import { Member } from '../models/members/entities/members.entity';
+import { CreateMemberDto } from '../models/members/dto/create.members.dto';
+import { ToMember } from '../models/members/dto/members.dto';
 
 export interface RegistrationsStatus {
   success: boolean;
@@ -23,12 +24,18 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(member: Member): Promise<RegistrationsStatus> {
+  async register(
+    createMemberDto: CreateMemberDto,
+  ): Promise<RegistrationsStatus> {
     let status: RegistrationsStatus = {
       success: true,
       message: 'member registered',
     };
     try {
+      this.membersService.verifiyInput(createMemberDto, true);
+
+      const member = ToMember(createMemberDto);
+
       await this.membersService.setMemberLocation(member);
 
       await this.membersService.create(member);
@@ -37,6 +44,7 @@ export class AuthService {
         success: false,
         message: err,
       };
+      throw new HttpException(status, HttpStatus.BAD_REQUEST);
     }
     return status;
   }

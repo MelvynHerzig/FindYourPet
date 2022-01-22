@@ -9,6 +9,8 @@ export const ERROR_INVALID_PASSWORD = 'error invalid password';
 /** Users **/
 export const ERROR_USER_ALREADY_EXIST = 'error user already exist';
 export const ERROR_USER_NOT_FOUND = 'error user not found';
+export const ERROR_INVALID_EMAIL_FORMAT = 'error invalid email format';
+export const ERROR_INVALID_PHONE_FORMAT = 'error invalid phone format';
 
 /** Token **/
 export const ERROR_INVALID_TOKEN = 'error invalid token';

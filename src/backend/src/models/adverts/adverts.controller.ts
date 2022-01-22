@@ -137,6 +137,7 @@ export class AdvertsController {
     try {
       const ability = this.caslAbilityFactory.createForMember(req.user);
       if (ability.can(Action.Create, Advert)) {
+        advert.memberId = req.user.id;
         return this.advertService.ToAdvertDto(
           await this.advertService.createAdvert(
             this.advertService.ToAdvert(advert),

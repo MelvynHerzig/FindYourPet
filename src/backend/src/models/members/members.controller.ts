@@ -61,7 +61,7 @@ export class MembersController {
       const member = await this.memberService.findOne({ id: updatedMember.id });
 
       if (ability.can(Action.Update, member)) {
-        return this.memberService.update(ToMember(member));
+        return this.memberService.update(ToMember(updatedMember));
       }
     } catch (e) {
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
