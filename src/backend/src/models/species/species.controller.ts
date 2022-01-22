@@ -27,6 +27,7 @@ import {
   Action,
   CaslAbilityFactory,
 } from '../../security/casl/casl-ability.factory';
+import { HttpResponse } from '../response';
 
 /**
  * Race controller
@@ -116,7 +117,7 @@ export class SpeciesController {
   /******************* PUT    ************************/
   @Put()
   @UseGuards(AuthGuard('jwt'))
-  update(@Body() species: UpdateSpeciesDto, @Req() req): Promise<UpdateResult> {
+  update(@Body() species: UpdateSpeciesDto, @Req() req): Promise<HttpResponse> {
     try {
       const ability = this.caslAbilityFactory.createForMember(req.user);
 
@@ -132,7 +133,7 @@ export class SpeciesController {
   /******************* DELETE ************************/
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
-  deleteOne(@Param('id') id: string, @Req() req): Promise<DeleteResult> {
+  deleteOne(@Param('id') id: string, @Req() req): Promise<HttpResponse> {
     try {
       const ability = this.caslAbilityFactory.createForMember(req.user);
       if (ability.can(Action.Delete, Species)) {

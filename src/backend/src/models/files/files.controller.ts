@@ -34,7 +34,7 @@ export class FilesController {
   ) {}
 
   @Post('adverts/:id')
-  @UseInterceptors(FileInterceptor('file', { dest: './files' }))
+  @UseInterceptors(FileInterceptor('image', { dest: './files' }))
   @UseGuards(AuthGuard('jwt'))
   async upload(
     @Param('id') id,
