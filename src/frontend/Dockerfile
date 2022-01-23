@@ -18,9 +18,8 @@ RUN npm run build
 # nginx state for serving content
 FROM nginx:alpine
 
-
-
-COPY conf.d/ /etc/nginx
+RUN rm -f /etc/nginx/conf.d/default.conf
+COPY conf.d/default.conf /etc/nginx/
 
 # Set working directory to nginx asset directory
 WORKDIR /usr/share/nginx/html
