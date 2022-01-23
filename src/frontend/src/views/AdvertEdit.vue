@@ -7,7 +7,7 @@
             <div class="preview">
               <img v-if="image" :src="url" />
             </div>
-            <input type="file" class="img-input" accept="image/gif, image/jpeg, image/png" @change="Preview_image" required/>
+            <input type="file" class="img-input" accept="image/gif, image/jpeg, image/png" @change="Preview_image" :required = "image == null ? true : false"/>
             <select class="input" v-model="selectedSpecies" required>
               <option disabled hidden value="">{{$t("ad_create.species")}}</option>
               <option v-for="specie in species" :key="specie.id" v-bind:value="specie.id">
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import {createAdvert, updateAdvert, getAdvertById, getAllSpeciesFromLang, getMemberConnectedId  } from "../logic/apicalls";
+import {createAdvert, updateAdvert, getAdvertById, getAllSpeciesFromLang, getMemberConnectedId, addFile, getFileById  } from "../logic/apicalls";
 import { manageErrors } from "../logic/errors";
 
 import ToastError from "../components/toasts/ToastError";
@@ -68,6 +68,16 @@ export default {
           this.age = result.data.petAge
           this.description = result.data.description
           this.title = result.data.title;
+          this.imageId = result.data.imageId
+          getFileById(this.imageId).then(response => {
+              const blob = new Blob([response.data]);
+              this.image = blob;
+              this.url = URL.createObjectURL(blob);
+            }).catch(error =>{
+                this.url = "../images/default_advert_image.png";
+                this.error = manageErrors(error.message);
+              }
+        )
         } else{
           this.$router.push("/profile")
         }
@@ -114,8 +124,16 @@ export default {
         petAge: this.age,
         petGender: this.selectedSex,
         speciesId: this.selectedSpecies
-      }) .then(() => {
-            this.$router.push('/profile')
+      }) .then(
+            response => {
+              this.id = response.data.id;
+              addFile(this.id, this.image)
+              .then(()=>{
+                this.$router.push('/profile')
+              })
+              .catch(error =>{
+                this.error = manageErrors(error.message);
+              })
           })
           .catch(error => {
             this.error = manageErrors(error.message);
@@ -129,8 +147,14 @@ export default {
         petAge: this.age,
         petGender: this.selectedSex,
         speciesId: this.selectedSpecies
-      }) .then(() => {
-            this.$router.push('/profile')
+      }) .then(()=> {
+              addFile(this.id, this.image)
+              .then(()=>{
+                this.$router.push('/profile')
+              })
+              .catch(error =>{
+                this.error = manageErrors(error.message);
+              })
           })
           .catch(error => {
             this.error = manageErrors(error.message);
@@ -207,7 +231,7 @@ form {
 }
 
 .short {
-  height: 375px;
+  height: 575px;
   flex: 2;
   margin: 10px;
   justify-items: left;
@@ -238,13 +262,13 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 200px;
-  height: 200px;
+  width: 400px;
+  height: 400px;
 }
 
 .preview img {
-  width: 200px;
-  height: 200px;
+  width: 400px;
+  height: 400px;
   align-self: center;
   border-radius: 50px;
 }

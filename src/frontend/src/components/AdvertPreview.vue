@@ -1,7 +1,7 @@
 <template>
   <div class="advert" @click="$router.push(`/adverts/${advert.id}`)">
     <div class="image">
-      <img src="images/kitty.jpg" alt="image">
+      <img :src="image" alt="image">
     </div>
     <div class="name">
       <h1>{{ advert.title }}</h1>
@@ -24,7 +24,8 @@
 
 <script>
 
-import { deleteAdvert, getMemberConnectedId, getSpeciesByIdFromLang } from '../logic/apicalls'
+import { deleteAdvert, getMemberConnectedId, getSpeciesByIdFromLang, getFileById} from '../logic/apicalls'
+import { manageErrors } from "../logic/errors";
 
 export default {
   name: "AdvertPreview",
@@ -33,6 +34,14 @@ export default {
   },
   beforeMount() {
     this.getSpecies();
+    getFileById(this.advert.imageId).then(response => {
+      const blob = new Blob([response.data]);
+      this.image = URL.createObjectURL(blob);
+    }).catch(error =>{
+          this.image = "../images/default_advert_image.png";
+          this.error = manageErrors(error.message);
+        }
+      )
   },
   watch:{
     '$i18n.locale': function() {
@@ -42,6 +51,7 @@ export default {
   data() {
     return {
       specie: {},
+      image: null
     }
   },
   methods: {
@@ -60,6 +70,9 @@ export default {
         deleteAdvert(this.advert.id);
         window.location.reload();
       } 
+    },
+    getImg(){
+      return this.image;
     }
   },
   computed: {
