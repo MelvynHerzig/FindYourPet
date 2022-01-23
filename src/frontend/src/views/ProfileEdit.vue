@@ -146,7 +146,7 @@ export default {
         npa: null,
         city: null,
       },
-      phone: "",
+      phone: null,
       addressToSelect: null,
     }
   },
