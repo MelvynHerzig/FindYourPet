@@ -32,6 +32,7 @@ import {
 
 /**
  * Member controller
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
  */
 @ApiTags('members')
 @Controller('members')

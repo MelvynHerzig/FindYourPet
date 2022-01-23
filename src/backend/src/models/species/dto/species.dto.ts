@@ -4,6 +4,10 @@ import { getSpeciesName, jsonStringFromSpecies } from '../species.utils';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { ERROR_INVALID_SPECIES } from '../../../error/error-message';
 
+/**
+ * Class that contains all informations to return for a species
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class SpeciesDto extends OmitType(Species, ['name'] as const) {
   @ApiProperty({
     description: 'The name of the species in French',

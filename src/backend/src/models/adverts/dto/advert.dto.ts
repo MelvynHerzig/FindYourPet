@@ -3,6 +3,10 @@ import { TranslatedSpeciesDto } from '../../species/dto/translated.species.dto';
 import { PublicMemberDto } from '../../members/dto/public.members.dto';
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 
+/**
+ * Class that contains all informations to return from an advert
+ * @author Berney Alec, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class AdvertDto extends OmitType(Advert, ['memberId', 'speciesId']) {
   @ApiProperty({
     description: 'The public information about the owner of the advert',

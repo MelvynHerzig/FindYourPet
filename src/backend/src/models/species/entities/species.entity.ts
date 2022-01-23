@@ -4,6 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 /**
  * Entity to represents a pet species of FindYourPet
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
  */
 @Entity('species')
 export class Species {

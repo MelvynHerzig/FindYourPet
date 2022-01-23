@@ -4,6 +4,10 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { ERROR_INVALID_SPECIES } from '../../../error/error-message';
 import { ApiProperty } from '@nestjs/swagger';
 
+/**
+ * Class that contains all informations to return a translated species
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class TranslatedSpeciesDto extends Species {
   @ApiProperty({
     description: 'The name of the species translated in the specified language',
@@ -13,6 +17,11 @@ export class TranslatedSpeciesDto extends Species {
   name: string;
 }
 
+/**
+ * Translate a species and return his translatedDto
+ * @param species species to translate
+ * @param lang language of the translation
+ */
 export function ToTranslatedSpeciesDto(species: Species, lang: string) {
   try {
     const { id } = species;

@@ -12,6 +12,7 @@ export enum PetGender {
 
 /**
  * Entity to represents an adverts to trade pets.
+ * @author Berney Alec, Teo Ferrari, Quentin Forestier, Melvyn Herzig
  */
 @Entity('adverts')
 export class Advert {

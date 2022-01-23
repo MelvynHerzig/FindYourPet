@@ -39,7 +39,8 @@ import {
 } from '@nestjs/swagger';
 
 /**
- * Race controller
+ * Species controller
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
  */
 @ApiTags('species')
 @Controller('species')
