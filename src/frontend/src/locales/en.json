@@ -92,7 +92,11 @@
     "button": "Modify"
   },
   "animal_ad" : {
-    "age": "age"
+    "age": "age",
+    "distance": "Distance from you:",
+    "modify": "Modify",
+    "delete": "Delete",
+    "your_ad": "This is your ad!"
   },
   "ad":{
     "contact": "Contact",

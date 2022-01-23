@@ -92,7 +92,11 @@
     "button": "Ändern Sie"
   },
   "animal_ad" : {
-    "age": "Alter"
+    "age": "Alter",
+    "distance": "Entfernung von Ihnen:",
+    "modify": "Ändern",
+    "delete": "Löschen",
+    "your_ad": "Das ist Ihre Anzeige!"
   },
   "ad":{
     "contact": "Kontact",

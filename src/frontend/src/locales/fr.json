@@ -89,7 +89,11 @@
     "button": "Modifier"
   },
   "animal_ad" : {
-    "age": "age"
+    "age": "age",
+    "distance": "Distance de chez vous :",
+    "modify": "Modifier",
+    "delete": "Supprimer",
+    "your_ad": "Ceci est votre annonce !"
   },
   "ad":{
     "contact": "Contact",
