@@ -4,7 +4,7 @@
       <h1>{{advert.title}}</h1>
       <div class="info">
         <div class="short">
-          <img src="..\..\public\images\kitty.jpg" alt="image">
+          <img :src="image" alt="image">
           <h2>{{advert.species.name}}</h2>  
           <h3>{{$t("ad_create." + advert.petGender)}}, {{advert.petAge}} {{$t("ad.years")}}</h3>
         </div>
@@ -33,13 +33,22 @@
 </template>
 
 <script>
-import {getAdvertById, getMemberConnectedId, memberIsConnected, deleteAdvert} from "../logic/apicalls";
+import {getAdvertById, getMemberConnectedId, memberIsConnected, deleteAdvert, getFileById} from "../logic/apicalls";
+import { manageErrors } from "../logic/errors";
 
 export default {
   name: "Advert",
   beforeMount() {
     getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result => {
       this.advert = result.data;
+      getFileById(this.advert.imageId).then(response => {
+        const blob = new Blob([response.data]);
+        this.image = URL.createObjectURL(blob);
+      }).catch(error =>{
+            this.image = "../images/default_advert_image.png";
+            this.error = manageErrors(error.message);
+          }
+        )
     });
   },
   watch:{
@@ -70,7 +79,8 @@ export default {
   },
   data: function () {
     return {
-      advert: {}
+      advert: {},
+      image: null
     }
   },
 
@@ -141,8 +151,8 @@ button{
 }
 
 img{
-  width: 200px;
-  height: 200px;
+  width: 400px;
+  height: 400px;
   align-self: center;
   border-radius: 50px;
 

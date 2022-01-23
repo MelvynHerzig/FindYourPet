@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useCookies } from "vue3-cookies";
-import { manageErrors } from "./errors";
 
 const {cookies} = useCookies();
 
@@ -119,17 +118,18 @@ export async function login(credentials) {
 /***************** Files ********************/
 
 export async function getFileById(idFile) {
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/files/${idFile}`);
+    return axios.get(`${process.env.VUE_APP_ROOT_API}/files/${idFile}`,{responseType: 'arraybuffer'});
 }
 
-export async function addFile(idAdvert, file) {
-    return axios.post(`${process.env.VUE_APP_ROOT_API}/files/${idAdvert}`, file)
-        .then(result => {
-            console.log(result);
-        })
-        .catch(error => {
-            return manageErrors(error.message);
-        });
+export async function addFile(idAdvert, image) {
+    var FormData = require('form-data');
+    var data = new FormData();
+    data.append('image', image);
+    return axios.post(`${process.env.VUE_APP_ROOT_API}/files/adverts/${idAdvert}`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+    });
 }
 
 /***************** Members ********************/
