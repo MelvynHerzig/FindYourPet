@@ -64,7 +64,11 @@ export class AdvertsService {
 
   async findOneAdvertById(id: number): Promise<Advert> {
     try {
-      return this.advertRepository.findOne(id);
+      const advert = await this.advertRepository.findOne(id);
+      if (!advert) {
+        throw new HttpException(ERROR_ADVERT_NOT_FOUND, HttpStatus.BAD_REQUEST);
+      }
+      return advert;
     } catch (e) {
       throw new HttpException(ERROR_ADVERT_NOT_FOUND, HttpStatus.BAD_REQUEST);
     }
