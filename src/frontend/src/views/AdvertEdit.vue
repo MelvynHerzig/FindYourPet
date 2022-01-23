@@ -103,7 +103,8 @@ export default {
       url: null,
       image: null,
       title: null,
-      description: null
+      description: null,
+      imageChanged: false
     } 
   },
   methods: {
@@ -113,6 +114,7 @@ export default {
       });
     },
     Preview_image(event) {
+      this.imageChanged = true;
       this.image = event.target.files[0]
       this.url= URL.createObjectURL(this.image)
     },
@@ -145,16 +147,21 @@ export default {
         title: this.title,
         description: this.description,
         petAge: this.age,
+        imageId: this.imageId,
         petGender: this.selectedSex,
         speciesId: this.selectedSpecies
       }) .then(()=> {
-              addFile(this.id, this.image)
-              .then(()=>{
-                this.$router.push('/profile')
-              })
-              .catch(error =>{
-                this.error = manageErrors(error.message);
-              })
+              if(this.imageChanged){
+                addFile(this.id, this.image)
+                .then(()=>{
+                  this.$router.push('/profile');
+                })
+                .catch(error =>{
+                  this.error = manageErrors(error.message);
+                })
+              } else {
+                this.$router.push('/profile');
+              }
           })
           .catch(error => {
             this.error = manageErrors(error.message);
