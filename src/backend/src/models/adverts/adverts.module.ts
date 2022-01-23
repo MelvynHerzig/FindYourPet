@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AdvertsService } from './adverts.service';
 import { AdvertsController } from './adverts.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -12,7 +12,7 @@ import { AuthModule } from '../../auth/auth.module';
   imports: [
     TypeOrmModule.forFeature([Advert]),
     SpeciesModule,
-    MembersModule,
+    forwardRef(() => MembersModule),
     AuthModule,
   ],
   providers: [AdvertsService, CaslAbilityFactory],

@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilterDto } from './dto/filters.dto';
@@ -26,7 +32,6 @@ import {
   RESPONSE_ADVERT_UPDATED,
 } from '../response';
 import { Member } from '../members/entities/members.entity';
-import { Point } from 'geojson';
 
 /**
  * Service to query adverts
@@ -39,6 +44,7 @@ export class AdvertsService {
     @InjectRepository(Advert)
     private readonly advertRepository: Repository<Advert>,
     private speciesService: SpeciesService,
+    @Inject(forwardRef(() => MembersService))
     private membersService: MembersService,
     private jwtService: JwtService,
   ) {}
@@ -179,6 +185,21 @@ export class AdvertsService {
   async deleteAdvert(id: number): Promise<HttpResponse> {
     try {
       await this.advertRepository.delete(id);
+      return {
+        success: true,
+        message: RESPONSE_ADVERT_DELETED,
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e,
+      };
+    }
+  }
+
+  async deleteAllOfMember(uuid: string) {
+    try {
+      await this.advertRepository.delete({ memberId: uuid });
       return {
         success: true,
         message: RESPONSE_ADVERT_DELETED,
