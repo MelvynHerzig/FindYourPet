@@ -26,6 +26,7 @@ import {
   RESPONSE_ADVERT_UPDATED,
 } from '../response';
 import { Member } from '../members/entities/members.entity';
+import { Point } from 'geojson';
 
 /**
  * Service to query adverts
@@ -96,12 +97,12 @@ export class AdvertsService {
     pageNum: number,
     member: Member,
   ): Promise<Advert[]> {
-    this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
+    await this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
 
     // Prepare query
     const query = this.advertRepository
       .createQueryBuilder('adverts')
-      .innerJoin('adverts.member', 'm');
+      .leftJoinAndSelect(Member, 'm', 'm.id = adverts.memberId');
 
     // Filter by species
     if (filters.speciesId !== undefined) {
@@ -132,7 +133,7 @@ export class AdvertsService {
         .setParameters({
           // stringify GeoJSON
           origin: JSON.stringify(member.location),
-          range: filters.radius * 1000, //KM conversion
+          range: filters.radius * 1000, //KM conversion,
         });
     }
 
@@ -192,18 +193,20 @@ export class AdvertsService {
 
   async getDistanceOfAdvert(member: Member, advert: Advert): Promise<number> {
     if (advert.memberId !== undefined && member !== undefined) {
-      const adMember = await this.membersService.findOne({
-        id: advert.memberId,
-      });
+      const query = this.advertRepository
+        .createQueryBuilder()
+        .select('ST_Distance(m1.location, m2.location) distance')
+        .from(Member, 'm1')
+        .from(Member, 'm2')
+        .andWhere('m1.id=:id1 AND m2.id=:id2')
+        .setParameters({
+          // stringify GeoJSON
+          id1: advert.memberId,
+          id2: member.id,
+        });
 
-      const latitude1 = member.location.coordinates[0];
-      const longitude1 = member.location.coordinates[1];
-      const latitude2 = adMember.location.coordinates[0];
-      const longitude2 = adMember.location.coordinates[1];
-      const distance = Math.sqrt(
-        Math.pow(latitude1 - latitude2, 2) +
-          Math.pow(longitude1 - longitude2, 2),
-      );
+      const distance: number = (await query.getRawOne())['distance'] / 1000; // KM Conversion
+
       return distance < 1 ? 1 : distance;
     }
     return undefined;

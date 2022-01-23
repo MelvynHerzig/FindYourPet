@@ -153,7 +153,7 @@ export class AdvertsController {
     return this.advertService.ToAdvertsDto(
       await this.advertService.findAllAdvertByUuid(uuid),
       lang,
-      req.user.email,
+      req.user,
     );
   }
 
@@ -222,7 +222,6 @@ export class AdvertsController {
     try {
       await this.advertService.checkFilter(filterDto);
       const member = await this.advertService.verifyJwt(req);
-      console.log(member);
       return this.advertService.ToAdvertsDto(
         await this.advertService.filterAdvert(
           filterDto,
