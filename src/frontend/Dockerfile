@@ -19,7 +19,7 @@ RUN npm run build
 FROM nginx:alpine
 
 RUN rm -f /etc/nginx/conf.d/default.conf
-COPY conf.d/default.conf /etc/nginx/
+COPY conf.d/default.conf /etc/nginx/conf.d
 
 # Set working directory to nginx asset directory
 WORKDIR /usr/share/nginx/html
