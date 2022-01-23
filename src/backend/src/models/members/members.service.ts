@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Member } from './entities/members.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -21,6 +27,7 @@ import {
   RESPONSE_MEMBER_DELETED,
   RESPONSE_MEMBER_UPDATED,
 } from '../response';
+import { AdvertsService } from '../adverts/adverts.service';
 
 // Need to use bcrypt like that, otherwise not working...
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -34,6 +41,8 @@ export class MembersService {
   constructor(
     @InjectRepository(Member)
     private readonly memberRepository: Repository<Member>,
+    @Inject(forwardRef(() => AdvertsService))
+    private advertService: AdvertsService,
   ) {}
 
   async findOne(options?: object): Promise<Member> {
@@ -124,6 +133,7 @@ export class MembersService {
 
   async delete(memberId: string): Promise<HttpResponse> {
     try {
+      await this.advertService.deleteAllOfMember(memberId);
       await this.memberRepository.delete(memberId);
       return {
         success: true,

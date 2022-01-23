@@ -71,7 +71,7 @@ export class Advert {
   })
   petGender: PetGender;
 
-  @Column({ nullable: true, type: 'uuid' })
+  @Column({ type: 'uuid' })
   memberId: string;
 
   @ApiProperty({

@@ -1,7 +1,14 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Point } from 'geojson';
 import { IsEmail, IsInt, IsNotEmpty, IsPostalCode } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Advert } from '../../adverts/entities/adverts.entity';
 
 /**
  * Entity to represents a user of FindYourPet

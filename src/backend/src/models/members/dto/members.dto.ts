@@ -38,24 +38,30 @@ export function ToMember(member): Member {
 }
 
 export function ToMemberDto(member: Member): MemberDto {
-  return {
-    id: member.id,
-    firstname: member.firstname,
-    name: member.name,
-    email: member.email,
-    street: member.street,
-    NPA: member.NPA,
-    city: member.city,
-    phone: member.phone,
-  };
+  if (member !== undefined) {
+    return {
+      id: member.id,
+      firstname: member.firstname,
+      name: member.name,
+      email: member.email,
+      street: member.street,
+      NPA: member.NPA,
+      city: member.city,
+      phone: member.phone,
+    };
+  }
+  return undefined;
 }
 
 export function ToPublicMemberDto(member): PublicMemberDto {
-  return {
-    id: member.id,
-    firstname: member.firstname,
-    name: member.name,
-    email: member.email,
-    phone: member.phone,
-  };
+  if (member !== undefined) {
+    return {
+      id: member.id,
+      firstname: member.firstname,
+      name: member.name,
+      email: member.email,
+      phone: member.phone,
+    };
+  }
+  return undefined;
 }

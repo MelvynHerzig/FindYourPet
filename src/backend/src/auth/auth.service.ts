@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { MembersService } from '../models/members/members.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt.strategy';
@@ -13,6 +19,7 @@ import { LoginStatus } from './dto/login.status.dto';
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(forwardRef(() => MembersService))
     private readonly membersService: MembersService,
     private readonly jwtService: JwtService,
   ) {}
