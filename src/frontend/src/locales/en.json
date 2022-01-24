@@ -80,7 +80,8 @@
     "filterButton": "Filter",
     "loadMore": "Load more pet adverts",
     "title": "Adverts:",
-    "titleFiltered": "Adverts filtered:"
+    "titleFiltered": "Adverts filtered:",
+    "notFound": "No adverts found"
   },
   "profile": {
     "profileInfos": "Profile Informations",

@@ -80,7 +80,8 @@
     "filterButton": "Filter",
     "loadMore": "Mehr Haustier-Anzeigen laden",
     "title": "Anzeigen:",
-    "titleFiltered": "Anzeigen gefiltert:"
+    "titleFiltered": "Anzeigen gefiltert:",
+    "notFound": "Keine Anzeigen gefunden"
   },
   "profile": {
     "profileInfos": "Profil Informationen",

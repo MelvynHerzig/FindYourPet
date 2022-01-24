@@ -51,6 +51,11 @@
           </ul>
         </div>
       </div>
+      <ToastInfo
+          v-if="notFound"
+          :text="$t('advertsList.notFound')"
+          class="toast"
+      />
       <ToastError
           v-if="error"
           :text="error"
@@ -76,13 +81,14 @@ import {
 } from "@/logic/apicalls";
 import { manageErrors } from "@/logic/errors"
 import ToastError from "../components/toasts/ToastError";
+import ToastInfo from "@/components/toasts/ToastInfo";
 import AdvertPreview from "../components/AdvertPreview";
 import MinimumInput from "../components/inputs/MinimumInput";
 import MaximumInput from "../components/inputs/MaximumInput";
 
 export default {
   name: "AdvertsList",
-  components: {MaximumInput, MinimumInput, AdvertPreview, ToastError},
+  components: {MaximumInput, MinimumInput, AdvertPreview, ToastError, ToastInfo},
   beforeMount() {
     this.getAdverts();
     this.getSpecies();
@@ -91,6 +97,7 @@ export default {
     return {
       error: null,
       invalidMessage: null,
+      notFound: false,
       adverts: [],
       species: [],
       selectedSpecies: "",
@@ -110,13 +117,14 @@ export default {
       });
     },
     getAdverts() {
-      this.actualPage = 1;
-      this.adverts = [];
+      this.resetLogicVariable();
       getPageAdverts(this.actualPage, this.$root.$i18n.locale).then(result => {
-        if(result.data !== null) {
-          this.adverts = result.data;
-          this.filteredRequest = false;
-        } else {
+        this.adverts = result.data;
+        this.filteredRequest = false;
+        if(result.data.size() === 0) {
+          this.notFound = true;
+        }
+        if(result.data.size() < 10) {
           this.smthToLoad = false;
         }
       }).catch(error => {
@@ -125,10 +133,13 @@ export default {
       });
     },
     getNewAdverts(page) {
+      this.resetPageVariable();
       getPageAdverts(page, this.$root.$i18n.locale).then(result => {
-        if(result.data !== null) {
-          this.adverts = this.adverts.concat(result.data);
-        } else {
+        this.adverts = this.adverts.concat(result.data);
+        if(result.data.size() === 0) {
+          this.notFound = true;
+        }
+        if(result.data.size() < 10) {
           this.smthToLoad = false;
         }
       }).catch(error => {
@@ -140,50 +151,39 @@ export default {
       let filters = {petMinAge: 0};
       if(this.selectedSpecies != null && this.selectedSpecies !== "") {
         filters.speciesId = this.selectedSpecies;
-        /*let specie = {speciesId: this.selectedSpecies};
-        Object.assign(filters, specie);*/
       }
       if(this.selectedGender != null && this.selectedGender !== "") {
-        //filters.gender = this.selectedGender;
-        let gender = {gender: this.selectedGender};
-        Object.assign(filters, gender);
+        filters.gender = this.selectedGender;
       }
       if(this.minAge != null) {
         filters.petMinAge = this.minAge;
-        //let minAge = {petMinAge: this.minAge};
-        //Object.assign(filters, minAge);
       }
       if(this.maxAge != null) {
-        //filters.petMaxAge = this.maxAge;
-        let maxAge = {petMaxAge: this.maxAge};
-        Object.assign(filters, maxAge);
+        filters.petMaxAge = this.maxAge;
       }
       if(this.maxDistance != null) {
-        //filters.radius = this.maxDistance;
-        let radius = {radius: this.maxDistance};
-        Object.assign(filters, radius);
+        filters.radius = this.maxDistance;
       }
-      console.log(filters);
       return filters;
     },
     getFilteredPage() {
-      this.actualPage = 1;
-      this.adverts = [];
+      this.resetLogicVariable();
       getPageFilteredAdverts(this.actualPage, this.$root.$i18n.locale, this.getFilters()).then(result => {
-        console.log(result.data);
-        if(result.data !== null) {
-          this.adverts = result.data;
-          this.filteredRequest = true;
-        } else {
+        this.adverts = result.data;
+        this.filteredRequest = true;
+        if(result.data.size() === 0) {
+          this.notFound = true;
+        }
+        if(result.data.size() < 10) {
           this.smthToLoad = false;
         }
       }).catch(error => {
-        console.log("ici");
         this.smthToLoad = false;
         this.error = manageErrors(error.message);
       });
     },
     getNewFilteredPage(page) {
+      this.resetPageVariable();
       getPageFilteredAdverts(page, this.$root.$i18n.locale, {
         speciesId: this.selectedSpecies,
         gender: this.selectedGender,
@@ -191,10 +191,11 @@ export default {
         petMaxAge: this.maxAge,
         radius: this.maxDistance,
       }).then(result => {
-        console.log(result.data);
-        if(result.data !== null) {
-            this.adverts = this.adverts.concat(result.data);
-        } else {
+        this.adverts = this.adverts.concat(result.data);
+        if(result.data.size() === 0) {
+          this.notFound = true;
+        }
+        if(result.data.size() < 10) {
           this.smthToLoad = false;
         }
       }).catch(error => {
@@ -235,6 +236,15 @@ export default {
     isConnected() {
       return memberIsConnected();
     },
+    resetLogicVariable() {
+      this.actualPage = 1;
+      this.adverts = [];
+      this.resetPageVariable();
+    },
+    resetPageVariable() {
+      this.smthToLoad = true;
+      this.notFound = false;
+    }
   },
   watch:{
     '$i18n.locale': function() {
