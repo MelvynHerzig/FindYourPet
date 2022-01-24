@@ -26,6 +26,7 @@
 <script>
 import { login } from "@/logic/apicalls";
 import { manageErrors } from "@/logic/errors";
+import { verifyEmail, verifyPassword } from "@/logic/verify-inputs";
 import EmailInput from "../components/inputs/EmailInput";
 import PasswordInput from "../components/inputs/PasswordInput";
 import ToastError from "../components/toasts/ToastError";
@@ -75,35 +76,17 @@ export default {
         return `${this.$t('account.password')} ${this.$t('errors.empty')}`;
       }
 
-      message = this.verifyEmail();
+      message = verifyEmail(this.email);
       if(message != null) {
         return message;
       }
 
-      message = this.verifyPassword();
+      message = verifyPassword(this.password);
       if(message != null) {
         return message;
       }
 
       return message;
-    },
-    verifyPassword() {
-      const Validation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
-      const valid = Validation.test(this.password);
-      if (!valid) {
-        return this.$t('errors.passwordNotCorrect');
-      } else {
-        return null;
-      }
-    },
-    verifyEmail() {
-      const Validation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/gm;
-      const valid = Validation.test(this.email);
-      if (!valid) {
-        return this.$t('errors.emailNotCorrect');
-      } else {
-        return null;
-      }
     },
   },
 }
