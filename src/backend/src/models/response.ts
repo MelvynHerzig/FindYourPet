@@ -9,6 +9,10 @@ export const RESPONSE_MEMBER_DELETED = 'member deleted';
 export const RESPONSE_SPECIES_UPDATED = 'species updated';
 export const RESPONSE_SPECIES_DELETED = 'species deleted';
 
+/**
+ * Class for status response
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class HttpResponse {
   @ApiProperty({
     description: 'Status of the response',

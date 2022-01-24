@@ -10,13 +10,11 @@ import {
   Put,
   Req,
   Request,
-  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { AdvertsService } from './adverts.service';
 import { AuthGuard } from '@nestjs/passport';
 import { FilterDto } from './dto/filters.dto';
-import { DeleteResult, UpdateResult } from 'typeorm';
 import {
   Action,
   CaslAbilityFactory,
@@ -43,6 +41,10 @@ import { ERROR_NOT_AUTHORIZED } from '../../error/error-message';
  */
 @ApiTags('adverts')
 @Controller('adverts')
+/**
+ * Controller for the adverts
+ * @author Berney Alec, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class AdvertsController {
   constructor(
     private advertService: AdvertsService,

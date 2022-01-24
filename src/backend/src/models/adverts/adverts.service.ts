@@ -35,6 +35,7 @@ import { Member } from '../members/entities/members.entity';
 
 /**
  * Service to query adverts
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
  */
 @Injectable()
 export class AdvertsService {
@@ -49,6 +50,11 @@ export class AdvertsService {
     private jwtService: JwtService,
   ) {}
 
+  /**
+   * Create an new advert
+   * @param advert Advert to create
+   * @return newly created advert
+   */
   async createAdvert(advert: Advert): Promise<Advert> {
     try {
       return this.advertRepository.save(advert);
@@ -57,6 +63,11 @@ export class AdvertsService {
     }
   }
 
+  /**
+   * Find all advert of a page
+   * @param pageNum No of the page
+   * @return List of advert
+   */
   async findPageAdvert(pageNum: number): Promise<Advert[]> {
     await this.checkIfNumberIsSmallerThan(pageNum, 1, FILTER_INVALID_PAGE);
 
@@ -69,6 +80,11 @@ export class AdvertsService {
     });
   }
 
+  /**
+   * Find one specific advert represented by the id
+   * @param id Id of the advert
+   * @return Return the specified advert
+   */
   async findOneAdvertById(id: number): Promise<Advert> {
     try {
       const advert = await this.advertRepository.findOne(id);
@@ -81,6 +97,11 @@ export class AdvertsService {
     }
   }
 
+  /**
+   * Find all adverts of specified member
+   * @param uuid Id of the member
+   * @return List of advert of the membe
+   */
   async findAllAdvertByUuid(uuid: string): Promise<Advert[]> {
     try {
       return this.advertRepository.find({ memberId: uuid });
@@ -89,6 +110,10 @@ export class AdvertsService {
     }
   }
 
+  /**
+   * Find the 10 last created or modified adverts
+   * @return Top 10 recents adverts
+   */
   async findTop10RecentAdvert(): Promise<Advert[]> {
     return this.advertRepository.find({
       order: {
@@ -98,6 +123,13 @@ export class AdvertsService {
     });
   }
 
+  /**
+   * Find adverts filtered
+   * @param filters Filter to apply
+   * @param pageNum Page number to get
+   * @param member Member used to check distance
+   * @return List of adverts of the specified page
+   */
   async filterAdvert(
     filters: FilterDto,
     pageNum: number,
@@ -166,6 +198,11 @@ export class AdvertsService {
     return adverts;
   }
 
+  /**
+   * Update the advert
+   * @param advert Advert to update with new informations
+   * @return HttpResponse Status of the update
+   */
   async updateAdvert(advert: Advert): Promise<HttpResponse> {
     try {
       advert.lastModified = new Date();
@@ -182,6 +219,11 @@ export class AdvertsService {
     }
   }
 
+  /**
+   * Delete the advert
+   * @param id id of the advert to delete
+   * @return HttpResponse Status of the deletion
+   */
   async deleteAdvert(id: number): Promise<HttpResponse> {
     try {
       await this.advertRepository.delete(id);
@@ -197,6 +239,10 @@ export class AdvertsService {
     }
   }
 
+  /**
+   * Delete all advert of a member
+   * @param uuid Member
+   */
   async deleteAllOfMember(uuid: string) {
     try {
       await this.advertRepository.delete({ memberId: uuid });
@@ -212,6 +258,11 @@ export class AdvertsService {
     }
   }
 
+  /**
+   * Get the distance between a member and an advert
+   * @param member Member that asked for distance
+   * @param advert Advert to check
+   */
   async getDistanceOfAdvert(member: Member, advert: Advert): Promise<number> {
     if (advert.memberId !== undefined && member !== undefined) {
       const query = this.advertRepository
@@ -233,6 +284,10 @@ export class AdvertsService {
     return undefined;
   }
 
+  /**
+   * Check if all filter are valid
+   * @param filterDto Informations for filters
+   */
   async checkFilter(filterDto: FilterDto) {
     if (filterDto.speciesId !== undefined) {
       await this.speciesService.checkSpecies(filterDto.speciesId);
@@ -277,12 +332,22 @@ export class AdvertsService {
     }
   }
 
+  /**
+   * Check if a number is small than another and throw exception if not
+   * @param num Num to check
+   * @param min Minimal number possible
+   * @param error Error to throw
+   */
   async checkIfNumberIsSmallerThan(num: number, min: number, error: string) {
     if (!Number.isInteger(num) || num < min) {
       throw error;
     }
   }
 
+  /**
+   * Verify the user in token
+   * @param req Request received
+   */
   async verifyJwt(req): Promise<Member> {
     const jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
     try {
@@ -297,6 +362,12 @@ export class AdvertsService {
     return undefined;
   }
 
+  /**
+   * Translate an advert to the dto
+   * @param advert advert to translate
+   * @param lang Language of translation
+   * @param member Member that asked for the advert
+   */
   async ToAdvertDto(advert, lang: string, member: Member): Promise<AdvertDto> {
     const {
       id,
@@ -332,6 +403,12 @@ export class AdvertsService {
     };
   }
 
+  /**
+   * Translate a list of advert to a list of dto
+   * @param adverts adverts to translate
+   * @param lang Language of translation
+   * @param member Member that asked for the advert
+   */
   async ToAdvertsDto(
     adverts,
     lang: string,
@@ -345,6 +422,10 @@ export class AdvertsService {
     return result;
   }
 
+  /**
+   * Translate a dto to an advert
+   * @param advert
+   */
   ToAdvert(advert): Advert {
     const {
       id,

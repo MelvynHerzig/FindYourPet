@@ -12,6 +12,7 @@ import { Advert } from '../../adverts/entities/adverts.entity';
 
 /**
  * Entity to represents a user of FindYourPet
+ * @author Berney Alec, Teo Ferrari, Quentin Forestier, Melvyn Herzig
  */
 @Entity('member')
 export class Member {

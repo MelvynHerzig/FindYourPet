@@ -2,6 +2,10 @@ import { PetGender } from '../entities/adverts.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsOptional, IsPositive, Min } from 'class-validator';
 
+/**
+ * Class that contains all filter for adverts
+ * @author Berney Alec, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class FilterDto {
   @ApiProperty({
     description: 'Id of the species wanted',

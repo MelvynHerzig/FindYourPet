@@ -19,6 +19,10 @@ import { AuthService } from './auth.service';
 
 @ApiTags('auth')
 @Controller('auth')
+/**
+ * Controller for the authentification
+ * @author Berney Alec, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

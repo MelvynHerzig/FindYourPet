@@ -25,7 +25,15 @@ export enum Action {
 }
 
 @Injectable()
+/**
+ * Class for ability of each user
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class CaslAbilityFactory {
+  /**
+   * Create all ability of the member
+   * @param member Member to create ability for
+   */
   createForMember(member: Member) {
     const { can, build } = new AbilityBuilder<Ability<[Action, Subjects]>>(
       Ability as AbilityClass<AppAbility>,

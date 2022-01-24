@@ -17,6 +17,10 @@ import { RegistrationsStatus } from './dto/registration.status.dto';
 import { LoginStatus } from './dto/login.status.dto';
 
 @Injectable()
+/**
+ * Service that contains the logic for the authentification
+ * @author Berney Alec, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class AuthService {
   constructor(
     @Inject(forwardRef(() => MembersService))
@@ -24,6 +28,11 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  /**
+   * Use the memberService to verify and create a new member
+   * @param createMemberDto All needed information to create the member
+   * @return RegistrationsStatus Status about the registration
+   */
   async register(
     createMemberDto: CreateMemberDto,
   ): Promise<RegistrationsStatus> {
@@ -49,6 +58,11 @@ export class AuthService {
     return status;
   }
 
+  /**
+   * Use the member service to check if login information are correct
+   * @param loginMemberDto Information required for login
+   * @return LoginStatus Status about the login
+   */
   async login(loginMemberDto: LoginMemberDto): Promise<LoginStatus> {
     const member = await this.membersService.findByLogin(loginMemberDto);
 
@@ -62,6 +76,10 @@ export class AuthService {
     };
   }
 
+  /**
+   * Validate if user exist with memberService
+   * @param payload Payload in the JwtToken
+   */
   async validateUser(payload: JwtPayload): Promise<Member> {
     const member = await this.membersService.findByPayload(payload);
 
@@ -72,6 +90,10 @@ export class AuthService {
     return member;
   }
 
+  /**
+   * Create a token to authentifie next calls
+   * @param email email of the member
+   */
   private _createToken({ email }: Member): any {
     const member: JwtPayload = { email };
 
