@@ -13,11 +13,22 @@
         {{ advert.description }}
       </p>
     </div>
-    <div class="modification" v-if="isOwner">
-      <p>
-        <button @click="modifyButtonClicked">Modify</button> 
-        <button @click="deleteButtonClicked">Delete</button>
-      </p>
+    <div class="mod" v-if="isOwner">
+      <h3>{{ $t("animal_ad.your_ad") }}</h3>
+      <div class="modification" >
+        <p>
+          <button @click="modifyButtonClicked">{{ $t("animal_ad.modify") }}</button> 
+          <button @click="deleteButtonClicked">{{ $t("animal_ad.delete") }}</button>
+        </p>
+      </div>
+    </div>
+    <div class="distance" v-if="isConnected">
+      <h3>
+        {{ $t("animal_ad.distance") }}
+      </h3>
+      <h2>
+        {{Math.floor(advert.distance)}} Km
+      </h2>
     </div>
   </div>
 </template>
@@ -79,6 +90,12 @@ export default {
     isOwner:  function(){
       if (getMemberConnectedId() != null){
        return this.advert.member.id === getMemberConnectedId();
+      }
+      return false;
+    },
+    isConnected:  function(){
+      if (getMemberConnectedId() != null){
+       return this.advert.member.id != getMemberConnectedId();
       }
       return false;
     }
@@ -145,9 +162,23 @@ img {
   overflow: auto;
 }
 
+.mod{
+  text-align: center;
+}
+
 .modification {
   display: flex;
   align-self: center;
+}
+
+.distance {
+  display: flex;
+  flex-direction: column;
+  justify-content:space-around;
+  align-self: center;
+  text-align: center;
+  width: 120px;
+  height: 80px;
 }
 
 button {

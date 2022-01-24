@@ -20,12 +20,21 @@
           <h3> {{advert.member.firstname}} {{advert.member.name}} </h3>
           <h3> {{advert.member.email}}  </h3>
           <h3> {{advert.member.phone}} </h3>
+          <div class="distance" v-if="isConnected">
+          <h3>
+            {{ $t("animal_ad.distance") }}
+          </h3>
+          <h2>
+            {{Math.floor(advert.distance)}} Km
+          </h2>
         </div>
+        </div>
+        
       </div>
       <div class="modification" v-if="isOwner">
         <p>
-          <button @click="$router.push(`/adverts/${advert.id}/modify`)">Modify</button> 
-          <button @click="deleteButtonClicked">Delete</button>
+          <button @click="$router.push(`/adverts/${advert.id}/modify`)">{{ $t("animal_ad.modify") }}</button> 
+          <button @click="deleteButtonClicked">{{ $t("animal_ad.delete") }}</button>
         </p>
       </div>
     </div>
