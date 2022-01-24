@@ -8,7 +8,6 @@ import {
 import { Point } from 'geojson';
 import { IsEmail, IsInt, IsNotEmpty, IsPostalCode } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Advert } from '../../adverts/entities/adverts.entity';
 
 /**
  * Entity to represents a user of FindYourPet
