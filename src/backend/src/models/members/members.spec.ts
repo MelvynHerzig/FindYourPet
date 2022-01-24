@@ -101,6 +101,14 @@ describe('MembersController', () => {
     } catch (e) {}
   });
 
+  afterAll(async () => {
+    try {
+      await membersService.delete(adminMember.id);
+      await membersService.delete(randomMember.id);
+      await membersService.delete(randomMember2.id);
+    } catch (e) {}
+  });
+
   describe('findOneByEmail', () => {
     it('Should return unauthorized exception when not granted', async () => {
       try {
