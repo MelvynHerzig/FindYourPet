@@ -77,7 +77,8 @@
     "filterButton": "Filtro",
     "loadMore": "Carica altri annunci di animali domestici",
     "title": "Annunci:",
-    "titleFiltered": "Annunci filtrati:"
+    "titleFiltered": "Annunci filtrati:",
+    "notFound": "Nessun annuncio trovato"
   },
   "profile": {
     "profileInfos": "Informazioni sul profilo",

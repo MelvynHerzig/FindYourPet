@@ -1,7 +1,7 @@
 <template>
   <div class="animalsList">
     <section class="filters" id="filters">
-      <form v-on:submit.prevent="filter">
+      <form v-on:submit.prevent="getFilteredPage()">
         <MinimumInput
             @valueInput="setMinAge"
             :name="'minAge'"
@@ -51,13 +51,18 @@
           </ul>
         </div>
       </div>
+      <ToastInfo
+          v-if="notFound"
+          :text="$t('advertsList.notFound')"
+          class="toast"
+      />
       <ToastError
           v-if="error"
           :text="error"
           class="toast"
       />
       <div class="page">
-        <a v-if="smthToLoad===true" href="#" @click="getPage(actualPage+1)">
+        <a v-if="smthToLoad" href="#" @click="getNewPage()">
           <i class="fas fa-spinner"></i>
           {{ $t('advertsList.loadMore') }}
         </a>
@@ -68,24 +73,31 @@
 </template>
 
 <script>
-import { getPageAdverts, getPageFilteredAdverts, getAllSpeciesFromLang, memberIsConnected } from "@/logic/apicalls";
+import {
+  getPageAdverts,
+  getPageFilteredAdverts,
+  getAllSpeciesFromLang,
+  memberIsConnected,
+} from "@/logic/apicalls";
 import { manageErrors } from "@/logic/errors"
 import ToastError from "../components/toasts/ToastError";
+import ToastInfo from "@/components/toasts/ToastInfo";
 import AdvertPreview from "../components/AdvertPreview";
 import MinimumInput from "../components/inputs/MinimumInput";
 import MaximumInput from "../components/inputs/MaximumInput";
 
 export default {
   name: "AdvertsList",
-  components: {MaximumInput, MinimumInput, AdvertPreview, ToastError},
+  components: {MaximumInput, MinimumInput, AdvertPreview, ToastError, ToastInfo},
   beforeMount() {
-    this.getAdverts(this.actualPage);
+    this.getAdverts();
     this.getSpecies();
   },
   data() {
     return {
       error: null,
       invalidMessage: null,
+      notFound: false,
       adverts: [],
       species: [],
       selectedSpecies: "",
@@ -104,23 +116,74 @@ export default {
         this.species = result.data;
       });
     },
-    getAdverts(page) {
-      getPageAdverts(page, this.$root.$i18n.locale).then(result => {
-        if(result !== null) {
-          if(!this.filteredRequest) {
-            this.adverts = this.adverts.concat(result.data);
-          } else {
-            this.adverts = result.data;
-            this.filteredRequest = false;
-          }
-        } else {
+    getAdverts() {
+      this.resetLogicVariable();
+      getPageAdverts(this.actualPage, this.$root.$i18n.locale).then(result => {
+        this.adverts = result.data;
+        this.filteredRequest = false;
+        if(result.data.length === 0) {
+          this.notFound = true;
+        }
+        if(result.data.length < 10) {
           this.smthToLoad = false;
         }
       }).catch(error => {
+        this.smthToLoad = false;
         this.error = manageErrors(error.message);
       });
     },
-    filter(page) {
+    getNewAdverts(page) {
+      this.resetPageVariable();
+      getPageAdverts(page, this.$root.$i18n.locale).then(result => {
+        this.adverts = this.adverts.concat(result.data);
+        if(result.data.length === 0) {
+          this.notFound = true;
+        }
+        if(result.data.length < 10) {
+          this.smthToLoad = false;
+        }
+      }).catch(error => {
+        this.smthToLoad = false;
+        this.error = manageErrors(error.message);
+      });
+    },
+    getFilters() {
+      let filters = {petMinAge: 0};
+      if(this.selectedSpecies != null && this.selectedSpecies !== "") {
+        filters.speciesId = this.selectedSpecies;
+      }
+      if(this.selectedGender != null && this.selectedGender !== "") {
+        filters.gender = this.selectedGender;
+      }
+      if(this.minAge != null) {
+        filters.petMinAge = this.minAge;
+      }
+      if(this.maxAge != null) {
+        filters.petMaxAge = this.maxAge;
+      }
+      if(this.maxDistance != null) {
+        filters.radius = this.maxDistance;
+      }
+      return filters;
+    },
+    getFilteredPage() {
+      this.resetLogicVariable();
+      getPageFilteredAdverts(this.actualPage, this.$root.$i18n.locale, this.getFilters()).then(result => {
+        this.adverts = result.data;
+        this.filteredRequest = true;
+        if(result.data.length === 0) {
+          this.notFound = true;
+        }
+        if(result.data.length < 10) {
+          this.smthToLoad = false;
+        }
+      }).catch(error => {
+        this.smthToLoad = false;
+        this.error = manageErrors(error.message);
+      });
+    },
+    getNewFilteredPage(page) {
+      this.resetPageVariable();
       getPageFilteredAdverts(page, this.$root.$i18n.locale, {
         speciesId: this.selectedSpecies,
         gender: this.selectedGender,
@@ -128,26 +191,24 @@ export default {
         petMaxAge: this.maxAge,
         radius: this.maxDistance,
       }).then(result => {
-        if(result !== null) {
-          if(this.filteredRequest) {
-            this.adverts = this.adverts.concat(result.data);
-          } else {
-            this.adverts = result.data;
-            this.filteredRequest = true;
-          }
-        } else {
+        this.adverts = this.adverts.concat(result.data);
+        if(result.data.length === 0) {
+          this.notFound = true;
+        }
+        if(result.data.length < 10) {
           this.smthToLoad = false;
         }
       }).catch(error => {
+        this.smthToLoad = false;
         this.error = manageErrors(error.message);
       });
     },
-    getPage(page) {
-      this.actualPage = page;
+    getNewPage() {
+      this.actualPage++;
       if(this.isAFilterActive()) {
-        this.filter(this.actualPage);
+        this.getNewFilteredPage(this.actualPage);
       } else {
-        this.getAdverts(this.actualPage);
+        this.getNewAdverts(this.actualPage);
       }
     },
     setMinAge(value) {
@@ -175,7 +236,26 @@ export default {
     isConnected() {
       return memberIsConnected();
     },
-  }
+    resetLogicVariable() {
+      this.actualPage = 1;
+      this.adverts = [];
+      this.resetPageVariable();
+    },
+    resetPageVariable() {
+      this.smthToLoad = true;
+      this.notFound = false;
+    }
+  },
+  watch:{
+    '$i18n.locale': function() {
+      this.getSpecies();
+      if(this.isAFilterActive()) {
+        this.getFilteredPage();
+      } else {
+        this.getAdverts();
+      }
+    }
+  },
 }
 </script>
 
@@ -232,6 +312,24 @@ export default {
   justify-content: center;
 }
 
+.toast {
+  align-self: center;
+}
+
+.options {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.page {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 40%;
+  padding-left: 40%;
+  margin-bottom: 3em;
+}
+
 button {
   display: inline-block;
   padding: 20px;
@@ -260,20 +358,6 @@ button:hover {
 .dropdown:focus,
 .dropdown:hover {
   border: 1px solid var(--footer-color);
-}
-
-.options {
-  font-family: Georgia, 'Times New Roman', Times, serif;
-}
-
-.page {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding-right: 40%;
-  padding-left: 40%;
-  margin-bottom: 3em;
 }
 
 h1,

@@ -18,7 +18,7 @@ export default {
   name: "ProfileAdverts",
   components: {AdvertPreview},
   props: {
-    adverts: []
+    adverts: null,
   }
 }
 </script>

@@ -87,7 +87,7 @@ export async function getPageAdverts(pageNum, lang) {
 }
 
 export async function getPageFilteredAdverts(pageNum, lang, filters) {
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/filters/page/${pageNum}`, filters);
+    return axios.post(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/filters/page/${pageNum}`, filters);
 }
 
 export async function getRecentAdverts(lang) {
