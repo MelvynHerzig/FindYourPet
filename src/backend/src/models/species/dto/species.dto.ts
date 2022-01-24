@@ -1,8 +1,5 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Species } from '../entities/species.entity';
-import { getSpeciesName, jsonStringFromSpecies } from '../species.utils';
-import { HttpException, HttpStatus } from '@nestjs/common';
-import { ERROR_INVALID_SPECIES } from '../../../error/error-message';
 
 /**
  * Class that contains all informations to return for a species

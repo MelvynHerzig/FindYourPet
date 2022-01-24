@@ -12,21 +12,9 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { SpeciesService } from './species.service';
+
 import { AuthGuard } from '@nestjs/passport';
-import { CreateSpeciesDto } from './dto/create.species.dto';
-import { Species } from './entities/species.entity';
-import { UpdateSpeciesDto } from './dto/update.species.dto.js';
-import { SpeciesDto } from './dto/species.dto';
-import {
-  ToTranslatedSpeciesDto,
-  TranslatedSpeciesDto,
-} from './dto/translated.species.dto.js';
-import {
-  Action,
-  CaslAbilityFactory,
-} from '../../security/casl/casl-ability.factory';
-import { HttpResponse } from '../response';
+
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -37,6 +25,20 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+
+import { SpeciesService } from './species.service';
+import { Species } from './entities/species.entity';
+import { SpeciesDto } from './dto/species.dto';
+import { CreateSpeciesDto } from './dto/create.species.dto';
+import { UpdateSpeciesDto } from './dto/update.species.dto';
+import { TranslatedSpeciesDto } from './dto/translated.species.dto';
+
+import {
+  Action,
+  CaslAbilityFactory,
+} from '../../security/casl/casl-ability.factory';
+
+import { HttpResponse } from '../response';
 
 /**
  * Species controller
@@ -83,7 +85,7 @@ export class SpeciesController {
   ): Promise<TranslatedSpeciesDto[]> {
     try {
       return (await this.speciesService.findAllSpecies()).map((sp) =>
-        ToTranslatedSpeciesDto(sp, lang),
+        this.speciesService.ToTranslatedSpeciesDto(sp, lang),
       );
     } catch (e) {
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
@@ -138,7 +140,7 @@ export class SpeciesController {
     @Param('id') id: string,
   ): Promise<TranslatedSpeciesDto> {
     try {
-      return ToTranslatedSpeciesDto(
+      return this.speciesService.ToTranslatedSpeciesDto(
         await this.speciesService.findOneSpeciesById(parseInt(id)),
         lang,
       );

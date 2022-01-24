@@ -214,7 +214,7 @@ export class AdvertsController {
     status: 400,
     description: 'At least one parameter is invalid',
   })
-  @Get(':lang/filters/page/:pageNum')
+  @Post(':lang/filters/page/:pageNum')
   async findAllByFilter(
     @Body() filterDto: FilterDto,
     @Param('pageNum') pageNum: string,
