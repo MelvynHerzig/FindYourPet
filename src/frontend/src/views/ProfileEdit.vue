@@ -167,15 +167,11 @@ export default {
           NPA: this.address.npa,
           city: this.address.city,
           phone: this.phone,
-        }).then(result => {
-          if (result.data.success) {
-            this.$router.push('/login');
-          } else {
-            this.error = result.data.message;
-          }
+        }).then(() => {
+          this.$router.push('/login');
         })
         .catch(error => {
-          this.error = manageErrors(error.message);
+          this.error = manageErrors(error);
         });
       } else {
         this.error = this.verifyModifyInfos();
@@ -348,6 +344,9 @@ export default {
           this.address.city = result.data.city;
           this.phone = result.data.phone;
         }
+      })
+      .catch(error => {
+        this.error = manageErrors(error);
       });
     }
   },

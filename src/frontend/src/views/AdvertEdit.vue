@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import {createAdvert, updateAdvert, getAdvertById, getAllSpeciesFromLang, getMemberConnectedId, addFile, getFileById  } from "../logic/apicalls";
-import { manageErrors } from "../logic/errors";
+import {createAdvert, updateAdvert, getAdvertById, getAllSpeciesFromLang, getMemberConnectedId, addFile, getFileById  } from "@/logic/apicalls";
+import { manageErrors } from "@/logic/errors";
 
 import ToastError from "../components/toasts/ToastError";
 
@@ -75,12 +75,15 @@ export default {
               this.url = URL.createObjectURL(blob);
             }).catch(error =>{
                 this.url = "../images/default_advert_image.png";
-                this.error = manageErrors(error.message);
+                this.error = manageErrors(error);
               }
         )
         } else{
           this.$router.push("/profile")
         }
+      })
+      .catch(error => {
+        this.error = manageErrors(error);
       });
     }
   },
@@ -111,6 +114,9 @@ export default {
     getSpecies() {
       getAllSpeciesFromLang(this.$root.$i18n.locale).then(result => {
         this.species = result.data;
+      })
+      .catch(error => {
+        this.error = manageErrors(error);
       });
     },
     Preview_image(event) {
@@ -119,53 +125,53 @@ export default {
       this.url= URL.createObjectURL(this.image)
     },
     submit() {
-      if(this.id == null){
-      createAdvert({
-        title: this.title,
-        description: this.description,
-        petAge: this.age,
-        petGender: this.selectedSex,
-        speciesId: this.selectedSpecies
-      }) .then(
-            response => {
-              this.id = response.data.id;
-              addFile(this.id, this.image)
-              .then(()=>{
-                this.$router.push('/profile')
-              })
-              .catch(error =>{
-                this.error = manageErrors(error.message);
-              })
-          })
-          .catch(error => {
-            this.error = manageErrors(error.message);
-          });
-      }
-      else{ 
+      if(this.id == null) {
+        createAdvert({
+          title: this.title,
+          description: this.description,
+          petAge: this.age,
+          petGender: this.selectedSex,
+          speciesId: this.selectedSpecies
+        })
+        .then(response => {
+            this.id = response.data.id;
+            addFile(this.id, this.image)
+            .then(()=>{
+              this.$router.push('/profile')
+            })
+            .catch(error =>{
+              this.error = manageErrors(error);
+            });
+        })
+        .catch(error => {
+          this.error = manageErrors(error);
+        });
+      } else {
         updateAdvert({
-        id: this.id,
-        title: this.title,
-        description: this.description,
-        petAge: this.age,
-        imageId: this.imageId,
-        petGender: this.selectedSex,
-        speciesId: this.selectedSpecies
-      }) .then(()=> {
-              if(this.imageChanged){
-                addFile(this.id, this.image)
-                .then(()=>{
-                  this.$router.push('/profile');
-                })
-                .catch(error =>{
-                  this.error = manageErrors(error.message);
-                })
-              } else {
-                this.$router.push('/profile');
-              }
-          })
-          .catch(error => {
-            this.error = manageErrors(error.message);
-          });
+          id: this.id,
+          title: this.title,
+          description: this.description,
+          petAge: this.age,
+          imageId: this.imageId,
+          petGender: this.selectedSex,
+          speciesId: this.selectedSpecies
+        })
+        .then(()=> {
+          if(this.imageChanged){
+            addFile(this.id, this.image)
+            .then(()=>{
+              this.$router.push('/profile');
+            })
+            .catch(error =>{
+              this.error = manageErrors(error);
+            });
+          } else {
+            this.$router.push('/profile');
+          }
+        })
+        .catch(error => {
+          this.error = manageErrors(error);
+        });
       }
     },
   }

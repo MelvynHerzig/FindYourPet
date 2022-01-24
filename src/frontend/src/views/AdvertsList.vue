@@ -114,6 +114,9 @@ export default {
     getSpecies() {
       getAllSpeciesFromLang(this.$root.$i18n.locale).then(result => {
         this.species = result.data;
+      })
+      .catch(error => {
+        this.error = manageErrors(error);
       });
     },
     getAdverts() {
@@ -129,7 +132,7 @@ export default {
         }
       }).catch(error => {
         this.smthToLoad = false;
-        this.error = manageErrors(error.message);
+        this.error = manageErrors(error);
       });
     },
     getNewAdverts(page) {
@@ -144,7 +147,7 @@ export default {
         }
       }).catch(error => {
         this.smthToLoad = false;
-        this.error = manageErrors(error.message);
+        this.error = manageErrors(error);
       });
     },
     getFilters() {
@@ -179,7 +182,7 @@ export default {
         }
       }).catch(error => {
         this.smthToLoad = false;
-        this.error = manageErrors(error.message);
+        this.error = manageErrors(error);
       });
     },
     getNewFilteredPage(page) {
@@ -200,7 +203,7 @@ export default {
         }
       }).catch(error => {
         this.smthToLoad = false;
-        this.error = manageErrors(error.message);
+        this.error = manageErrors(error);
       });
     },
     getNewPage() {

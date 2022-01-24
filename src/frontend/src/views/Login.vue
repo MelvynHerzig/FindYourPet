@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import { login } from "../logic/apicalls";
-import { manageErrors } from "../logic/errors";
+import { login } from "@/logic/apicalls";
+import { manageErrors } from "@/logic/errors";
 import EmailInput from "../components/inputs/EmailInput";
 import PasswordInput from "../components/inputs/PasswordInput";
 import ToastError from "../components/toasts/ToastError";
@@ -56,7 +56,7 @@ export default {
         this.$router.push('/profile');
       })
       .catch(error => {
-        this.error = manageErrors(error.message);
+        this.error = manageErrors(error);
       });
     },
     setEmail(value) {
