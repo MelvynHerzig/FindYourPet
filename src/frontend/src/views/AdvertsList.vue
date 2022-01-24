@@ -121,10 +121,10 @@ export default {
       getPageAdverts(this.actualPage, this.$root.$i18n.locale).then(result => {
         this.adverts = result.data;
         this.filteredRequest = false;
-        if(result.data.size() === 0) {
+        if(result.data.length === 0) {
           this.notFound = true;
         }
-        if(result.data.size() < 10) {
+        if(result.data.length < 10) {
           this.smthToLoad = false;
         }
       }).catch(error => {
@@ -136,10 +136,10 @@ export default {
       this.resetPageVariable();
       getPageAdverts(page, this.$root.$i18n.locale).then(result => {
         this.adverts = this.adverts.concat(result.data);
-        if(result.data.size() === 0) {
+        if(result.data.length === 0) {
           this.notFound = true;
         }
-        if(result.data.size() < 10) {
+        if(result.data.length < 10) {
           this.smthToLoad = false;
         }
       }).catch(error => {
@@ -171,10 +171,10 @@ export default {
       getPageFilteredAdverts(this.actualPage, this.$root.$i18n.locale, this.getFilters()).then(result => {
         this.adverts = result.data;
         this.filteredRequest = true;
-        if(result.data.size() === 0) {
+        if(result.data.length === 0) {
           this.notFound = true;
         }
-        if(result.data.size() < 10) {
+        if(result.data.length < 10) {
           this.smthToLoad = false;
         }
       }).catch(error => {
@@ -192,10 +192,10 @@ export default {
         radius: this.maxDistance,
       }).then(result => {
         this.adverts = this.adverts.concat(result.data);
-        if(result.data.size() === 0) {
+        if(result.data.length === 0) {
           this.notFound = true;
         }
-        if(result.data.size() < 10) {
+        if(result.data.length < 10) {
           this.smthToLoad = false;
         }
       }).catch(error => {
@@ -312,6 +312,24 @@ export default {
   justify-content: center;
 }
 
+.toast {
+  align-self: center;
+}
+
+.options {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.page {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 40%;
+  padding-left: 40%;
+  margin-bottom: 3em;
+}
+
 button {
   display: inline-block;
   padding: 20px;
@@ -340,20 +358,6 @@ button:hover {
 .dropdown:focus,
 .dropdown:hover {
   border: 1px solid var(--footer-color);
-}
-
-.options {
-  font-family: Georgia, 'Times New Roman', Times, serif;
-}
-
-.page {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding-right: 40%;
-  padding-left: 40%;
-  margin-bottom: 3em;
 }
 
 h1,
