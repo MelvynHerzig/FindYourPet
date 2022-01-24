@@ -222,9 +222,6 @@ button:hover {
     width: 160px;
     height: 160px;
     border-radius: 50px;
-    align-self: center;
-    align-items: center;
-    padding-left: 20px;
   }
   
 }

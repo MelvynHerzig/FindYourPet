@@ -183,4 +183,12 @@ button:hover {
   cursor:pointer;
   background-color: var(--select-color);
 } 
+
+@media screen and (max-width: 600px) {
+  img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50px;
+  }
+}
 </style>
