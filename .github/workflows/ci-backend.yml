@@ -18,7 +18,7 @@ jobs:
         run: touch /home/runner/work/FindYourPet/FindYourPet/src/backend/database/.env
 
       - name: Set .env file for tests
-        run: echo "${{secrets.ENV_FILE}}" >> /home/runner/work/FindYourPet/FindYourPet/src/backend/database/.env
+        run: echo "${{secrets.ENV_FILE}}" >> ./src/backend/database/.env
 
       - name: Start containers
         run: docker-compose -f "./src/backend/database/docker-compose.yml" up -d --build
