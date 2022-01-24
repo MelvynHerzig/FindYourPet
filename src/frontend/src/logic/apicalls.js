@@ -32,12 +32,6 @@ export function getMemberConnectedId() {
     }
 }
 
-export function getMemberConnectedToken() {
-    if(memberIsConnected()) {
-        return cookies.get('token');
-    }
-}
-
 export function destroyMemberToken() {
     cookies.set('token', null);
     cookies.remove('token');
