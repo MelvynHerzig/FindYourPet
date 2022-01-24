@@ -4,13 +4,13 @@
       <img :src="image" alt="image">
     </div>
     <div class="name">
-      <h1>{{ advert.title }}</h1>
+      <h1>{{ textLimit(advert.title, 20, "...") }}</h1>
       <h3>{{ specie.name }}</h3>
       <h3>{{$t("ad_create." + advert.petGender)}}, {{ $t("animal_ad.age") }}: {{ advert.petAge }}</h3>
     </div>
     <div class="description">
       <p>
-        {{ advert.description }}
+        {{ textLimit(advert.description, 360, "...") }}
       </p>
     </div>
     <div class="mod" v-if="isOwner">
@@ -84,6 +84,9 @@ export default {
     },
     getImg(){
       return this.image;
+    },
+    textLimit(text, stop, clamp) {
+        return text.slice(0, stop) + (stop < text.length ? clamp || '...' : '')
     }
   },
   computed: {
@@ -152,8 +155,7 @@ img {
 
 .description {
   border-radius: 10px;
-  padding-left: 20px;
-  padding-bottom: 10px;
+  padding: 10px 20px;
   min-width: 100px;
   border: solid;
   border-color: var(--header-selection-color);
