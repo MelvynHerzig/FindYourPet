@@ -36,26 +36,3 @@ export class SpeciesDto extends OmitType(Species, ['name'] as const) {
   })
   it: string;
 }
-
-export function ToSpeciesDto(species: Species): SpeciesDto {
-  try {
-    const { id } = species;
-    const names = getSpeciesName(species);
-    return {
-      id,
-      fr: names['fr'],
-      en: names['en'],
-      de: names['de'],
-      it: names['it'],
-    };
-  } catch (e) {
-    throw new HttpException(ERROR_INVALID_SPECIES, HttpStatus.BAD_REQUEST);
-  }
-}
-
-export function ToSpecies(species: SpeciesDto): Species {
-  return {
-    id: species.id,
-    name: jsonStringFromSpecies(species),
-  };
-}

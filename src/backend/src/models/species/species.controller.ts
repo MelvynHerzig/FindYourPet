@@ -17,7 +17,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateSpeciesDto } from './dto/create.species.dto';
 import { Species } from './entities/species.entity';
 import { UpdateSpeciesDto } from './dto/update.species.dto.js';
-import { SpeciesDto, ToSpecies, ToSpeciesDto } from './dto/species.dto';
+import { SpeciesDto } from './dto/species.dto';
 import {
   ToTranslatedSpeciesDto,
   TranslatedSpeciesDto,
@@ -60,7 +60,7 @@ export class SpeciesController {
   @Get()
   async findAll(): Promise<SpeciesDto[]> {
     return (await this.speciesService.findAllSpecies()).map((sp) =>
-      ToSpeciesDto(sp),
+      this.speciesService.ToSpeciesDto(sp),
     );
   }
 
@@ -106,7 +106,7 @@ export class SpeciesController {
   @Get('id/:id')
   async findOne(@Param('id') id: string): Promise<SpeciesDto> {
     try {
-      return ToSpeciesDto(
+      return this.speciesService.ToSpeciesDto(
         await this.speciesService.findOneSpeciesById(parseInt(id)),
       );
     } catch (e) {
@@ -173,9 +173,9 @@ export class SpeciesController {
       const ability = this.caslAbilityFactory.createForMember(req.user);
 
       if (ability.can(Action.Create, Species)) {
-        return ToSpeciesDto(
+        return this.speciesService.ToSpeciesDto(
           await this.speciesService.createSpecies(
-            ToSpecies({ ...species, id: undefined }),
+            this.speciesService.ToSpecies({ ...species, id: undefined }),
           ),
         );
       }
@@ -208,7 +208,9 @@ export class SpeciesController {
       const ability = this.caslAbilityFactory.createForMember(req.user);
 
       if (ability.can(Action.Update, Species)) {
-        return this.speciesService.updateSpecies(ToSpecies(species));
+        return this.speciesService.updateSpecies(
+          this.speciesService.ToSpecies(species),
+        );
       }
     } catch (e) {
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
