@@ -30,7 +30,7 @@ p {
   width: 100%;
   bottom: 0;
   display: flex;
-  position: fixed;
+  position: relative;
   justify-content: space-between;
   background-color: var(--footer-color);
 }
@@ -70,7 +70,7 @@ p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: fixed;
+    position: relative;
     background-color: var(--footer-color);
   }
 }

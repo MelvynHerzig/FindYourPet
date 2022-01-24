@@ -6,4 +6,3 @@ import store from "./store";
 
 createApp(App).use(i18n).use(router).use(store).mount('#app');
 
-

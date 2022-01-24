@@ -1,9 +1,4 @@
 <template>
-  <link rel="stylesheet"
-        href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-        integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
-        crossorigin="anonymous"/>
-  <link rel ="icon" href ="assets/images/findyourpet_logo.png" type = "image/x-icon"/>
   <div class="main-div">
     <Header />
     <router-view class="content"/>
@@ -70,21 +65,14 @@ body {
 body::-webkit-scrollbar {/*Chrome*/
   display: none;
 }
-
-html {
-  height: 100%;
-}
 .main-div {
   height: parent;
-}
-body {
-  min-height: 100%;
 }
 
 body {
   width: 100%;
   margin: 0;
-  margin-top: 80px;
+  margin-top: 94px;
   background-color: var(--bg-color);
   background-size: 100%;
   background-repeat:repeat-x;
@@ -92,8 +80,5 @@ body {
   background-position: left top;
 }
 
-.content {
-  padding-bottom: 200px;
-}
 
 </style>
