@@ -87,7 +87,17 @@ export async function getPageAdverts(pageNum, lang) {
 }
 
 export async function getPageFilteredAdverts(pageNum, lang, filters) {
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/filters/page/${pageNum}`, filters);
+    /*return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/filters/page/${pageNum}`, {
+        data: {filters}
+    });*/
+
+   return fetch(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/filters/page/${pageNum}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: filters,
+    });
 }
 
 export async function getRecentAdverts(lang) {

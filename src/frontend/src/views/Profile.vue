@@ -34,7 +34,7 @@ export default {
       profileError: null,
       advertsError: null,
       member: null,
-      adverts: []
+      adverts: null,
     }
   },
   methods: {

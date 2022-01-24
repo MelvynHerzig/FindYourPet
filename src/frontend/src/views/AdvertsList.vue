@@ -1,7 +1,7 @@
 <template>
   <div class="animalsList">
     <section class="filters" id="filters">
-      <form v-on:submit.prevent="filter">
+      <form v-on:submit.prevent="getFilteredPage()">
         <MinimumInput
             @valueInput="setMinAge"
             :name="'minAge'"
@@ -57,7 +57,7 @@
           class="toast"
       />
       <div class="page">
-        <a v-if="smthToLoad===true" href="#" @click="getPage(actualPage+1)">
+        <a v-if="smthToLoad" href="#" @click="getNewPage()">
           <i class="fas fa-spinner"></i>
           {{ $t('advertsList.loadMore') }}
         </a>
@@ -68,7 +68,12 @@
 </template>
 
 <script>
-import { getPageAdverts, getPageFilteredAdverts, getAllSpeciesFromLang, memberIsConnected } from "@/logic/apicalls";
+import {
+  getPageAdverts,
+  getPageFilteredAdverts,
+  getAllSpeciesFromLang,
+  memberIsConnected,
+} from "@/logic/apicalls";
 import { manageErrors } from "@/logic/errors"
 import ToastError from "../components/toasts/ToastError";
 import AdvertPreview from "../components/AdvertPreview";
@@ -79,7 +84,7 @@ export default {
   name: "AdvertsList",
   components: {MaximumInput, MinimumInput, AdvertPreview, ToastError},
   beforeMount() {
-    this.getAdverts(this.actualPage);
+    this.getAdverts();
     this.getSpecies();
   },
   data() {
@@ -104,23 +109,81 @@ export default {
         this.species = result.data;
       });
     },
-    getAdverts(page) {
-      getPageAdverts(page, this.$root.$i18n.locale).then(result => {
-        if(result !== null) {
-          if(!this.filteredRequest) {
-            this.adverts = this.adverts.concat(result.data);
-          } else {
-            this.adverts = result.data;
-            this.filteredRequest = false;
-          }
+    getAdverts() {
+      this.actualPage = 1;
+      this.adverts = [];
+      getPageAdverts(this.actualPage, this.$root.$i18n.locale).then(result => {
+        if(result.data !== null) {
+          this.adverts = result.data;
+          this.filteredRequest = false;
         } else {
           this.smthToLoad = false;
         }
       }).catch(error => {
+        this.smthToLoad = false;
         this.error = manageErrors(error.message);
       });
     },
-    filter(page) {
+    getNewAdverts(page) {
+      getPageAdverts(page, this.$root.$i18n.locale).then(result => {
+        if(result.data !== null) {
+          this.adverts = this.adverts.concat(result.data);
+        } else {
+          this.smthToLoad = false;
+        }
+      }).catch(error => {
+        this.smthToLoad = false;
+        this.error = manageErrors(error.message);
+      });
+    },
+    getFilters() {
+      let filters = {petMinAge: 0};
+      if(this.selectedSpecies != null && this.selectedSpecies !== "") {
+        filters.speciesId = this.selectedSpecies;
+        /*let specie = {speciesId: this.selectedSpecies};
+        Object.assign(filters, specie);*/
+      }
+      if(this.selectedGender != null && this.selectedGender !== "") {
+        //filters.gender = this.selectedGender;
+        let gender = {gender: this.selectedGender};
+        Object.assign(filters, gender);
+      }
+      if(this.minAge != null) {
+        filters.petMinAge = this.minAge;
+        //let minAge = {petMinAge: this.minAge};
+        //Object.assign(filters, minAge);
+      }
+      if(this.maxAge != null) {
+        //filters.petMaxAge = this.maxAge;
+        let maxAge = {petMaxAge: this.maxAge};
+        Object.assign(filters, maxAge);
+      }
+      if(this.maxDistance != null) {
+        //filters.radius = this.maxDistance;
+        let radius = {radius: this.maxDistance};
+        Object.assign(filters, radius);
+      }
+      console.log(filters);
+      return filters;
+    },
+    getFilteredPage() {
+      this.actualPage = 1;
+      this.adverts = [];
+      getPageFilteredAdverts(this.actualPage, this.$root.$i18n.locale, this.getFilters()).then(result => {
+        console.log(result.data);
+        if(result.data !== null) {
+          this.adverts = result.data;
+          this.filteredRequest = true;
+        } else {
+          this.smthToLoad = false;
+        }
+      }).catch(error => {
+        console.log("ici");
+        this.smthToLoad = false;
+        this.error = manageErrors(error.message);
+      });
+    },
+    getNewFilteredPage(page) {
       getPageFilteredAdverts(page, this.$root.$i18n.locale, {
         speciesId: this.selectedSpecies,
         gender: this.selectedGender,
@@ -128,26 +191,23 @@ export default {
         petMaxAge: this.maxAge,
         radius: this.maxDistance,
       }).then(result => {
-        if(result !== null) {
-          if(this.filteredRequest) {
+        console.log(result.data);
+        if(result.data !== null) {
             this.adverts = this.adverts.concat(result.data);
-          } else {
-            this.adverts = result.data;
-            this.filteredRequest = true;
-          }
         } else {
           this.smthToLoad = false;
         }
       }).catch(error => {
+        this.smthToLoad = false;
         this.error = manageErrors(error.message);
       });
     },
-    getPage(page) {
-      this.actualPage = page;
+    getNewPage() {
+      this.actualPage++;
       if(this.isAFilterActive()) {
-        this.filter(this.actualPage);
+        this.getNewFilteredPage(this.actualPage);
       } else {
-        this.getAdverts(this.actualPage);
+        this.getNewAdverts(this.actualPage);
       }
     },
     setMinAge(value) {
@@ -175,7 +235,17 @@ export default {
     isConnected() {
       return memberIsConnected();
     },
-  }
+  },
+  watch:{
+    '$i18n.locale': function() {
+      this.getSpecies();
+      if(this.isAFilterActive()) {
+        this.getFilteredPage();
+      } else {
+        this.getAdverts();
+      }
+    }
+  },
 }
 </script>
 
