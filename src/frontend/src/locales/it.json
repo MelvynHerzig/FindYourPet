@@ -48,7 +48,21 @@
     "empty": "non può essere vuoto",
     "emailNotCorrect": "L'e-mail deve seguire il formato dell'esempio: esempio(at)esempio.esempio",
     "phoneNotCorrect": "Il telefono ha un formato errato",
-    "passwordNotCorrect": "La password deve contenere almeno 1 maiuscola, 1 minuscola, 1 numero e 1 carattere speciale"
+    "passwordNotCorrect": "La password deve contenere almeno 1 maiuscola, 1 minuscola, 1 numero, 1 carattere speciale e 8 caratteri",
+    "addressNotCorrect": "Nessun risultato corrispondente per una data via, NPA e città",
+    "specieNotCorrect": "Specie non valida",
+    "specieNotCreated": "Si è verificato un errore durante la creazione della specie",
+    "minAgeNotCorrect": "L'età minima dell'animale domestico deve essere un intero maggiore o uguale a 0",
+    "maxAgeNotCorrect": "L'età massima dell'animale deve essere un intero maggiore o uguale a 0 e maggiore dell'età minima",
+    "radiusNotCorrect": "Il raggio di ricerca deve essere un intero e almeno 1 chilometro",
+    "genderNotCorrect": "Il genere dell'animale deve essere 'maschio' o 'femmina'",
+    "pageNotCorrect": "Numero di pagina non valido",
+    "notAuthorized": "Non autorizzato",
+    "advertNotFound": "Annuncio non trovato",
+    "advertNotCreated": "Annuncio non creato",
+    "fileNotFound": "File non trovato",
+    "fileNotUploaded": "File non caricato",
+    "unknown": "Errore sconosciuto"
   },
   "account": {
     "email": "E-mail",

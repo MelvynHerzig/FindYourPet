@@ -38,39 +38,53 @@
         </p>
       </div>
     </div>
+    <ToastError
+        v-if="error"
+        :text="error"
+    />
   </div>
 </template>
 
 <script>
-import {getAdvertById, getMemberConnectedId, memberIsConnected, deleteAdvert, getFileById} from "../logic/apicalls";
-import { manageErrors } from "../logic/errors";
+import {getAdvertById, getMemberConnectedId, memberIsConnected, deleteAdvert, getFileById} from "@/logic/apicalls";
+import { manageErrors } from "@/logic/errors";
+import ToastError from "@/components/toasts/ToastError";
 
 export default {
   name: "Advert",
+  components: {ToastError},
   beforeMount() {
     getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result => {
       this.advert = result.data;
       getFileById(this.advert.imageId).then(response => {
         const blob = new Blob([response.data]);
         this.image = URL.createObjectURL(blob);
-      }).catch(error =>{
-            this.image = "../images/default_advert_image.png";
-            this.error = manageErrors(error.message);
-          }
-        )
+      })
+      .catch(error => {
+        this.image = "../images/default_advert_image.png";
+        this.error = manageErrors(error);
+      })
+    })
+    .catch(error => {
+      this.error = manageErrors(error);
     });
   },
   watch:{
     '$i18n.locale': function() {
       getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result => {
       this.advert = result.data;
-    });
+      })
+      .catch(error => {
+        this.error = manageErrors(error);
+      });
     }
   },
   methods : {
     deleteButtonClicked(){
       if(this.isOwner){
-        deleteAdvert(this.advert.id)
+        deleteAdvert(this.advert.id).catch(error => {
+          this.error = manageErrors(error);
+        });
         this.$router.push('/profile')
       } 
     }
@@ -89,7 +103,8 @@ export default {
   data: function () {
     return {
       advert: {},
-      image: null
+      image: null,
+      error: null,
     }
   },
 

@@ -48,7 +48,21 @@
     "empty": "cannot be empty",
     "emailNotCorrect": "Email must follow format example: example(at)example.example",
     "phoneNotCorrect": "Phone have an incorrect format",
-    "passwordNotCorrect": "Password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character"
+    "passwordNotCorrect": "Password must contain at least 1 uppercase, 1 lowercase, 1 number, 1 special character and 8 characteres",
+    "addressNotCorrect": "No matching result for given street, NPA and city",
+    "specieNotCorrect": "Invalid specie",
+    "specieNotCreated": "An error occured during specie creation",
+    "minAgeNotCorrect": "Minimum pet age must be an integer bigger or equal to 0",
+    "maxAgeNotCorrect": "Maximum pet age must be an integer bigger or equal to 0 and bigger than minimum age",
+    "radiusNotCorrect": "Search radius must be an integer and at least 1 kilometer",
+    "genderNotCorrect": "Pet gender must be 'male' or 'female'",
+    "pageNotCorrect": "Invalid page number",
+    "notAuthorized": "Not authorized",
+    "advertNotFound": "Advert not found",
+    "advertNotCreated": "Advert not created",
+    "fileNotFound": "File not found",
+    "fileNotUploaded": "File not uploaded",
+    "unknown": "Unknown error"
   },
   "account": {
     "email": "Email Address",
