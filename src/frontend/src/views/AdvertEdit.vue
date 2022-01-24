@@ -298,7 +298,7 @@ button:hover {
 }
 
 @media screen and (max-width: 600px) {
-  img {
+  .preview img {
     width: 160px;
     height: 160px;
     border-radius: 50px;
