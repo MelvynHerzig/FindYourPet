@@ -68,8 +68,12 @@ body::-webkit-scrollbar {/*Chrome*/
 .main-div {
   height: parent;
 }
+html {
+  height: 100%;
+}
 
 body {
+  min-height: 100%;
   width: 100%;
   margin: 0;
   margin-top: 94px;

@@ -5,17 +5,17 @@
     </a>
     <div class="link" id="links">
       <div class="nav">
-        <button @click="$router.push('/')"> {{$t("header.home")}} </button>
-        <button @click="$router.push('/adverts')"> {{$t("header.advert")}} </button>
+        <button @click="$router.push('/'), displayMenu()"> {{$t("header.home")}} </button>
+        <button @click="$router.push('/adverts'), displayMenu()"> {{$t("header.advert")}} </button>
       </div>
       <div v-if="isConnected" class="account">
-        <button @click="$router.push('/profile')"> {{$t("header.profile")}} </button>
-        <button @click="$router.push('/adverts/create')"> {{$t("header.advertCreation")}} </button>
-        <button @click="disconnectMember();"> {{$t("header.disconnect")}} </button>
+        <button @click="$router.push('/profile'), displayMenu()" > {{$t("header.profile")}} </button>
+        <button @click="$router.push('/adverts/create'), displayMenu()"> {{$t("header.advertCreation")}} </button>
+        <button @click="disconnectMember(), displayMenu()"> {{$t("header.disconnect")}} </button>
       </div>
       <div v-else class="account">
-        <button @click="$router.push('/login')"> {{$t("header.login")}} </button>
-        <button @click="$router.push('/register')"> {{$t("header.register")}} </button>
+        <button @click="$router.push('/login'), displayMenu()"> {{$t("header.login")}} </button>
+        <button @click="$router.push('/register'), displayMenu()"> {{$t("header.register")}} </button>
       </div>
     </div>
     <div>
@@ -46,11 +46,13 @@ export default {
   methods: {
     displayMenu() {
       const link = document.getElementById('links');
-      if (link.style.display === "flex") {
-        link.style.display = "none";
-      }
-      else {
-        link.style.display = "flex";
+      if(window.innerWidth < 1100){
+        if (link.style.display === "flex") {
+          link.style.display = null;
+        }
+        else {
+          link.style.display = "flex";
+        }
       }
     },
     disconnectMember() {
@@ -153,18 +155,6 @@ button {
 button:hover {
   cursor:pointer;
   background-color: var(--header-selection-color);
-}
-
-@media screen and (max-width: 1000000px) {
-  .link {
-    display: flex;
-  }
-}
-
-@media screen and (min-width: 1100px) {
-  .link {
-    display: flex;
-  }
 }
 
 @media screen and (max-width: 1100px) {
