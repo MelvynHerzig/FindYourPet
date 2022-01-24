@@ -13,6 +13,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Create .env file
+        run: touch /home/runner/work/FindYourPet/FindYourPet/src/backend/database/.env
+
+      - name: Set .env file for tests
+        run: echo "${{secrets.ENV_FILE}}" >> /home/runner/work/FindYourPet/FindYourPet/src/backend/database/.env
+
+      - name: Start containers
+        run: docker-compose -f "./src/backend/database/docker-compose.yml" up -d --build
+
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
@@ -26,3 +36,7 @@ jobs:
       - name: Start tests
         run: npm test
         working-directory: ./src/backend
+
+      - name: Stop containers
+        if: always()
+        run: docker-compose -f "./src/backend/database/docker-compose.yml" down
