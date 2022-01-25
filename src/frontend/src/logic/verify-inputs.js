@@ -63,7 +63,6 @@ export function verifyMaxAge(age) {
 }
 
 export function verifyDistance(distance) {
-    // todo: fonctionne pas
     if(!isInRange(distance, 0, 1000000)) {
         return i18n.global.t('errors.distanceNotCorrect');
     } else {
@@ -72,20 +71,12 @@ export function verifyDistance(distance) {
 }
 
 export function verifyImage(image) {
-    // todo: fonctionne pas
-    /*const Validation = /([^\s]+(\.(?i)(jpg|png|gif|bmp))$)/;
-    const valid = Validation.test(image);
+    const valid = image && image['type'].split('/')[0] === 'image'
     if (!valid) {
         return i18n.global.t('errors.imageNotCorrect');
     } else {
         return null;
-    }*/
-    if(image != null) {
-        return null;
-    } else {
-        return i18n.global.t('errors.imageNotCorrect');
     }
-
 }
 
 export function isEmpty(value) {
