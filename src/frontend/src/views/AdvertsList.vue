@@ -85,6 +85,7 @@ import ToastInfo from "@/components/toasts/ToastInfo";
 import AdvertPreview from "../components/AdvertPreview";
 import MinimumInput from "../components/inputs/MinimumInput";
 import MaximumInput from "../components/inputs/MaximumInput";
+import {isEmpty, verifyDistance, verifyGender, verifyMaxAge, verifyMinAge} from "@/logic/verify-inputs";
 
 export default {
   name: "AdvertsList",
@@ -152,20 +153,32 @@ export default {
     },
     getFilters() {
       let filters = {petMinAge: 0};
-      if(this.selectedSpecies != null && this.selectedSpecies !== "") {
+      if(!isEmpty(this.selectedSpecies)) {
         filters.speciesId = this.selectedSpecies;
       }
-      if(this.selectedGender != null && this.selectedGender !== "") {
-        filters.gender = this.selectedGender;
+      if(!isEmpty(this.selectedGender)) {
+        this.error = verifyGender(this.selectedSex);
+        if(this.error == null) {
+          filters.gender = this.selectedGender;
+        }
       }
-      if(this.minAge != null) {
-        filters.petMinAge = this.minAge;
+      if(!isEmpty(this.minAge)) {
+        this.error = verifyMinAge(this.minAge);
+        if(this.error == null) {
+          filters.petMinAge = this.minAge;
+        }
       }
-      if(this.maxAge != null) {
-        filters.petMaxAge = this.maxAge;
+      if(!isEmpty(this.maxAge)) {
+        this.error = verifyMaxAge(this.maxAge);
+        if(this.error == null) {
+          filters.petMaxAge = this.maxAge;
+        }
       }
-      if(this.maxDistance != null) {
-        filters.radius = this.maxDistance;
+      if(!isEmpty(this.maxDistance)) {
+        this.error = verifyDistance(this.maxDistance);
+        if(this.error == null) {
+          filters.radius = this.maxDistance;
+        }
       }
       return filters;
     },
@@ -187,13 +200,7 @@ export default {
     },
     getNewFilteredPage(page) {
       this.resetPageVariable();
-      getPageFilteredAdverts(page, this.$root.$i18n.locale, {
-        speciesId: this.selectedSpecies,
-        gender: this.selectedGender,
-        petMinAge: this.minAge,
-        petMaxAge: this.maxAge,
-        radius: this.maxDistance,
-      }).then(result => {
+      getPageFilteredAdverts(page, this.$root.$i18n.locale, this.getFilters()).then(result => {
         this.adverts = this.adverts.concat(result.data);
         if(result.data.length === 0) {
           this.notFound = true;

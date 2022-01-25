@@ -29,3 +29,61 @@ export function verifyPhone(phone) {
         return null;
     }
 }
+
+export function verifyGender(gender) {
+    if(gender !== i18n.global.t('ad_create.male') && gender !== i18n.global.t('ad_create.female')) {
+        return i18n.global.t('errors.genderNotCorrect');
+    } else {
+        return null;
+    }
+}
+
+export function verifyAge(age) {
+    if(!isInRange(age, 0, 1200)) {
+        return i18n.global.t('errors.ageNotCorrect');
+    } else {
+        return null;
+    }
+}
+
+export function verifyMinAge(age) {
+    if(!isInRange(age, 0, 1200)) {
+        return i18n.global.t('errors.minAgeNotCorrect');
+    } else {
+        return null;
+    }
+}
+
+export function verifyMaxAge(age) {
+    if(!isInRange(age, 0, 1200)) {
+        return i18n.global.t('errors.maxAgeNotCorrect');
+    } else {
+        return null;
+    }
+}
+
+export function verifyDistance(distance) {
+    if(!isInRange(distance, 0, 1000000)) {
+        return i18n.global.t('errors.distanceNotCorrect');
+    } else {
+        return null;
+    }
+}
+
+export function verifyImage(image) {
+    const Validation = /([^\s]+(\.(?i)(jpg|png|gif|bmp))$)/;
+    const valid = Validation.test(image);
+    if (!valid) {
+        return i18n.global.t('errors.imageNotCorrect');
+    } else {
+        return null;
+    }
+}
+
+export function isEmpty(value) {
+    return value === "" || value == null;
+}
+
+function isInRange(value, min, max) {
+    return value >= min && value <= max;
+}

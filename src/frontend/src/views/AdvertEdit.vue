@@ -51,34 +51,33 @@
 
 <script>
 import {createAdvert, updateAdvert, getAdvertById, getAllSpeciesFromLang, getMemberConnectedId, addFile, getFileById  } from "@/logic/apicalls";
-import { manageErrors } from "@/logic/errors";
-
+import {manageErrors} from "@/logic/errors";
+import {isEmpty, verifyAge, verifyGender, verifyImage} from "@/logic/verify-inputs";
 import ToastError from "../components/toasts/ToastError";
 
 export default {
   name: "AdvertEdit",
   components: {ToastError},
   beforeMount(){
-    if(this.$route.params.id != null){
+    if(this.$route.params.id != null) {
       getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result =>{
-          if(result.data.member.id === getMemberConnectedId()){
-          this.id = result.data.id; 
-          this.selectedSpecies = result.data.species.id
-          this.selectedSex = result.data.petGender
-          this.age = result.data.petAge
-          this.description = result.data.description
-          this.title = result.data.title;
-          this.imageId = result.data.imageId
-          getFileById(this.imageId).then(response => {
+          if(result.data.member.id === getMemberConnectedId()) {
+            this.id = result.data.id;
+            this.selectedSpecies = result.data.species.id
+            this.selectedSex = result.data.petGender
+            this.age = result.data.petAge
+            this.description = result.data.description
+            this.title = result.data.title;
+            this.imageId = result.data.imageId
+            getFileById(this.imageId).then(response => {
               const blob = new Blob([response.data]);
               this.image = blob;
               this.url = URL.createObjectURL(blob);
-            }).catch(error =>{
-                this.url = "../images/default_advert_image.png";
-                this.error = manageErrors(error);
-              }
-        )
-        } else{
+            })
+            .catch(() => {
+              this.url = "../images/default_advert_image.png";
+            });
+        } else {
           this.$router.push("/profile")
         }
       })
@@ -125,6 +124,10 @@ export default {
       this.url= URL.createObjectURL(this.image)
     },
     submit() {
+      this.error = this.verifyInfos();
+      if(this.error != null) {
+        return;
+      }
       if(this.id == null) {
         createAdvert({
           title: this.title,
@@ -172,6 +175,54 @@ export default {
         .catch(error => {
           this.error = manageErrors(error);
         });
+      }
+    },
+    verifyInfos() {
+      let message = null;
+
+      message = this.verifyEmptyFields();
+      if(message != null) {
+        return message;
+      }
+
+      message = verifyImage(this.image);
+      if(message != null) {
+        return message;
+      }
+
+      message = verifyGender(this.selectedSex);
+      if(message != null) {
+        return message;
+      }
+
+      message = verifyAge(this.age);
+      if(message != null) {
+        return message;
+      }
+
+      return message;
+    },
+    verifyEmptyFields() {
+      let field = null;
+      if(isEmpty(this.title)) {
+        field = this.$t('ad_create.title');
+      }
+      if(isEmpty(this.selectedSpecies)) {
+        field = this.$t('ad_create.species');
+      }
+      if(isEmpty(this.selectedSex)) {
+        field = this.$t('ad_create.sex');
+      }
+      if(isEmpty(this.age)) {
+        field = this.$t('ad_create.age');
+      }
+      if(isEmpty(this.description)) {
+        field = this.$t('ad_create.description');
+      }
+      if(field != null) {
+        return `${field} ${this.$t('errors.empty')}`;
+      } else {
+        return null;
       }
     },
   }
