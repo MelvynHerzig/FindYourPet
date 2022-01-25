@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MembersModule } from '../models/members/members.module';
 import { PassportModule } from '@nestjs/passport';
@@ -9,7 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    MembersModule,
+    forwardRef(() => MembersModule),
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
     PassportModule.register({
       defaultStrategy: 'jwt',

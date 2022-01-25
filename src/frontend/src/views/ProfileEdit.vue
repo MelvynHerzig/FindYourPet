@@ -128,6 +128,7 @@ import {
 } from "@/logic/apicalls";
 import { manageErrors } from "@/logic/errors";
 import { ERROR_INVALID_ADDRESS } from "../logic/error-message.ts";
+import {isEmpty, verifyEmail, verifyPassword, verifyPhone} from "@/logic/verify-inputs";
 
 export default {
   name: "ProfileEdit",
@@ -167,15 +168,11 @@ export default {
           NPA: this.address.npa,
           city: this.address.city,
           phone: this.phone,
-        }).then(result => {
-          if (result.data.success) {
-            this.$router.push('/login');
-          } else {
-            this.error = result.data.message;
-          }
+        }).then(() => {
+          this.$router.push('/login');
         })
         .catch(error => {
-          this.error = manageErrors(error.message);
+          this.error = manageErrors(error);
         });
       } else {
         this.error = this.verifyModifyInfos();
@@ -205,14 +202,14 @@ export default {
         return message;
       }
 
-      if(this.password === "") {
+      if(isEmpty(this.password)) {
         return `${this.$t('account.password')} ${this.$t('errors.empty')}`;
       }
-      if(this.confirmPassword === "") {
+      if(isEmpty(this.confirmPassword)) {
         return `${this.$t('account.confirmPassword')} ${this.$t('errors.empty')}`;
       }
 
-      message = this.verifyPassword();
+      message = verifyPassword(this.password);
       if(message != null) {
         return message;
       }
@@ -231,14 +228,14 @@ export default {
         return message;
       }
 
-      message = this.verifyEmail();
+      message = verifyEmail(this.email);
       if(message != null) {
         return message;
       }
 
       this.verifyAddress();
 
-      message = this.verifyPhone();
+      message = verifyPhone(this.phone);
       if(message != null) {
         return message;
       }
@@ -247,16 +244,16 @@ export default {
     },
     verifyEmptyFields() {
       let field = null;
-      if(this.firstName === "") {
+      if(isEmpty(this.firstName)) {
         field = this.$t('account.firstName');
       }
-      if(this.name === "") {
+      if(isEmpty(this.name)) {
         field = this.$t('account.name');
       }
-      if(this.email === "") {
+      if(isEmpty(this.email)) {
         field = this.$t('account.email');
       }
-      if(this.phone === "") {
+      if(isEmpty(this.phone)) {
         field = this.$t('account.phone');
       }
       if(field != null) {
@@ -265,38 +262,12 @@ export default {
         return null;
       }
     },
-    verifyEmail() {
-      const Validation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/gm;
-      const valid = Validation.test(this.email);
-      if (!valid) {
-        return this.$t('errors.emailNotCorrect');
-      } else {
-        return null;
-      }
-    },
-    verifyPhone() {
-      const Validation = /^([0][1-9][0-9](\s|)[0-9][0-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9])$|^(([0][0]|\+)[1-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9][0-9](\s|)[0-9][0-9](\s|)[0-9][0-9])$/gm;
-      const valid = Validation.test(this.phone);
-      if (!valid) {
-        return this.$t('errors.phoneNotCorrect');
-      } else {
-        return null;
-      }
-    },
-    verifyPassword() {
-      const Validation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
-      const valid = Validation.test(this.password);
-      if (!valid) {
-        return this.$t('errors.passwordNotCorrect');
-      } else {
-        return null;
-      }
-    },
     async verifyAddress() {
       let foundAddress = await getSwissAdress(this.addressToString(this.address));
 
       if (foundAddress.length === 0) {
-        this.error = manageErrors(ERROR_INVALID_ADDRESS);
+        let error = {status: 400, message: ERROR_INVALID_ADDRESS}
+        this.error = manageErrors(error);
       }
 
       // parse results
@@ -348,6 +319,9 @@ export default {
           this.address.city = result.data.city;
           this.phone = result.data.phone;
         }
+      })
+      .catch(error => {
+        this.error = manageErrors(error);
       });
     }
   },

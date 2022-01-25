@@ -32,6 +32,7 @@ import {
 
 /**
  * Member controller
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
  */
 @ApiTags('members')
 @Controller('members')
@@ -71,6 +72,7 @@ export class MembersController {
 
       if (ability.can(Action.Read, member)) return ToMemberDto(member);
     } catch (e) {
+      console.log(e);
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
     throw new UnauthorizedException();

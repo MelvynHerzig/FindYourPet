@@ -14,6 +14,10 @@ import {
 } from '../../error/error-message';
 
 @Injectable()
+/**
+ * Service for the files
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class FilesService {
   constructor(
     @InjectRepository(File)
@@ -21,6 +25,11 @@ export class FilesService {
     private advertService: AdvertsService,
   ) {}
 
+  /**
+   * Update the image for an advert
+   * @param advertId Id of the advert
+   * @param file File informations
+   */
   async updateImage(advertId: number, file: File): Promise<File> {
     try {
       const newFile = await this.filesRepository.create(file);
@@ -40,6 +49,10 @@ export class FilesService {
     }
   }
 
+  /**
+   * Get an file by id
+   * @param id Id of the file
+   */
   async getImage(id: number): Promise<File> {
     try {
       return await this.filesRepository.findOne(id);

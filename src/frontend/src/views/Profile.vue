@@ -25,6 +25,7 @@ import ProfileInfos from "@/components/profile/ProfileInfos";
 import ProfileAdverts from "@/components/profile/ProfileAdverts";
 import ToastInfo from "@/components/toasts/ToastInfo";
 import ToastError from "@/components/toasts/ToastError";
+import {manageErrors} from "@/logic/errors";
 
 export default {
   name: "Profile",
@@ -34,7 +35,7 @@ export default {
       profileError: null,
       advertsError: null,
       member: null,
-      adverts: []
+      adverts: null,
     }
   },
   methods: {
@@ -43,14 +44,14 @@ export default {
         this.member = result.data;
         this.getMembersAdverts() 
       }).catch(error => {
-        this.profileError = error;
+        this.profileError = manageErrors(error);
       });
     },
     getMembersAdverts() {
       getAdvertsByMember(this.member.id,this.$root.$i18n.locale).then(result => {
         this.adverts = result.data;
       }).catch(error => {
-        this.advertsError = error;
+        this.advertsError = manageErrors(error);
       });
     }
   },

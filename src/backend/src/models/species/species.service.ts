@@ -12,9 +12,12 @@ import {
   RESPONSE_SPECIES_DELETED,
   RESPONSE_SPECIES_UPDATED,
 } from '../response';
+import { getSpeciesName, jsonStringFromSpecies } from './species.utils';
+import { SpeciesDto } from './dto/species.dto';
 
 /**
  * Service to query species
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
  */
 @Injectable()
 export class SpeciesService {
@@ -23,6 +26,10 @@ export class SpeciesService {
     private readonly speciesRepository: Repository<Species>,
   ) {}
 
+  /**
+   * Create a species
+   * @param species Dto that contains all information to create a species
+   */
   async createSpecies(species: Species): Promise<Species> {
     try {
       return this.speciesRepository.save(species);
@@ -31,10 +38,17 @@ export class SpeciesService {
     }
   }
 
+  /**
+   * Find a list of all species
+   */
   async findAllSpecies(): Promise<Species[]> {
     return this.speciesRepository.find();
   }
 
+  /**
+   * Find a specific species using the id
+   * @param id Id of the species
+   */
   async findOneSpeciesById(id: number): Promise<Species> {
     try {
       return this.speciesRepository.findOne(id);
@@ -43,6 +57,10 @@ export class SpeciesService {
     }
   }
 
+  /**
+   * Update a species
+   * @param species Dto that contains all information to update the species
+   */
   async updateSpecies(species: Species): Promise<HttpResponse> {
     try {
       await this.speciesRepository.update(species.id, species);
@@ -58,6 +76,10 @@ export class SpeciesService {
     }
   }
 
+  /**
+   * Delete a species
+   * @param id Id of the species to delete
+   */
   async deleteSpecies(id: number): Promise<HttpResponse> {
     try {
       await this.speciesRepository.delete(id);
@@ -73,6 +95,10 @@ export class SpeciesService {
     }
   }
 
+  /**
+   * Check if a species exist
+   * @param id id to check
+   */
   async checkSpecies(id: number): Promise<boolean> {
     try {
       const species = await this.findOneSpeciesById(id);
@@ -85,5 +111,45 @@ export class SpeciesService {
     }
 
     return true;
+  }
+
+  ToSpeciesDto(species: Species): SpeciesDto {
+    try {
+      const { id } = species;
+      const names = getSpeciesName(species);
+      return {
+        id,
+        fr: names['fr'],
+        en: names['en'],
+        de: names['de'],
+        it: names['it'],
+      };
+    } catch (e) {
+      throw new HttpException(ERROR_INVALID_SPECIES, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  ToSpecies(species: SpeciesDto): Species {
+    return {
+      id: species.id,
+      name: jsonStringFromSpecies(species),
+    };
+  }
+
+  /**
+   * Translate a species and return his translatedDto
+   * @param species species to translate
+   * @param lang language of the translation
+   */
+  ToTranslatedSpeciesDto(species: Species, lang: string) {
+    try {
+      const { id } = species;
+      return {
+        id,
+        name: lang !== undefined ? getSpeciesName(species)[lang] : species.name,
+      };
+    } catch (e) {
+      throw new HttpException(ERROR_INVALID_SPECIES, HttpStatus.BAD_REQUEST);
+    }
   }
 }

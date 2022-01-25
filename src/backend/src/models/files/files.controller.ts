@@ -8,7 +8,6 @@ import {
   Req,
   Res,
   StreamableFile,
-  UnauthorizedException,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -40,6 +39,10 @@ import { ERROR_NOT_AUTHORIZED } from '../../error/error-message';
 
 @ApiTags('files')
 @Controller('files')
+/**
+ * Controller for the files
+ * @author Berney Alec, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class FilesController {
   constructor(
     private advertService: AdvertsService,

@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Member } from './entities/members.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -21,6 +27,7 @@ import {
   RESPONSE_MEMBER_DELETED,
   RESPONSE_MEMBER_UPDATED,
 } from '../response';
+import { AdvertsService } from '../adverts/adverts.service';
 
 // Need to use bcrypt like that, otherwise not working...
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -28,22 +35,37 @@ const bcrypt = require('bcryptjs');
 
 /**
  * Service to query members
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
  */
 @Injectable()
 export class MembersService {
   constructor(
     @InjectRepository(Member)
     private readonly memberRepository: Repository<Member>,
+    @Inject(forwardRef(() => AdvertsService))
+    private advertService: AdvertsService,
   ) {}
 
+  /**
+   * Find one member using the specified option in param
+   * @param options One or more attribute of the member
+   */
   async findOne(options?: object): Promise<Member> {
     try {
-      return this.memberRepository.findOne(options);
+      const member = this.memberRepository.findOne(options);
+      if (!member) {
+        throw new HttpException(ERROR_USER_NOT_FOUND, HttpStatus.BAD_REQUEST);
+      }
+      return member;
     } catch (e) {
       throw new HttpException(ERROR_USER_NOT_FOUND, HttpStatus.BAD_REQUEST);
     }
   }
 
+  /**
+   * Find member using payload of jwt
+   * @param email unique email of the member
+   */
   async findByPayload({ email }: any): Promise<Member> {
     try {
       return await this.findOne({ where: { email } });
@@ -52,6 +74,10 @@ export class MembersService {
     }
   }
 
+  /**
+   * Find location of a user
+   * @param email Email of user
+   */
   async findLocationByPayload({ email }: any): Promise<Point> {
     try {
       const member = await this.findByPayload(email);
@@ -61,6 +87,11 @@ export class MembersService {
     }
   }
 
+  /**
+   * Find a user using his credential
+   * @param email Email of the user
+   * @param password Password of the user
+   */
   async findByLogin({ email, password }: LoginMemberDto): Promise<Member> {
     const member = await this.memberRepository.findOne({ where: { email } });
 
@@ -77,6 +108,10 @@ export class MembersService {
     throw new HttpException(ERROR_INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED);
   }
 
+  /**
+   * Create a member
+   * @param members member to create
+   */
   async create(members: Member): Promise<Member> {
     const { email } = members;
 
@@ -89,12 +124,15 @@ export class MembersService {
 
     const member: Member = await this.memberRepository.create(members);
     member.password = bcrypt.hashSync(member.password, 10);
-    member.isAdmin = false;
     await this.memberRepository.save(member);
 
     return member;
   }
 
+  /**
+   * Update the member
+   * @param member Member to update
+   */
   async update(member: Member): Promise<HttpResponse> {
     try {
       this.verifiyInput(member, false);
@@ -122,8 +160,13 @@ export class MembersService {
     }
   }
 
+  /**
+   * Delete a member
+   * @param memberId member's id to delete
+   */
   async delete(memberId: string): Promise<HttpResponse> {
     try {
+      await this.advertService.deleteAllOfMember(memberId);
       await this.memberRepository.delete(memberId);
       return {
         success: true,
@@ -137,6 +180,10 @@ export class MembersService {
     }
   }
 
+  /**
+   * Set location point using an api for a given address
+   * @param member Member that contain the address
+   */
   async setMemberLocation(member: Member) {
     // Getting geolocation
     const addr = `${member.street} ${member.NPA} ${member.city}`;
@@ -160,6 +207,11 @@ export class MembersService {
     };
   }
 
+  /**
+   * Verify if information given are correct
+   * @param member
+   * @param verifiyPassword
+   */
   verifiyInput(member, verifiyPassword: boolean) {
     const passwordValidation =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;

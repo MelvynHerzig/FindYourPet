@@ -10,13 +10,11 @@ import {
   Put,
   Req,
   Request,
-  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { AdvertsService } from './adverts.service';
 import { AuthGuard } from '@nestjs/passport';
 import { FilterDto } from './dto/filters.dto';
-import { DeleteResult, UpdateResult } from 'typeorm';
 import {
   Action,
   CaslAbilityFactory,
@@ -43,6 +41,10 @@ import { ERROR_NOT_AUTHORIZED } from '../../error/error-message';
  */
 @ApiTags('adverts')
 @Controller('adverts')
+/**
+ * Controller for the adverts
+ * @author Berney Alec, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class AdvertsController {
   constructor(
     private advertService: AdvertsService,
@@ -153,7 +155,7 @@ export class AdvertsController {
     return this.advertService.ToAdvertsDto(
       await this.advertService.findAllAdvertByUuid(uuid),
       lang,
-      req.user.email,
+      req.user,
     );
   }
 
@@ -212,7 +214,7 @@ export class AdvertsController {
     status: 400,
     description: 'At least one parameter is invalid',
   })
-  @Get(':lang/filters/page/:pageNum')
+  @Post(':lang/filters/page/:pageNum')
   async findAllByFilter(
     @Body() filterDto: FilterDto,
     @Param('pageNum') pageNum: string,
@@ -222,7 +224,6 @@ export class AdvertsController {
     try {
       await this.advertService.checkFilter(filterDto);
       const member = await this.advertService.verifyJwt(req);
-      console.log(member);
       return this.advertService.ToAdvertsDto(
         await this.advertService.filterAdvert(
           filterDto,

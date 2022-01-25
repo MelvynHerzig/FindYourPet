@@ -2,6 +2,10 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
+/**
+ * Entity to represents a file
+ * @author Berney Alec, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class File {
   @ApiProperty({
     description: 'The id of the file',

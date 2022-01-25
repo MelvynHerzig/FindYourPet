@@ -12,21 +12,9 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { SpeciesService } from './species.service';
+
 import { AuthGuard } from '@nestjs/passport';
-import { CreateSpeciesDto } from './dto/create.species.dto';
-import { Species } from './entities/species.entity';
-import { UpdateSpeciesDto } from './dto/update.species.dto.js';
-import { SpeciesDto, ToSpecies, ToSpeciesDto } from './dto/species.dto';
-import {
-  ToTranslatedSpeciesDto,
-  TranslatedSpeciesDto,
-} from './dto/translated.species.dto.js';
-import {
-  Action,
-  CaslAbilityFactory,
-} from '../../security/casl/casl-ability.factory';
-import { HttpResponse } from '../response';
+
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -38,8 +26,23 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
+import { SpeciesService } from './species.service';
+import { Species } from './entities/species.entity';
+import { SpeciesDto } from './dto/species.dto';
+import { CreateSpeciesDto } from './dto/create.species.dto';
+import { UpdateSpeciesDto } from './dto/update.species.dto';
+import { TranslatedSpeciesDto } from './dto/translated.species.dto';
+
+import {
+  Action,
+  CaslAbilityFactory,
+} from '../../security/casl/casl-ability.factory';
+
+import { HttpResponse } from '../response';
+
 /**
- * Race controller
+ * Species controller
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
  */
 @ApiTags('species')
 @Controller('species')
@@ -59,7 +62,7 @@ export class SpeciesController {
   @Get()
   async findAll(): Promise<SpeciesDto[]> {
     return (await this.speciesService.findAllSpecies()).map((sp) =>
-      ToSpeciesDto(sp),
+      this.speciesService.ToSpeciesDto(sp),
     );
   }
 
@@ -82,7 +85,7 @@ export class SpeciesController {
   ): Promise<TranslatedSpeciesDto[]> {
     try {
       return (await this.speciesService.findAllSpecies()).map((sp) =>
-        ToTranslatedSpeciesDto(sp, lang),
+        this.speciesService.ToTranslatedSpeciesDto(sp, lang),
       );
     } catch (e) {
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
@@ -105,7 +108,7 @@ export class SpeciesController {
   @Get('id/:id')
   async findOne(@Param('id') id: string): Promise<SpeciesDto> {
     try {
-      return ToSpeciesDto(
+      return this.speciesService.ToSpeciesDto(
         await this.speciesService.findOneSpeciesById(parseInt(id)),
       );
     } catch (e) {
@@ -137,7 +140,7 @@ export class SpeciesController {
     @Param('id') id: string,
   ): Promise<TranslatedSpeciesDto> {
     try {
-      return ToTranslatedSpeciesDto(
+      return this.speciesService.ToTranslatedSpeciesDto(
         await this.speciesService.findOneSpeciesById(parseInt(id)),
         lang,
       );
@@ -172,9 +175,9 @@ export class SpeciesController {
       const ability = this.caslAbilityFactory.createForMember(req.user);
 
       if (ability.can(Action.Create, Species)) {
-        return ToSpeciesDto(
+        return this.speciesService.ToSpeciesDto(
           await this.speciesService.createSpecies(
-            ToSpecies({ ...species, id: undefined }),
+            this.speciesService.ToSpecies({ ...species, id: undefined }),
           ),
         );
       }
@@ -207,7 +210,9 @@ export class SpeciesController {
       const ability = this.caslAbilityFactory.createForMember(req.user);
 
       if (ability.can(Action.Update, Species)) {
-        return this.speciesService.updateSpecies(ToSpecies(species));
+        return this.speciesService.updateSpecies(
+          this.speciesService.ToSpecies(species),
+        );
       }
     } catch (e) {
       throw new HttpException(e, HttpStatus.BAD_REQUEST);

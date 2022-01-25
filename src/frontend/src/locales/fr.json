@@ -48,7 +48,24 @@
     "empty": "ne peut pas être vide",
     "emailNotCorrect": "L'email doit respecter le format suivant: exemple(at)exemple.exemple",
     "phoneNotCorrect": "Le téléphone possède un format incorrecte",
-    "passwordNotCorrect": "Le mot de passe doit contenir au moins une majuscule, une minuscule, un nombre et un charactère spécial"
+    "passwordNotCorrect": "Le mot de passe doit contenir au moins une majuscule, une minuscule, un nombre, un charactère spécial et 8 charactères",
+    "addressNotCorrect": "Pas de résultat trouvé pour la rue, le NPA et la ville donnée",
+    "specieNotCorrect": "Espèce invalide",
+    "specieNotCreated": "Une erreur est survenue lors de la création de l'espèce",
+    "ageNotCorrect": "L'âge de l'animal doit être plus grand ou égal à 0 et plus petit que 1200 mois",
+    "minAgeNotCorrect": "Le minimum de l'âge de l'animal doit être plus grand ou égal à 0",
+    "maxAgeNotCorrect": "Le maximum de l'âge de l'animal doit être plus grand ou égal à 0",
+    "radiusNotCorrect": "Le rayon de recherche doit valoir au moins 1 kilomètre",
+    "genderNotCorrect": "Le genre de l'animal doit être 'mâle' ou 'femelle'",
+    "pageNotCorrect": "Numéro de page invalide",
+    "imageNotCorrect": "Fichier image invalide, l'extension doit être .jpg, .png, .gif ou .bmp",
+    "distanceNotCorrect": "La distance doit être plus grande ou égale à 0 et plus petite que 1'000'000 km",
+    "notAuthorized": "Inauthorisé",
+    "advertNotFound": "Annonce non trouvée",
+    "advertNotCreated": "Annonce non créée",
+    "fileNotFound": "Fichier non trouvé",
+    "fileNotUploaded": "Fichier non téléchargé",
+    "unknown": "Erreur inconnue"
   },
   "account": {
     "email": "Adresse email",
@@ -77,7 +94,8 @@
     "filterButton": "Filtrer",
     "loadMore": "Charger plus d'annonces d'animal de compagnie",
     "title": "Annonces:",
-    "titleFiltered": "Annonces filtrées:"
+    "titleFiltered": "Annonces filtrées:",
+    "notFound": "Aucune annonce trouvée"
   },
   "profile": {
     "profileInfos": "Informations du Profil",
@@ -89,7 +107,11 @@
     "button": "Modifier"
   },
   "animal_ad" : {
-    "age": "age"
+    "age": "age",
+    "distance": "Distance de chez vous :",
+    "modify": "Modifier",
+    "delete": "Supprimer",
+    "your_ad": "Ceci est votre annonce !"
   },
   "ad":{
     "contact": "Contact",

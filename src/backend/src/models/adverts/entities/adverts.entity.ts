@@ -12,6 +12,7 @@ export enum PetGender {
 
 /**
  * Entity to represents an adverts to trade pets.
+ * @author Berney Alec, Teo Ferrari, Quentin Forestier, Melvyn Herzig
  */
 @Entity('adverts')
 export class Advert {
@@ -71,7 +72,7 @@ export class Advert {
   })
   petGender: PetGender;
 
-  @Column({ nullable: true })
+  @Column({ type: 'uuid' })
   memberId: string;
 
   @ApiProperty({

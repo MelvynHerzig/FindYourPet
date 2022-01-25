@@ -25,33 +25,40 @@ export enum Action {
 }
 
 @Injectable()
+/**
+ * Class for ability of each user
+ * @author Alec Berney, Teo Ferrari, Quentin Forestier, Melvyn Herzig
+ */
 export class CaslAbilityFactory {
+  /**
+   * Create all ability of the member
+   * @param member Member to create ability for
+   */
   createForMember(member: Member) {
     const { can, build } = new AbilityBuilder<Ability<[Action, Subjects]>>(
       Ability as AbilityClass<AppAbility>,
     );
 
     if (member) {
-      // Adverts
-      can(Action.Read, Advert);
-      can(Action.Create, Advert);
-      can(Action.Update, Advert, { memberId: member.id });
-      can(Action.Delete, Advert, { memberId: member.id });
-
-      // Species
-      can(Action.Read, Species);
-
-      // Members
-      can(Action.Read, Member, { id: member.id });
-      can(Action.Update, Member, { id: member.id });
-      can(Action.Delete, Member, { id: member.id });
-
-      // Admin
       if (member.isAdmin) {
         can(Action.Read, 'all');
         can(Action.Create, 'all');
         can(Action.Update, 'all');
         can(Action.Delete, 'all');
+      } else {
+        // Adverts
+        can(Action.Read, Advert);
+        can(Action.Create, Advert);
+        can(Action.Update, Advert, { memberId: member.id });
+        can(Action.Delete, Advert, { memberId: member.id });
+
+        // Species
+        can(Action.Read, Species);
+
+        // Members
+        can(Action.Read, Member, { id: member.id });
+        can(Action.Update, Member, { id: member.id });
+        can(Action.Delete, Member, { id: member.id });
       }
     }
     return build({

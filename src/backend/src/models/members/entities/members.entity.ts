@@ -1,10 +1,17 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Point } from 'geojson';
 import { IsEmail, IsInt, IsNotEmpty, IsPostalCode } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 /**
  * Entity to represents a user of FindYourPet
+ * @author Berney Alec, Teo Ferrari, Quentin Forestier, Melvyn Herzig
  */
 @Entity('member')
 export class Member {

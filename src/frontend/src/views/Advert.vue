@@ -20,48 +20,71 @@
           <h3> {{advert.member.firstname}} {{advert.member.name}} </h3>
           <h3> {{advert.member.email}}  </h3>
           <h3> {{advert.member.phone}} </h3>
+          <div class="distance" v-if="isConnected">
+          <h3>
+            {{ $t("animal_ad.distance") }}
+          </h3>
+          <h2>
+            {{Math.floor(advert.distance)}} Km
+          </h2>
         </div>
+        </div>
+        
       </div>
       <div class="modification" v-if="isOwner">
         <p>
-          <button @click="$router.push(`/adverts/${advert.id}/modify`)">Modify</button> 
-          <button @click="deleteButtonClicked">Delete</button>
+          <button @click="$router.push(`/adverts/${advert.id}/modify`)">{{ $t("animal_ad.modify") }}</button> 
+          <button @click="deleteButtonClicked">{{ $t("animal_ad.delete") }}</button>
         </p>
       </div>
     </div>
+    <ToastError
+        v-if="error"
+        :text="error"
+    />
   </div>
 </template>
 
 <script>
-import {getAdvertById, getMemberConnectedId, memberIsConnected, deleteAdvert, getFileById} from "../logic/apicalls";
-import { manageErrors } from "../logic/errors";
+import {getAdvertById, getMemberConnectedId, memberIsConnected, deleteAdvert, getFileById} from "@/logic/apicalls";
+import { manageErrors } from "@/logic/errors";
+import ToastError from "@/components/toasts/ToastError";
 
 export default {
   name: "Advert",
+  components: {ToastError},
   beforeMount() {
     getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result => {
       this.advert = result.data;
       getFileById(this.advert.imageId).then(response => {
         const blob = new Blob([response.data]);
         this.image = URL.createObjectURL(blob);
-      }).catch(error =>{
-            this.image = "../images/default_advert_image.png";
-            this.error = manageErrors(error.message);
-          }
-        )
+      })
+      .catch(error => {
+        this.image = "../images/default_advert_image.png";
+        this.error = manageErrors(error);
+      })
+    })
+    .catch(error => {
+      this.error = manageErrors(error);
     });
   },
   watch:{
     '$i18n.locale': function() {
       getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result => {
       this.advert = result.data;
-    });
+      })
+      .catch(error => {
+        this.error = manageErrors(error);
+      });
     }
   },
   methods : {
     deleteButtonClicked(){
       if(this.isOwner){
-        deleteAdvert(this.advert.id)
+        deleteAdvert(this.advert.id).catch(error => {
+          this.error = manageErrors(error);
+        });
         this.$router.push('/profile')
       } 
     }
@@ -80,7 +103,8 @@ export default {
   data: function () {
     return {
       advert: {},
-      image: null
+      image: null,
+      error: null,
     }
   },
 
@@ -174,4 +198,12 @@ button:hover {
   cursor:pointer;
   background-color: var(--select-color);
 } 
+
+@media screen and (max-width: 600px) {
+  img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50px;
+  }
+}
 </style>

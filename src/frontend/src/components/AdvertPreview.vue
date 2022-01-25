@@ -4,31 +4,48 @@
       <img :src="image" alt="image">
     </div>
     <div class="name">
-      <h1>{{ advert.title }}</h1>
+      <h1>{{ textLimit(advert.title, 20, "...") }}</h1>
       <h3>{{ specie.name }}</h3>
       <h3>{{$t("ad_create." + advert.petGender)}}, {{ $t("animal_ad.age") }}: {{ advert.petAge }}</h3>
     </div>
     <div class="description">
       <p>
-        {{ advert.description }}
+        {{ textLimit(advert.description, 360, "...") }}
       </p>
     </div>
-    <div class="modification" v-if="isOwner">
-      <p>
-        <button @click="modifyButtonClicked">Modify</button> 
-        <button @click="deleteButtonClicked">Delete</button>
-      </p>
+    <div class="mod" v-if="isOwner">
+      <h3>{{ $t("animal_ad.your_ad") }}</h3>
+      <div class="modification" >
+        <p>
+          <button @click="modifyButtonClicked">{{ $t("animal_ad.modify") }}</button> 
+          <button @click="deleteButtonClicked">{{ $t("animal_ad.delete") }}</button>
+        </p>
+      </div>
     </div>
+    <div class="distance" v-if="isConnected">
+      <h3>
+        {{ $t("animal_ad.distance") }}
+      </h3>
+      <h2>
+        {{Math.floor(advert.distance)}} Km
+      </h2>
+    </div>
+    <ToastError
+        v-if="error"
+        :text="error"
+    />
   </div>
 </template>
 
 <script>
 
-import { deleteAdvert, getMemberConnectedId, getSpeciesByIdFromLang, getFileById} from '../logic/apicalls'
-import { manageErrors } from "../logic/errors";
+import {deleteAdvert, getMemberConnectedId, getSpeciesByIdFromLang, getFileById} from '@/logic/apicalls'
+import {manageErrors} from "@/logic/errors";
+import ToastError from "@/components/toasts/ToastError";
 
 export default {
   name: "AdvertPreview",
+  components: {ToastError},
   props: {
     advert: {}
   },
@@ -37,11 +54,11 @@ export default {
     getFileById(this.advert.imageId).then(response => {
       const blob = new Blob([response.data]);
       this.image = URL.createObjectURL(blob);
-    }).catch(error =>{
-          this.image = "../images/default_advert_image.png";
-          this.error = manageErrors(error.message);
-        }
-      )
+    })
+    .catch(error =>{
+      this.image = "../images/default_advert_image.png";
+      this.error = manageErrors(error);
+    })
   },
   watch:{
     '$i18n.locale': function() {
@@ -51,13 +68,17 @@ export default {
   data() {
     return {
       specie: {},
-      image: null
+      image: null,
+      error: null,
     }
   },
   methods: {
     getSpecies(){
       getSpeciesByIdFromLang(this.advert.species.id, this.$root.$i18n.locale).then(result => {
           this.specie = result.data;
+      })
+      .catch(error => {
+        this.error = manageErrors(error);
       });
     },
     modifyButtonClicked(event){
@@ -67,18 +88,29 @@ export default {
     deleteButtonClicked(event){
       event.stopPropagation();
       if(this.isOwner){
-        deleteAdvert(this.advert.id);
+        deleteAdvert(this.advert.id).catch(error => {
+          this.error = manageErrors(error);
+        });
         window.location.reload();
       } 
     },
     getImg(){
       return this.image;
+    },
+    textLimit(text, stop, clamp) {
+        return text.slice(0, stop) + (stop < text.length ? clamp || '...' : '')
     }
   },
   computed: {
     isOwner:  function(){
       if (getMemberConnectedId() != null){
        return this.advert.member.id === getMemberConnectedId();
+      }
+      return false;
+    },
+    isConnected:  function(){
+      if (getMemberConnectedId() != null){
+       return this.advert.member.id !== getMemberConnectedId();
       }
       return false;
     }
@@ -135,8 +167,7 @@ img {
 
 .description {
   border-radius: 10px;
-  padding-left: 20px;
-  padding-bottom: 10px;
+  padding: 10px 20px;
   min-width: 100px;
   border: solid;
   border-color: var(--header-selection-color);
@@ -145,9 +176,23 @@ img {
   overflow: auto;
 }
 
+.mod{
+  text-align: center;
+}
+
 .modification {
   display: flex;
   align-self: center;
+}
+
+.distance {
+  display: flex;
+  flex-direction: column;
+  justify-content:space-around;
+  align-self: center;
+  text-align: center;
+  width: 120px;
+  height: 80px;
 }
 
 button {
@@ -189,9 +234,6 @@ button:hover {
     width: 160px;
     height: 160px;
     border-radius: 50px;
-    align-self: center;
-    align-items: center;
-    padding-left: 20px;
   }
   
 }

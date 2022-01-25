@@ -32,12 +32,6 @@ export function getMemberConnectedId() {
     }
 }
 
-export function getMemberConnectedToken() {
-    if(memberIsConnected()) {
-        return cookies.get('token');
-    }
-}
-
 export function destroyMemberToken() {
     cookies.set('token', null);
     cookies.remove('token');
@@ -87,7 +81,7 @@ export async function getPageAdverts(pageNum, lang) {
 }
 
 export async function getPageFilteredAdverts(pageNum, lang, filters) {
-    return axios.get(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/filters/page/${pageNum}`, filters);
+    return axios.post(`${process.env.VUE_APP_ROOT_API}/adverts/${lang}/filters/page/${pageNum}`, filters);
 }
 
 export async function getRecentAdverts(lang) {
