@@ -39,6 +39,11 @@
         <button type="submit">{{ $t('advertsList.filterButton') }}</button>
       </form>
     </section>
+    <ToastError
+        v-if="error"
+        :text="error"
+        class="toast"
+    />
     <section class="bg">
       <div class="inner">
         <h1 v-if="filteredRequest">{{$t("advertsList.titleFiltered")}}</h1>
@@ -54,11 +59,6 @@
       <ToastInfo
           v-if="notFound"
           :text="$t('advertsList.notFound')"
-          class="toast"
-      />
-      <ToastError
-          v-if="error"
-          :text="error"
           class="toast"
       />
       <div class="page">

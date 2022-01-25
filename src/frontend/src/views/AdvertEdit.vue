@@ -252,6 +252,7 @@ button{
   width: 100%;
   margin: auto;
   display: flex;
+  flex-direction: column;
 }
 
 form {
@@ -335,6 +336,10 @@ form {
   height: 400px;
   align-self: center;
   border-radius: 50px;
+}
+
+.toast {
+  align-self: center;
 }
 
 button {
