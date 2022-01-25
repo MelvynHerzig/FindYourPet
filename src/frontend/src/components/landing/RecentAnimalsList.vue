@@ -4,7 +4,7 @@
       <h1>{{$t("recent.title")}}</h1>
       <div class="list">
         <ul>
-          <li v-for="advert in this.adverts.slice(0,3)" :key="advert.id" style="list-style-type:none">
+          <li v-for="advert in this.adverts.slice(0,10)" :key="advert.id" style="list-style-type:none">
             <AdvertPreview :advert="advert"/>
           </li>
         </ul>

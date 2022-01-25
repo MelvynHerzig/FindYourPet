@@ -156,6 +156,11 @@ h3, p {
   margin-left: 10px;
 }
 
+.image{
+  display: flex;
+  justify-content: center;
+}
+
 img {
   width: 160px;
   height: 160px;
@@ -240,6 +245,13 @@ button:hover {
     padding: 10px;
     border-radius: 10px;
     transition: all .3s;
+  }
+
+  .text{
+    display: flex;
+    flex-direction: column;
+    min-width: 0px;
+    align-items: center;
   }
 
   .advert div {

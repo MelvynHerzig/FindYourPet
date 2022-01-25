@@ -98,10 +98,7 @@ export default {
   background: url("../assets/images/bunny.jpg") no-repeat fixed center;
   background-size: contain;
   width: 100%;
-  height: 66vh;
   margin: auto;
-  padding-top: 3em;
-  padding-bottom: 3em;
   display: flex;
 }
 
