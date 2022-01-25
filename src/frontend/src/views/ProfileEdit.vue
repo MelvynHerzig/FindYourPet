@@ -128,7 +128,7 @@ import {
 } from "@/logic/apicalls";
 import { manageErrors } from "@/logic/errors";
 import { ERROR_INVALID_ADDRESS } from "../logic/error-message.ts";
-import {verifyEmail, verifyPassword, verifyPhone} from "@/logic/verify-inputs";
+import {isEmpty, verifyEmail, verifyPassword, verifyPhone} from "@/logic/verify-inputs";
 
 export default {
   name: "ProfileEdit",
@@ -202,10 +202,10 @@ export default {
         return message;
       }
 
-      if(this.password === "") {
+      if(isEmpty(this.password)) {
         return `${this.$t('account.password')} ${this.$t('errors.empty')}`;
       }
-      if(this.confirmPassword === "") {
+      if(isEmpty(this.confirmPassword)) {
         return `${this.$t('account.confirmPassword')} ${this.$t('errors.empty')}`;
       }
 
@@ -244,16 +244,16 @@ export default {
     },
     verifyEmptyFields() {
       let field = null;
-      if(this.firstName === "") {
+      if(isEmpty(this.firstName)) {
         field = this.$t('account.firstName');
       }
-      if(this.name === "") {
+      if(isEmpty(this.name)) {
         field = this.$t('account.name');
       }
-      if(this.email === "") {
+      if(isEmpty(this.email)) {
         field = this.$t('account.email');
       }
-      if(this.phone === "") {
+      if(isEmpty(this.phone)) {
         field = this.$t('account.phone');
       }
       if(field != null) {

@@ -2,25 +2,42 @@
   <div class="animalsList">
     <section class="filters" id="filters">
       <form v-on:submit.prevent="getFilteredPage()">
-        <MinimumInput
-            @valueInput="setMinAge"
-            :name="'minAge'"
-            :placeholder="$t('advertsList.minAge')"
-            class="input"
-        />
-        <MaximumInput
-            @valueInput="setMaxAge"
-            :name="'maxAge'"
-            :placeholder="$t('advertsList.maxAge')"
-            class="input"
-        />
-        <MaximumInput
-            v-if="isConnected() === true"
-            @valueInput="setMaxDistance"
-            :name="'maxDistance'"
-            :placeholder="$t('advertsList.maxDistance')"
-            class="input"
-        />
+        <div class="field">
+          <i class="fas fa-minus icon"></i>
+          <input
+              v-model="minAge"
+              type="number"
+              min="0"
+              max="1200"
+              name="minAge"
+              :placeholder="$t('advertsList.minAge')"
+              class="input"
+          />
+        </div>
+        <div class="field">
+          <i class="fas fa-plus icon"></i>
+          <input
+              v-model="maxAge"
+              type="number"
+              min="0"
+              max="1200"
+              name="maxAge"
+              :placeholder="$t('advertsList.maxAge')"
+              class="input"
+          />
+        </div>
+        <div class="field" v-if="isConnected() === true">
+          <i class="fas fa-plus icon"></i>
+          <input
+              v-model="maxDistance"
+              type="number"
+              min="0"
+              max="1000000"
+              name="maxDistance"
+              :placeholder="$t('advertsList.maxDistance')"
+              class="input"
+          />
+        </div>
         <select class="dropdown" v-model="selectedSpecies">
           <option class="options" disabled hidden value="">{{$t("ad_create.species")}}</option>
           <option class="options" v-for="specie in species" :key="specie.id" v-bind:value="specie.id">
@@ -39,6 +56,11 @@
         <button type="submit">{{ $t('advertsList.filterButton') }}</button>
       </form>
     </section>
+    <ToastError
+        v-if="error"
+        :text="error"
+        class="toast"
+    />
     <section class="bg">
       <div class="inner">
         <h1 v-if="filteredRequest">{{$t("advertsList.titleFiltered")}}</h1>
@@ -54,11 +76,6 @@
       <ToastInfo
           v-if="notFound"
           :text="$t('advertsList.notFound')"
-          class="toast"
-      />
-      <ToastError
-          v-if="error"
-          :text="error"
           class="toast"
       />
       <div class="page">
@@ -83,12 +100,11 @@ import { manageErrors } from "@/logic/errors"
 import ToastError from "../components/toasts/ToastError";
 import ToastInfo from "@/components/toasts/ToastInfo";
 import AdvertPreview from "../components/AdvertPreview";
-import MinimumInput from "../components/inputs/MinimumInput";
-import MaximumInput from "../components/inputs/MaximumInput";
+import {isEmpty, verifyDistance, verifyGender, verifyMaxAge, verifyMinAge} from "@/logic/verify-inputs";
 
 export default {
   name: "AdvertsList",
-  components: {MaximumInput, MinimumInput, AdvertPreview, ToastError, ToastInfo},
+  components: {AdvertPreview, ToastError, ToastInfo},
   beforeMount() {
     this.getAdverts();
     this.getSpecies();
@@ -152,20 +168,32 @@ export default {
     },
     getFilters() {
       let filters = {petMinAge: 0};
-      if(this.selectedSpecies != null && this.selectedSpecies !== "") {
+      if(!isEmpty(this.selectedSpecies)) {
         filters.speciesId = this.selectedSpecies;
       }
-      if(this.selectedGender != null && this.selectedGender !== "") {
-        filters.gender = this.selectedGender;
+      if(!isEmpty(this.selectedGender)) {
+        this.error = verifyGender(this.selectedSex);
+        if(this.error == null) {
+          filters.gender = this.selectedGender;
+        }
       }
-      if(this.minAge != null) {
-        filters.petMinAge = this.minAge;
+      if(!isEmpty(this.minAge)) {
+        this.error = verifyMinAge(this.minAge);
+        if(this.error == null) {
+          filters.petMinAge = this.minAge;
+        }
       }
-      if(this.maxAge != null) {
-        filters.petMaxAge = this.maxAge;
+      if(!isEmpty(this.maxAge)) {
+        this.error = verifyMaxAge(this.maxAge);
+        if(this.error == null) {
+          filters.petMaxAge = this.maxAge;
+        }
       }
-      if(this.maxDistance != null) {
-        filters.radius = this.maxDistance;
+      if(!isEmpty(this.maxDistance)) {
+        this.error = verifyDistance(this.maxDistance);
+        if(this.error == null) {
+          filters.radius = this.maxDistance;
+        }
       }
       return filters;
     },
@@ -187,13 +215,7 @@ export default {
     },
     getNewFilteredPage(page) {
       this.resetPageVariable();
-      getPageFilteredAdverts(page, this.$root.$i18n.locale, {
-        speciesId: this.selectedSpecies,
-        gender: this.selectedGender,
-        petMinAge: this.minAge,
-        petMaxAge: this.maxAge,
-        radius: this.maxDistance,
-      }).then(result => {
+      getPageFilteredAdverts(page, this.$root.$i18n.locale, this.getFilters()).then(result => {
         this.adverts = this.adverts.concat(result.data);
         if(result.data.length === 0) {
           this.notFound = true;
@@ -212,21 +234,6 @@ export default {
         this.getNewFilteredPage(this.actualPage);
       } else {
         this.getNewAdverts(this.actualPage);
-      }
-    },
-    setMinAge(value) {
-      if(value >= 0) {
-        this.minAge = value;
-      }
-    },
-    setMaxAge(value) {
-      if(value > 1) {
-        this.maxAge = value;
-      }
-    },
-    setMaxDistance(value) {
-      if(value >= 1) {
-        this.maxDistance = value;
       }
     },
     isAFilterActive() {
@@ -284,7 +291,6 @@ export default {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  align-items: center;
 }
 
 .bg {
@@ -331,6 +337,35 @@ export default {
   padding-right: 40%;
   padding-left: 40%;
   margin-bottom: 3em;
+}
+
+.field {
+  position: relative;
+}
+
+.icon {
+  position: absolute;
+  top: 13px;
+  left: 20px;
+  color: grey;
+}
+
+input {
+  width: 100%;
+  height: 42px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  font-size: 14px;
+  padding: 0 20px 0 50px;
+  outline: none;
+}
+
+input:active,
+input:focus,
+input:hover {
+  border: 1px solid var(--footer-color);
 }
 
 button {
