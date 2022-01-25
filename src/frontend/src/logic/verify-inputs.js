@@ -31,7 +31,7 @@ export function verifyPhone(phone) {
 }
 
 export function verifyGender(gender) {
-    if(gender !== i18n.global.t('ad_create.male') && gender !== i18n.global.t('ad_create.female')) {
+    if(gender !== 'male' && gender !== 'female') {
         return i18n.global.t('errors.genderNotCorrect');
     } else {
         return null;
@@ -70,12 +70,12 @@ export function verifyDistance(distance) {
     }
 }
 
-export function verifyImage(image) {
-    const valid = image && image['type'].split('/')[0] === 'image'
-    if (!valid) {
-        return i18n.global.t('errors.imageNotCorrect');
-    } else {
+export function verifyImage(image, imageChanged) {
+    const valid = image && image['type'].split('/')[0] === 'image';
+    if (valid || !imageChanged) {
         return null;
+    } else {
+        return i18n.global.t('errors.imageNotCorrect');
     }
 }
 

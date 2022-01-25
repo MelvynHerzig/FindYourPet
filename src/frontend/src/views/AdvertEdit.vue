@@ -185,7 +185,7 @@ export default {
         return message;
       }
 
-      message = verifyImage(this.image);
+      message = verifyImage(this.image, this.imageChanged);
       if(message != null) {
         return message;
       }
