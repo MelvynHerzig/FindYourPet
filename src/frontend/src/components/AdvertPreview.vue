@@ -39,7 +39,13 @@
 
 <script>
 
-import {deleteAdvert, getMemberConnectedId, getSpeciesByIdFromLang, getFileById} from '@/logic/apicalls'
+import {
+  deleteAdvert,
+  getMemberConnectedId,
+  getSpeciesByIdFromLang,
+  getFileById,
+  memberIsConnected
+} from '@/logic/apicalls'
 import {manageErrors} from "@/logic/errors";
 import ToastError from "@/components/toasts/ToastError";
 
@@ -75,7 +81,7 @@ export default {
   methods: {
     getSpecies(){
       getSpeciesByIdFromLang(this.advert.species.id, this.$root.$i18n.locale).then(result => {
-          this.specie = result.data;
+        this.specie = result.data;
       })
       .catch(error => {
         this.error = manageErrors(error);
@@ -102,17 +108,20 @@ export default {
     }
   },
   computed: {
-    isOwner:  function(){
-      if (getMemberConnectedId() != null){
-       return this.advert.member.id === getMemberConnectedId();
+    isOwner() {
+      if (getMemberConnectedId() != null) {
+        return this.advert.member.id === getMemberConnectedId();
       }
       return false;
     },
-    isConnected:  function(){
-      if (getMemberConnectedId() != null){
-       return this.advert.member.id !== getMemberConnectedId();
+    isConnected() {
+      if(this.advert.member === undefined || this.advert.member == null) {
+        if(memberIsConnected()) {
+          this.$store.commit('disconnect');
+        }
+        return false;
       }
-      return false;
+      return memberIsConnected();
     }
   }
 }

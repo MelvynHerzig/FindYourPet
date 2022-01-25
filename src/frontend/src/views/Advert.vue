@@ -4,8 +4,8 @@
       <h1>{{advert.title}}</h1>
       <div class="info">
         <div class="short">
-          <img :src="image" alt="image">
-          <h2>{{advert.species.name}}</h2>  
+          <img v-if="image" :src="image" alt="image">
+          <h2>{{advert.species.name}}</h2>
           <h3>{{$t("ad_create." + advert.petGender)}}, {{advert.petAge}} {{$t("ad.years")}}</h3>
         </div>
         <div class="description">
@@ -21,15 +21,14 @@
           <h3> {{advert.member.email}}  </h3>
           <h3> {{advert.member.phone}} </h3>
           <div class="distance" v-if="isConnected">
-          <h3>
-            {{ $t("animal_ad.distance") }}
-          </h3>
-          <h2>
-            {{Math.floor(advert.distance)}} Km
-          </h2>
+            <h3>
+              {{ $t("animal_ad.distance") }}
+            </h3>
+            <h2>
+              {{Math.floor(advert.distance)}} Km
+            </h2>
+          </div>
         </div>
-        </div>
-        
       </div>
       <div class="modification" v-if="isOwner">
         <p>
@@ -69,7 +68,7 @@ export default {
       this.error = manageErrors(error);
     });
   },
-  watch:{
+  watch: {
     '$i18n.locale': function() {
       getAdvertById(this.$route.params.id, this.$root.$i18n.locale).then(result => {
       this.advert = result.data;
@@ -79,8 +78,8 @@ export default {
       });
     }
   },
-  methods : {
-    deleteButtonClicked(){
+  methods: {
+    deleteButtonClicked() {
       if(this.isOwner){
         deleteAdvert(this.advert.id).catch(error => {
           this.error = manageErrors(error);
@@ -89,18 +88,24 @@ export default {
       } 
     }
   },
-  computed:{
-    isConnected:  function(){
-     return memberIsConnected();
-    },
-    isOwner:  function(){
-      if (getMemberConnectedId() != null){
-       return this.advert.member.id === getMemberConnectedId();
+  computed: {
+    isConnected() {
+      if(this.advert.member === undefined || this.advert.member == null) {
+        if(memberIsConnected()) {
+          this.$store.commit('disconnect');
+        }
+        return false;
       }
-      return false
+      return memberIsConnected();
+    },
+    isOwner() {
+      if (getMemberConnectedId() != null) {
+        return this.advert.member.id === getMemberConnectedId();
+      }
+      return false;
     }
   },
-  data: function () {
+  data() {
     return {
       advert: {},
       image: null,
