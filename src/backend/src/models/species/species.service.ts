@@ -113,6 +113,10 @@ export class SpeciesService {
     return true;
   }
 
+  /**
+   * Translate a species to dto
+   * @param species Species to translate
+   */
   ToSpeciesDto(species: Species): SpeciesDto {
     try {
       const { id } = species;
@@ -129,6 +133,10 @@ export class SpeciesService {
     }
   }
 
+  /**
+   * Translate a dto to the entity
+   * @param species Dto to translate
+   */
   ToSpecies(species: SpeciesDto): Species {
     return {
       id: species.id,
