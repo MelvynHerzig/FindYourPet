@@ -128,7 +128,8 @@
     "sex": "Gender",
     "button": "Submit",
     "male": "male",
-    "female":"female"
-    
+    "female":"female",
+    "AllSpecies": "All species",
+    "AllGenders": "All genders"
   }
 }

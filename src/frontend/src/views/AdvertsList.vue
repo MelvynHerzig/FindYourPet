@@ -40,16 +40,18 @@
         </div>
         <select class="dropdown" v-model="selectedSpecies">
           <option class="options" disabled hidden value="">{{$t("ad_create.species")}}</option>
+          <option class="options" value="">{{$t("ad_create.AllSpecies")}}</option>
           <option class="options" v-for="specie in species" :key="specie.id" v-bind:value="specie.id">
             {{ specie.name }}
           </option>
         </select>
         <select class="dropdown" v-model="selectedGender">
           <option disabled hidden value="">{{$t("ad_create.sex")}}</option>
-          <option value = "male">
+          <option class="options" value="">{{$t("ad_create.AllGenders")}}</option>
+          <option class="options" value="male">
             {{ $t("ad_create.male") }}
           </option>
-          <option value = "female">
+          <option class="options" value="female">
             {{ $t("ad_create.female") }}
           </option>
         </select>
@@ -172,7 +174,7 @@ export default {
         filters.speciesId = this.selectedSpecies;
       }
       if(!isEmpty(this.selectedGender)) {
-        this.error = verifyGender(this.selectedSex);
+        this.error = verifyGender(this.selectedGender);
         if(this.error == null) {
           filters.gender = this.selectedGender;
         }

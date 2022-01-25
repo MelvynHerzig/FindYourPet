@@ -128,6 +128,8 @@
     "sex": "sex",
     "button": "submitten",
     "male": "male",
-    "female":"female"
+    "female":"female",
+    "AllSpecies": "Alle Spezies",
+    "AllGenders": "Alle Geschlechter"
   }
 }
