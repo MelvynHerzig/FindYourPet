@@ -3,15 +3,19 @@
     <div class="image">
       <img :src="image" alt="image">
     </div>
-    <div class="name">
-      <h1>{{ textLimit(advert.title, 20, "...") }}</h1>
-      <h3>{{ specie.name }}</h3>
-      <h3>{{$t("ad_create." + advert.petGender)}}, {{ $t("animal_ad.age") }}: {{ advert.petAge }}</h3>
-    </div>
-    <div class="description">
-      <p>
-        {{ textLimit(advert.description, 360, "...") }}
-      </p>
+    <div class = "info">
+        <h1>{{ textLimit(advert.title, 45, "...") }}</h1>
+        <div class= "text">
+          <div class="name">
+            <h3>{{ specie.name }}</h3>
+            <h3>{{$t("ad_create." + advert.petGender)}}, {{ $t("animal_ad.age") }}: {{ advert.petAge }}</h3>
+          </div>
+          <div class="description">
+            <p>
+              {{ textLimit(advert.description, 200, "...") }}
+            </p>
+          </div>
+          </div>
     </div>
     <div class="mod" v-if="isOwner">
       <h3>{{ $t("animal_ad.your_ad") }}</h3>
@@ -120,6 +124,11 @@ export default {
 
 <style scoped>
 
+h1{
+  margin: 2px;
+  margin-bottom: 15px;
+}
+
 h3, p {
   color: darkgrey;
 }
@@ -143,8 +152,8 @@ h3, p {
 }
 
 .advert div {
-  margin-right: 20px;
-  margin-left: 20px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 img {
@@ -152,6 +161,14 @@ img {
   height: 160px;
   align-self: center;
   border-radius: 50px;
+}
+
+.info{
+  flex: 3;
+}
+
+.text{
+  display: flex;
 }
 
 .name {
