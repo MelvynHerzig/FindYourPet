@@ -40,26 +40,25 @@ export class CaslAbilityFactory {
     );
 
     if (member) {
-      // Adverts
-      can(Action.Read, Advert);
-      can(Action.Create, Advert);
-      can(Action.Update, Advert, { memberId: member.id });
-      can(Action.Delete, Advert, { memberId: member.id });
-
-      // Species
-      can(Action.Read, Species);
-
-      // Members
-      can(Action.Read, Member, { id: member.id });
-      can(Action.Update, Member, { id: member.id });
-      can(Action.Delete, Member, { id: member.id });
-
-      // Admin
       if (member.isAdmin) {
         can(Action.Read, 'all');
         can(Action.Create, 'all');
         can(Action.Update, 'all');
         can(Action.Delete, 'all');
+      } else {
+        // Adverts
+        can(Action.Read, Advert);
+        can(Action.Create, Advert);
+        can(Action.Update, Advert, { memberId: member.id });
+        can(Action.Delete, Advert, { memberId: member.id });
+
+        // Species
+        can(Action.Read, Species);
+
+        // Members
+        can(Action.Read, Member, { id: member.id });
+        can(Action.Update, Member, { id: member.id });
+        can(Action.Delete, Member, { id: member.id });
       }
     }
     return build({

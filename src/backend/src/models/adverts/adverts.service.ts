@@ -5,7 +5,7 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilterDto } from './dto/filters.dto';
 import { SpeciesService } from '../species/species.service';
@@ -20,7 +20,6 @@ import {
   FILTER_INVALID_RADIUS,
 } from '../../error/error-message';
 import { MembersService } from '../members/members.service';
-import { ToTranslatedSpeciesDto } from '../species/dto/translated.species.dto';
 import { ToPublicMemberDto } from '../members/dto/members.dto';
 import { ExtractJwt } from 'passport-jwt';
 import { JwtService } from '@nestjs/jwt';
@@ -389,7 +388,7 @@ export class AdvertsService {
       lastModified,
       petAge,
       petGender,
-      species: ToTranslatedSpeciesDto(
+      species: this.speciesService.ToTranslatedSpeciesDto(
         await this.speciesService.findOneSpeciesById(speciesId),
         lang,
       ),

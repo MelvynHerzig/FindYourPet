@@ -30,16 +30,22 @@
         {{Math.floor(advert.distance)}} Km
       </h2>
     </div>
+    <ToastError
+        v-if="error"
+        :text="error"
+    />
   </div>
 </template>
 
 <script>
 
-import { deleteAdvert, getMemberConnectedId, getSpeciesByIdFromLang, getFileById} from '../logic/apicalls'
-import { manageErrors } from "../logic/errors";
+import {deleteAdvert, getMemberConnectedId, getSpeciesByIdFromLang, getFileById} from '@/logic/apicalls'
+import {manageErrors} from "@/logic/errors";
+import ToastError from "@/components/toasts/ToastError";
 
 export default {
   name: "AdvertPreview",
+  components: {ToastError},
   props: {
     advert: {}
   },
@@ -48,11 +54,11 @@ export default {
     getFileById(this.advert.imageId).then(response => {
       const blob = new Blob([response.data]);
       this.image = URL.createObjectURL(blob);
-    }).catch(error =>{
-          this.image = "../images/default_advert_image.png";
-          this.error = manageErrors(error.message);
-        }
-      )
+    })
+    .catch(error =>{
+      this.image = "../images/default_advert_image.png";
+      this.error = manageErrors(error);
+    })
   },
   watch:{
     '$i18n.locale': function() {
@@ -62,13 +68,17 @@ export default {
   data() {
     return {
       specie: {},
-      image: null
+      image: null,
+      error: null,
     }
   },
   methods: {
     getSpecies(){
       getSpeciesByIdFromLang(this.advert.species.id, this.$root.$i18n.locale).then(result => {
           this.specie = result.data;
+      })
+      .catch(error => {
+        this.error = manageErrors(error);
       });
     },
     modifyButtonClicked(event){
@@ -78,7 +88,9 @@ export default {
     deleteButtonClicked(event){
       event.stopPropagation();
       if(this.isOwner){
-        deleteAdvert(this.advert.id);
+        deleteAdvert(this.advert.id).catch(error => {
+          this.error = manageErrors(error);
+        });
         window.location.reload();
       } 
     },
@@ -98,7 +110,7 @@ export default {
     },
     isConnected:  function(){
       if (getMemberConnectedId() != null){
-       return this.advert.member.id != getMemberConnectedId();
+       return this.advert.member.id !== getMemberConnectedId();
       }
       return false;
     }

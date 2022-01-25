@@ -12,6 +12,8 @@ import {
   RESPONSE_SPECIES_DELETED,
   RESPONSE_SPECIES_UPDATED,
 } from '../response';
+import { getSpeciesName, jsonStringFromSpecies } from './species.utils';
+import { SpeciesDto } from './dto/species.dto';
 
 /**
  * Service to query species
@@ -109,5 +111,45 @@ export class SpeciesService {
     }
 
     return true;
+  }
+
+  ToSpeciesDto(species: Species): SpeciesDto {
+    try {
+      const { id } = species;
+      const names = getSpeciesName(species);
+      return {
+        id,
+        fr: names['fr'],
+        en: names['en'],
+        de: names['de'],
+        it: names['it'],
+      };
+    } catch (e) {
+      throw new HttpException(ERROR_INVALID_SPECIES, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  ToSpecies(species: SpeciesDto): Species {
+    return {
+      id: species.id,
+      name: jsonStringFromSpecies(species),
+    };
+  }
+
+  /**
+   * Translate a species and return his translatedDto
+   * @param species species to translate
+   * @param lang language of the translation
+   */
+  ToTranslatedSpeciesDto(species: Species, lang: string) {
+    try {
+      const { id } = species;
+      return {
+        id,
+        name: lang !== undefined ? getSpeciesName(species)[lang] : species.name,
+      };
+    } catch (e) {
+      throw new HttpException(ERROR_INVALID_SPECIES, HttpStatus.BAD_REQUEST);
+    }
   }
 }

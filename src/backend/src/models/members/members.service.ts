@@ -52,7 +52,11 @@ export class MembersService {
    */
   async findOne(options?: object): Promise<Member> {
     try {
-      return this.memberRepository.findOne(options);
+      const member = this.memberRepository.findOne(options);
+      if (!member) {
+        throw new HttpException(ERROR_USER_NOT_FOUND, HttpStatus.BAD_REQUEST);
+      }
+      return member;
     } catch (e) {
       throw new HttpException(ERROR_USER_NOT_FOUND, HttpStatus.BAD_REQUEST);
     }
@@ -120,7 +124,6 @@ export class MembersService {
 
     const member: Member = await this.memberRepository.create(members);
     member.password = bcrypt.hashSync(member.password, 10);
-    member.isAdmin = false;
     await this.memberRepository.save(member);
 
     return member;

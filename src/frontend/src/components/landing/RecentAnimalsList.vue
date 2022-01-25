@@ -10,6 +10,10 @@
         </ul>
       </div>
     </div>
+    <ToastError
+        v-if="error"
+        :text="error"
+    />
   </div>
 </template>
 
@@ -17,18 +21,24 @@
 import { getRecentAdverts } from "@/logic/apicalls";
 
 import AdvertPreview from "../AdvertPreview";
+import ToastError from "@/components/toasts/ToastError";
+import {manageErrors} from "@/logic/errors";
 
 export default {
   name: "RecentAnimalsList",
-  components: { AdvertPreview },
+  components: {ToastError, AdvertPreview },
   beforeMount() {
     getRecentAdverts(this.$root.$i18n.locale).then(result => {
       this.adverts = result.data;
+    })
+    .catch(error => {
+      this.error = manageErrors(error);
     });
   },
-  data: function () {
+  data() {
     return {
-      adverts: []
+      adverts: [],
+      error: null,
     }
   },
 }

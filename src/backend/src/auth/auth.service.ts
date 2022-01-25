@@ -47,7 +47,7 @@ export class AuthService {
 
       await this.membersService.setMemberLocation(member);
 
-      await this.membersService.create(member);
+      await this.membersService.create({ ...member, isAdmin: false });
     } catch (err) {
       status = {
         success: false,
