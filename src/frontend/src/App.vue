@@ -56,6 +56,10 @@ button{
   --transparent-border-color: #5a648f25
 }
 
+.content{
+  min-height: 88vh;
+}
+
 /*hide scrollbar*/
 body {
   -ms-overflow-style: none;  /* IE and Edge */
@@ -65,16 +69,11 @@ body {
 body::-webkit-scrollbar {/*Chrome*/
   display: none;
 }
-.main-div {
-  height: parent;
-}
-html {
-  height: 100%;
-}
 
 body {
   min-height: 100%;
-  width: 100%;
+  
+  left: 0;
   margin: 0;
   margin-top: 94px;
   background-color: var(--bg-color);

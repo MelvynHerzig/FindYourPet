@@ -3,15 +3,19 @@
     <div class="image">
       <img :src="image" alt="image">
     </div>
-    <div class="name">
-      <h1>{{ textLimit(advert.title, 20, "...") }}</h1>
-      <h3>{{ specie.name }}</h3>
-      <h3>{{$t("ad_create." + advert.petGender)}}, {{ $t("animal_ad.age") }}: {{ advert.petAge }}</h3>
-    </div>
-    <div class="description">
-      <p>
-        {{ textLimit(advert.description, 360, "...") }}
-      </p>
+    <div class = "info">
+        <h1>{{ textLimit(advert.title, 45, "...") }}</h1>
+        <div class= "text">
+          <div class="name">
+            <h3>{{ specie.name }}</h3>
+            <h3>{{$t("ad_create." + advert.petGender)}}, {{ $t("animal_ad.age") }}: {{ advert.petAge }}</h3>
+          </div>
+          <div class="description">
+            <p>
+              {{ textLimit(advert.description, 200, "...") }}
+            </p>
+          </div>
+          </div>
     </div>
     <div class="mod" v-if="isOwner">
       <h3>{{ $t("animal_ad.your_ad") }}</h3>
@@ -39,7 +43,13 @@
 
 <script>
 
-import {deleteAdvert, getMemberConnectedId, getSpeciesByIdFromLang, getFileById} from '@/logic/apicalls'
+import {
+  deleteAdvert,
+  getMemberConnectedId,
+  getSpeciesByIdFromLang,
+  getFileById,
+  memberIsConnected
+} from '@/logic/apicalls'
 import {manageErrors} from "@/logic/errors";
 import ToastError from "@/components/toasts/ToastError";
 
@@ -75,7 +85,7 @@ export default {
   methods: {
     getSpecies(){
       getSpeciesByIdFromLang(this.advert.species.id, this.$root.$i18n.locale).then(result => {
-          this.specie = result.data;
+        this.specie = result.data;
       })
       .catch(error => {
         this.error = manageErrors(error);
@@ -102,23 +112,32 @@ export default {
     }
   },
   computed: {
-    isOwner:  function(){
-      if (getMemberConnectedId() != null){
-       return this.advert.member.id === getMemberConnectedId();
+    isOwner() {
+      if (getMemberConnectedId() != null) {
+        return this.advert.member.id === getMemberConnectedId();
       }
       return false;
     },
-    isConnected:  function(){
-      if (getMemberConnectedId() != null){
-       return this.advert.member.id !== getMemberConnectedId();
+    isConnected() {
+      if(this.advert.member === undefined || this.advert.member == null) {
+        if(memberIsConnected()) {
+          this.$store.commit('disconnect');
+        }
+        return false;
       }
-      return false;
+      return memberIsConnected();
     }
   }
 }
 </script>
 
 <style scoped>
+
+h1{
+  margin: 2px;
+  margin-bottom: 15px;
+  padding-left: 20px;
+}
 
 h3, p {
   color: darkgrey;
@@ -143,8 +162,13 @@ h3, p {
 }
 
 .advert div {
-  margin-right: 20px;
-  margin-left: 20px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.image{
+  display: flex;
+  justify-content: center;
 }
 
 img {
@@ -152,6 +176,14 @@ img {
   height: 160px;
   align-self: center;
   border-radius: 50px;
+}
+
+.info{
+  flex: 3;
+}
+
+.text{
+  display: flex;
 }
 
 .name {
@@ -223,6 +255,13 @@ button:hover {
     padding: 10px;
     border-radius: 10px;
     transition: all .3s;
+  }
+
+  .text{
+    display: flex;
+    flex-direction: column;
+    min-width: 0px;
+    align-items: center;
   }
 
   .advert div {

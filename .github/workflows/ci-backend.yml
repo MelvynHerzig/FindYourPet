@@ -14,11 +14,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Create .env file
+      - name: Create .env file for database
         run: touch /home/runner/work/FindYourPet/FindYourPet/src/backend/database/.env
 
-      - name: Set .env file for tests
+      - name: Create .env file for backend
+        run: touch /home/runner/work/FindYourPet/FindYourPet/src/backend/.env
+
+      - name: Set .env file for database
         run: echo "${{secrets.ENV_FILE}}" >> ./src/backend/database/.env
+
+      - name: Set .env file for backend
+        run: echo "${{secrets.ENV_FILE}}" >> ./src/backend/.env
 
       - name: Start containers
         run: docker-compose -f "./src/backend/database/docker-compose.yml" up -d --build
