@@ -4,12 +4,13 @@
     <FormInput
         @valueInput="sendEvent"
         :defaultValue="defaultValue"
-        :type="'password'"
+        :type="type"
         :name="name"
         :placeholder="placeholder"
         :required="true"
         class="input"
     />
+    <i class="visible fas" :class = "isVisible ? 'fa-eye' : 'fa-eye-slash'" @click = "makeVisible(), isVisible = !isVisible" ></i>
   </div>
 </template>
 
@@ -28,7 +29,21 @@ export default {
     sendEvent(value) {
       this.$emit('valueInput', value);
     },
+    makeVisible(){
+      if(this.type === "password"){
+        this.type = "text";
+      } else {
+        this.type = "password";
+        
+      }
+    }
   },
+   data() {
+     return {
+      type: "password",
+      isVisible: true
+     }
+   }
 }
 </script>
 
@@ -42,6 +57,13 @@ export default {
   position: absolute;
   top: 13px;
   left: 20px;
+  color: grey;
+}
+
+.visible{
+  position: absolute;
+  top: 13px;
+  right: 20px;
   color: grey;
 }
 
