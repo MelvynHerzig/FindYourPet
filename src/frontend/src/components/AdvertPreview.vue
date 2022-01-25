@@ -127,6 +127,7 @@ export default {
 h1{
   margin: 2px;
   margin-bottom: 15px;
+  padding-left: 20px;
 }
 
 h3, p {
