@@ -49,7 +49,7 @@ services:
 
   postgres:
     container_name: postgres
-    image: postgres:latest
+    image: postgis/postgis
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root" ]
       timeout: 45s
@@ -112,7 +112,8 @@ services:
       - "traefik.http.routers.backend.tls.domains[0].main=findyourpet.ch"
       - "traefik.http.routers.backend.tls.domains[0].sans=*.findyourpet.ch"
       - "traefik.http.services.backend.loadbalancer.server.port=3000"
-
+    volumes:
+      - ./files:/app/files
     networks:
       - backend
 networks:
