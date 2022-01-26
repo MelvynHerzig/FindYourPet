@@ -167,7 +167,8 @@ h3, p {
   justify-content: center;
 }
 
-img {
+img {  
+  object-fit: cover;
   width: 160px;
   height: 160px;
   align-self: center;
@@ -270,7 +271,6 @@ button:hover {
     height: 160px;
     border-radius: 50px;
   }
-  
 }
 
 </style>

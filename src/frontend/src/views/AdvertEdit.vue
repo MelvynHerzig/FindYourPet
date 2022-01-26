@@ -336,6 +336,7 @@ form {
   height: 400px;
   align-self: center;
   border-radius: 50px;
+  object-fit: cover;
 }
 
 .toast {

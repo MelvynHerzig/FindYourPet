@@ -58,7 +58,9 @@ export function manageErrors(error) {
                 return i18n.global.t('errors.fileNotFound');
             case errorMessages.ERROR_FILE_NOT_UPLOADED:
                 return i18n.global.t('errors.fileNotUploaded');
+            default:
+                return i18n.global.t('errors.unknown');
         }
-        return this.$t('errors.unknown');
     }
+    return i18n.global.t('errors.unknown');
 }
