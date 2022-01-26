@@ -5,17 +5,17 @@
     </a>
     <div class="link" id="links">
       <div class="nav">
-        <button @click="$router.push('/'), displayMenu()"> {{$t("header.home")}} </button>
-        <button @click="$router.push('/adverts'), displayMenu()"> {{$t("header.advert")}} </button>
+        <router-link to="/"> <button @click="displayMenu()"> {{$t("header.home")}} </button> </router-link>
+        <router-link to="/adverts"> <button @click="displayMenu()"> {{$t("header.advert")}} </button> </router-link>
       </div>
       <div v-if="isConnected" class="account">
-        <button @click="$router.push('/profile'), displayMenu()" > {{$t("header.profile")}} </button>
-        <button @click="$router.push('/adverts/create'), displayMenu()"> {{$t("header.advertCreation")}} </button>
+        <router-link to="/profile"> <button @click="$router.push('/profile'), displayMenu()" > {{$t("header.profile")}} </button> </router-link>
+        <router-link to="/adverts/create"> <button @click="$router.push('/adverts/create'), displayMenu()"> {{$t("header.advertCreation")}} </button> </router-link>
         <button @click="disconnectMember(), displayMenu()"> {{$t("header.disconnect")}} </button>
       </div>
       <div v-else class="account">
-        <button @click="$router.push('/login'), displayMenu()"> {{$t("header.login")}} </button>
-        <button @click="$router.push('/register'), displayMenu()"> {{$t("header.register")}} </button>
+        <router-link to="/login"> <button @click="$router.push('/login'), displayMenu()"> {{$t("header.login")}} </button> </router-link>
+        <router-link to="/register"> <button @click="$router.push('/register'), displayMenu()"> {{$t("header.register")}} </button> </router-link>
       </div>
     </div>
     <div>
