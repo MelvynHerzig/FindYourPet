@@ -14,7 +14,9 @@ Le rendu final (dernière version réalisée) est disponible à l'adresse suivan
 
 ### Technologies principales utilisées
 
+
 Vous pouvez vous référer à la page du [wiki correspondant](https://github.com/FindYourPet-ch/FindYourPet/wiki/Choix-technologiques).
+
 
 ### Étapes d'installation
 
@@ -54,8 +56,8 @@ FindYourPet
 
 Contenu:
 ```
-JWT_KEY=secret
-JWT_EXPIRATION=15m
+JWT_KEY=<secret>
+JWT_EXPIRATION=60m
 ```
 
 #### .env du frontend
@@ -81,9 +83,9 @@ PGADMIN_PORT=8081
 POSTGRES_USER=<user>
 POSTGRES_PASSWORD=<password>
 
-APP_DB_USER=findyourpet
-APP_DB_PASS=findyourpet
-APP_DB_NAME=findyourpet_db
+APP_DB_USER=<user>
+APP_DB_PASS=<password>
+APP_DB_NAME=<db name>
 
 APP_DB_NAME_TEST=findyourpet_db_test
 
@@ -207,3 +209,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
