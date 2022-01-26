@@ -94,6 +94,8 @@ APP_DB_USER=findyourpet
 APP_DB_PASS=findyourpet
 APP_DB_NAME=findyourpet_db
 
+APP_DB_NAME_TEST=findyourpet_db_test
+
 PGADMIN_DEFAULT_EMAIL=<exemple@exemple.ch>
 PGADMIN_DEFAULT_PASSWORD=<password>
 ```
@@ -111,12 +113,30 @@ $ npm install
 
 ### Projet Backend
 
-En résumé, il suffit de lancer un container docker avec:
+En résumé, il suffit de lancer un container docker de la base de données avec:
 > Cette commande doit être exécutée depuis le dossier backend/database
 
 ```bash
 $ docker-compose up
 ```
+
+> Des espèces d'animaux peuvent être ajoutée grâce au script FindYourPet/src/server/FindYourPet/init-data.sql
+> ```
+> INSERT INTO member(firstname, name, email, password, street, "NPA", city, phone, "isAdmin", location)
+>VALUES ('Contact', 'FindYourPet', 'contact@findyourpet.ch', '$2a$10$ZbAcQnoqsYweBGODSwXNg.R2imGVpRgMKDcU5EnXNxQyn2erZ1Pr6', 'Rte de Cheseaux 1', 1400, 'Yverdon-les-Bains', >0796132606, true, '0101000020E6100000000000E06FA31A4000000040C3634740');
+>
+>INSERT INTO species(name)
+>VALUES
+>    ('{"en":"dog", "fr":"chien", "de":"Hund", "it":"cane"}'),
+>    ('{"en":"cat", "fr":"chat", "de":"Katze", "it":"gatto"}'),
+>    ('{"en":"bird", "fr":"oiseau", "de":"Vogel", "it":"ucello"}'),
+>    ('{"en":"reptile", "fr":"reptile", "de":"Reptil", "it":"rettile"}'),
+>    ('{"en":"horse", "fr":"cheval", "de":"Pferd", "it":"pesce"}'),
+>    ('{"en":"rabbit", "fr":"lapin", "de":"Hase", "it":"coniglio"}'),
+>    ('{"en":"poultry", "fr":"volaille", "de":"Geflügel", "it":"pollame"}'),
+>    ('{"en":"hamster", "fr":"hamster", "de":"Hamster", "it":"criceto"}'),
+>    ('{"en":"ferret", "fr":"furet", "de":"Frettchen", "it":"furetto"}');
+>```    
 
 Puis lancer le mode voulu:
 > Toutes les commandes décrites ci-dessous doivent être lancées depuis le dossier backend
@@ -205,7 +225,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-## Status du projet
-
-Le projet est en cours de développement.
