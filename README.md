@@ -93,15 +93,6 @@ PGADMIN_DEFAULT_PASSWORD=<password>
 
 ## Utilisation
 
-Une fois la partie "Installation" réalisée, il vous suffit de lancer votre IDE préféré pour le développement web. 
-Nous avons ensuite réalisé 2 README, un pour chaque projet expliquant comment utiliser le projet.
-
-Dans tous les cas il est nécessaire de réaliser la commande suivante pour chaque projet:
-
-```bash
-$ npm install
-```
-
 ### Backend
 > Toutes les commandes, sauf indications contraires, sont exécutées depuis src/backend
 
