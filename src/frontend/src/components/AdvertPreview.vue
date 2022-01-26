@@ -47,8 +47,7 @@ import {
   deleteAdvert,
   getMemberConnectedId,
   getSpeciesByIdFromLang,
-  getFileById,
-  memberIsConnected
+  getFileById
 } from '@/logic/apicalls'
 import {manageErrors} from "@/logic/errors";
 import ToastError from "@/components/toasts/ToastError";
@@ -112,20 +111,17 @@ export default {
     }
   },
   computed: {
-    isOwner() {
+    isOwner: function () {
       if (getMemberConnectedId() != null) {
         return this.advert.member.id === getMemberConnectedId();
       }
       return false;
     },
-    isConnected() {
-      if(this.advert.member === undefined || this.advert.member == null) {
-        if(memberIsConnected()) {
-          this.$store.commit('disconnect');
-        }
-        return false;
+    isConnected: function () {
+      if (getMemberConnectedId() != null) {
+        return this.advert.member.id !== getMemberConnectedId();
       }
-      return memberIsConnected();
+      return false;
     }
   }
 }
