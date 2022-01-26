@@ -112,13 +112,13 @@ export default {
     }
   },
   computed: {
-    isOwner() {
+    isOwner: function () {
       if (getMemberConnectedId() != null) {
         return this.advert.member.id === getMemberConnectedId();
       }
       return false;
     },
-    isConnected() {
+    isConnected: function () {
       if(this.advert.member === undefined || this.advert.member == null) {
         if(memberIsConnected()) {
           this.$store.commit('disconnect');

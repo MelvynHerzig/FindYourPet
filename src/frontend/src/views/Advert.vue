@@ -89,7 +89,7 @@ export default {
     }
   },
   computed: {
-    isConnected() {
+    isConnected: function () {
       if(this.advert.member === undefined || this.advert.member == null) {
         if(memberIsConnected()) {
           this.$store.commit('disconnect');
@@ -98,7 +98,7 @@ export default {
       }
       return memberIsConnected();
     },
-    isOwner() {
+    isOwner: function () {
       if (getMemberConnectedId() != null) {
         return this.advert.member.id === getMemberConnectedId();
       }
