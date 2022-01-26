@@ -125,6 +125,8 @@
     "sex": "Sexe",
     "button": "Envoyer",
     "male": "mâle",
-    "female":"femelle"
+    "female":"femelle",
+    "AllSpecies": "Toutes les espèces",
+    "AllGenders": "Tous les sexes"
   }
 }

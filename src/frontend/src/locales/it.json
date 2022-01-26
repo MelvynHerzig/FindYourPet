@@ -125,6 +125,8 @@
     "sex": "Sesso",
     "button": "Mandare",
     "male": "maschio",
-    "female":"femmina"
+    "female":"femmina",
+    "AllSpecies": "Tutte le specie",
+    "AllGenders": "Tutti i generi"
   }
 }

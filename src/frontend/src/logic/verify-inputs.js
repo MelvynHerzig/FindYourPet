@@ -1,7 +1,7 @@
 import i18n from "../i18n.js";
 
 export function verifyPassword(password) {
-    const Validation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
+    const Validation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@ !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])[A-Za-z\d !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]{8,}$/g;
     const valid = Validation.test(password);
     if (!valid) {
         return i18n.global.t('errors.passwordNotCorrect');

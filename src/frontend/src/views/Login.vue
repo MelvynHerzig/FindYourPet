@@ -26,7 +26,7 @@
 <script>
 import { login } from "@/logic/apicalls";
 import { manageErrors } from "@/logic/errors";
-import { verifyEmail, verifyPassword } from "@/logic/verify-inputs";
+import { verifyEmail, isEmpty } from "@/logic/verify-inputs";
 import EmailInput from "../components/inputs/EmailInput";
 import PasswordInput from "../components/inputs/PasswordInput";
 import ToastError from "../components/toasts/ToastError";
@@ -69,10 +69,10 @@ export default {
     verifyInfos() {
       let message = null;
 
-      if(this.email === "") {
+      if(isEmpty(this.email)) {
         return `${this.$t('account.email')} ${this.$t('errors.empty')}`;
       }
-      if(this.password === "") {
+      if(isEmpty(this.password)) {
         return `${this.$t('account.password')} ${this.$t('errors.empty')}`;
       }
 
@@ -80,12 +80,6 @@ export default {
       if(message != null) {
         return message;
       }
-
-      message = verifyPassword(this.password);
-      if(message != null) {
-        return message;
-      }
-
       return message;
     },
   },
