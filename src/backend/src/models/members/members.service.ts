@@ -105,7 +105,7 @@ export class MembersService {
       return member;
     }
 
-    throw new HttpException(ERROR_INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED);
+    throw new HttpException(ERROR_INVALID_CREDENTIALS, HttpStatus.BAD_REQUEST);
   }
 
   /**
@@ -214,7 +214,7 @@ export class MembersService {
    */
   verifiyInput(member, verifiyPassword: boolean) {
     const passwordValidation =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@ !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])[A-Za-z\d !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]{8,}$/g;
 
     const emailValidation =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/gm;
