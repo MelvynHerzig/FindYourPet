@@ -63,8 +63,8 @@ FindYourPet
 
 Contenu:
 ```
-JWT_KEY=secret
-JWT_EXPIRATION=15m
+JWT_KEY=<secret>
+JWT_EXPIRATION=60m
 ```
 
 #### .env du frontend
@@ -90,9 +90,9 @@ PGADMIN_PORT=8081
 POSTGRES_USER=<user>
 POSTGRES_PASSWORD=<password>
 
-APP_DB_USER=findyourpet
-APP_DB_PASS=findyourpet
-APP_DB_NAME=findyourpet_db
+APP_DB_USER=<user>
+APP_DB_PASS=<password>
+APP_DB_NAME=<db name>
 
 PGADMIN_DEFAULT_EMAIL=<exemple@exemple.ch>
 PGADMIN_DEFAULT_PASSWORD=<password>
@@ -206,6 +206,3 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Status du projet
-
-Le projet est en cours de développement.
