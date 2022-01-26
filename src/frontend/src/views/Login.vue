@@ -26,7 +26,7 @@
 <script>
 import { login } from "@/logic/apicalls";
 import { manageErrors } from "@/logic/errors";
-import { verifyEmail } from "@/logic/verify-inputs";
+import { verifyEmail, isEmpty } from "@/logic/verify-inputs";
 import EmailInput from "../components/inputs/EmailInput";
 import PasswordInput from "../components/inputs/PasswordInput";
 import ToastError from "../components/toasts/ToastError";
