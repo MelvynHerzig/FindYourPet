@@ -14,16 +14,7 @@ Le rendu final (dernière version réalisée) est disponible à l'adresse suivan
 
 ### Technologies principales utilisées
 
-Les 2 technologies importantes pour l'installation du projet sont npm et node.
-
-| Technologie | Version |
-|-----|---------|
-| npm | 6.14.15 |
-| node | 14.17.6 |
-| nest js | 8.0.0 |
-| docker |  |
-
-Vous pouvez aussi vous référez à la page du [wiki correspondant](https://github.com/FindYourPet-ch/FindYourPet/wiki/Choix-technologiques).
+Vous pouvez vous référer à la page du [wiki correspondant](https://github.com/FindYourPet-ch/FindYourPet/wiki/Choix-technologiques).
 
 ### Étapes d'installation
 
