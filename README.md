@@ -14,16 +14,7 @@ Le rendu final (dernière version réalisée) est disponible à l'adresse suivan
 
 ### Technologies principales utilisées
 
-Les 2 technologies importantes pour l'installation du projet sont npm et node.
-
-| Technologie | Version |
-|-----|---------|
-| npm | 6.14.15 |
-| node | 14.17.6 |
-| nest js | 8.0.0 |
-| docker |  |
-
-Vous pouvez aussi vous référez à la page du [wiki correspondant](https://github.com/FindYourPet-ch/FindYourPet/wiki/Choix-technologiques).
+Vous pouvez vous référer à la page du [wiki correspondant](https://github.com/FindYourPet-ch/FindYourPet/wiki/Choix-technologiques).
 
 ### Étapes d'installation
 
@@ -78,7 +69,7 @@ VUE_APP_I18N_FALLBACK_LOCALE=fr
 
 
 #### .env de la base de donnée
-Le .env de la base de données étant sensible certains champs ne seront pas indiqué.
+Le .env de la base de données étant sensible, certains champs ne seront pas indiqués.
 Si vous souhaitez les obtenir, contactez-nous via l'adresse email: contact@findyourpet.ch
 
 Contenu sensuré:
@@ -94,49 +85,60 @@ APP_DB_USER=findyourpet
 APP_DB_PASS=findyourpet
 APP_DB_NAME=findyourpet_db
 
+APP_DB_NAME_TEST=findyourpet_db_test
+
 PGADMIN_DEFAULT_EMAIL=<exemple@exemple.ch>
 PGADMIN_DEFAULT_PASSWORD=<password>
 ```
 
 ## Utilisation
 
-Une fois la partie "Installation" réalisée, il vous suffit de lancer votre IDE préféré pour le développement web. 
-Nous avons ensuite réalisé 2 README, un pour chaque projet expliquant comment utiliser le projet.
+### Backend
+> Toutes les commandes, sauf indications contraires, sont exécutées depuis src/backend
 
-Dans tous les cas il est nécessaire de réaliser la commande suivante pour chaque projet:
-
+Installer les dépendances
 ```bash
 $ npm install
 ```
 
-### Projet Backend
-
-En résumé, il suffit de lancer un container docker avec:
-> Cette commande doit être exécutée depuis le dossier backend/database
-
+Démarrer la base de données (depuis le dossier backend/database)
 ```bash
 $ docker-compose up
 ```
 
-Puis lancer le mode voulu:
-> Toutes les commandes décrites ci-dessous doivent être lancées depuis le dossier backend
+> Des espèces d'animaux peuvent être ajoutées grâce au script FindYourPet/src/server/FindYourPet/init-data.sql
+> ```
+> INSERT INTO member(firstname, name, email, password, street, "NPA", city, phone, "isAdmin", location)
+>VALUES ('Contact', 'FindYourPet', 'contact@findyourpet.ch', '$2a$10$ZbAcQnoqsYweBGODSwXNg.R2imGVpRgMKDcU5EnXNxQyn2erZ1Pr6', 'Rte de Cheseaux 1', 1400, 'Yverdon-les-Bains', >0796132606, true, '0101000020E6100000000000E06FA31A4000000040C3634740');
+>
+>INSERT INTO species(name)
+>VALUES
+>    ('{"en":"dog", "fr":"chien", "de":"Hund", "it":"cane"}'),
+>    ('{"en":"cat", "fr":"chat", "de":"Katze", "it":"gatto"}'),
+>    ('{"en":"bird", "fr":"oiseau", "de":"Vogel", "it":"ucello"}'),
+>    ('{"en":"reptile", "fr":"reptile", "de":"Reptil", "it":"rettile"}'),
+>    ('{"en":"horse", "fr":"cheval", "de":"Pferd", "it":"pesce"}'),
+>    ('{"en":"rabbit", "fr":"lapin", "de":"Hase", "it":"coniglio"}'),
+>    ('{"en":"poultry", "fr":"volaille", "de":"Geflügel", "it":"pollame"}'),
+>    ('{"en":"hamster", "fr":"hamster", "de":"Hamster", "it":"criceto"}'),
+>    ('{"en":"ferret", "fr":"furet", "de":"Frettchen", "it":"furetto"}');
+>```    
 
+Démarrer le serveur
 ```bash
-# development
 $ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-### Projet Frontend
+### Frontend
 
-En résumé, il suffit de lancer le mode voulu:
-> Toutes les commandes décrites ci-dessous doivent être lancées depuis le dossier frontend
+> Toutes les commandes, sauf indications contraires, sont exécutées depuis src/frontend
 
+Installer les dépendances
+```bash
+$ npm install
+```
+
+Servir le projet
 ```bash
 # compiles and hot-reloads for development
 $ npm run serve
@@ -205,7 +207,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-## Status du projet
-
-Le projet est en cours de développement.
