@@ -11,7 +11,7 @@
       <div v-if="isConnected" class="account">
         <router-link to="/profile"> <button @click="$router.push('/profile'), displayMenu()" > {{$t("header.profile")}} </button> </router-link>
         <router-link to="/adverts/create"> <button @click="$router.push('/adverts/create'), displayMenu()"> {{$t("header.advertCreation")}} </button> </router-link>
-        <button @click="disconnectMember(), displayMenu()"> {{$t("header.disconnect")}} </button>
+        <a> <button @click="disconnectMember(), displayMenu()"> {{$t("header.disconnect")}} </button> </a>
       </div>
       <div v-else class="account">
         <router-link to="/login"> <button @click="$router.push('/login'), displayMenu()"> {{$t("header.login")}} </button> </router-link>
@@ -143,6 +143,7 @@ export default {
 }
 
 button {
+  width: 100%;
   height: 100%;
   padding: 20px;
   font-size: 24px;
