@@ -8,9 +8,9 @@
     </div>
     <div class="right">
       <div>
-        <router-link to="/"><img src="../assets/images/insta.png" alt="instagram"></router-link>
-        <router-link to="/"><img src="../assets/images/twitter.png" alt="twitter"></router-link>
-        <router-link to="/"><img src="../assets/images/fb.png" alt="facebook"></router-link>
+        <a href = "https://twitter.com/FindYourPet_CH"> <img src="../assets/images/twitter.png" alt="twitter"></a>
+        <a href = "https://www.instagram.com/findyourpet.ch/"> <img src="../assets/images/insta.png" alt="instagram"></a>
+        <a href = "https://www.facebook.com/profile.php?id=100077287526063"> <img src="../assets/images/fb.png" alt="facebook"></a>
       </div>
     </div>
   </footer>
