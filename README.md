@@ -69,7 +69,7 @@ VUE_APP_I18N_FALLBACK_LOCALE=fr
 
 
 #### .env de la base de donnée
-Le .env de la base de données étant sensible certains champs ne seront pas indiqué.
+Le .env de la base de données étant sensible, certains champs ne seront pas indiqués.
 Si vous souhaitez les obtenir, contactez-nous via l'adresse email: contact@findyourpet.ch
 
 Contenu sensuré:
@@ -102,16 +102,20 @@ Dans tous les cas il est nécessaire de réaliser la commande suivante pour chaq
 $ npm install
 ```
 
-### Projet Backend
+### Backend
+> Toutes les commandes, sauf indications contraires, sont exécutées depuis src/backend
 
-En résumé, il suffit de lancer un container docker de la base de données avec:
-> Cette commande doit être exécutée depuis le dossier backend/database
+Installer les dépendances
+```bash
+$ npm install
+```
 
+Démarrer la base de données (depuis le dossier backend/database)
 ```bash
 $ docker-compose up
 ```
 
-> Des espèces d'animaux peuvent être ajoutée grâce au script FindYourPet/src/server/FindYourPet/init-data.sql
+> Des espèces d'animaux peuvent être ajoutées grâce au script FindYourPet/src/server/FindYourPet/init-data.sql
 > ```
 > INSERT INTO member(firstname, name, email, password, street, "NPA", city, phone, "isAdmin", location)
 >VALUES ('Contact', 'FindYourPet', 'contact@findyourpet.ch', '$2a$10$ZbAcQnoqsYweBGODSwXNg.R2imGVpRgMKDcU5EnXNxQyn2erZ1Pr6', 'Rte de Cheseaux 1', 1400, 'Yverdon-les-Bains', >0796132606, true, '0101000020E6100000000000E06FA31A4000000040C3634740');
@@ -129,25 +133,21 @@ $ docker-compose up
 >    ('{"en":"ferret", "fr":"furet", "de":"Frettchen", "it":"furetto"}');
 >```    
 
-Puis lancer le mode voulu:
-> Toutes les commandes décrites ci-dessous doivent être lancées depuis le dossier backend
-
+Démarrer le serveur
 ```bash
-# development
 $ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-### Projet Frontend
+### Frontend
 
-En résumé, il suffit de lancer le mode voulu:
-> Toutes les commandes décrites ci-dessous doivent être lancées depuis le dossier frontend
+> Toutes les commandes, sauf indications contraires, sont exécutées depuis src/frontend
 
+Installer les dépendances
+```bash
+$ npm install
+```
+
+Servir le projet
 ```bash
 # compiles and hot-reloads for development
 $ npm run serve
