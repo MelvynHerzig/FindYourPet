@@ -3,7 +3,7 @@
 ## Description 
 
 Le but de ce projet de semestre de la HEIG-VD est de développer une application web innovente.\
-Nous avons décidé de réaliser un site d'annonces d'animaux de compagnies 
+Nous avons décidé de réaliser un site d'annonces d'animaux de compagnie 
 qui centraliserait toutes les recherches et demandent de ce type (premièrement au niveau suisse) 
 sur un site d'annonces spécifiques à ce besoin.
 
